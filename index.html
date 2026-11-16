@@ -1,0 +1,1795 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Albleuchten Import-Cockpit</title>
+<meta name="description" content="Albleuchten Import-Cockpit: Fallstudie AEB × Hochschule Pforzheim. Fracht, Zoll, Incoterms, Cashflow und Risiko für den Import von LED-Leuchten aus China.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 34 34%22%3E%3Cpath d=%22M6 6h22l-4 9H10z%22 fill=%22%235A6369%22/%3E%3Cpath d=%22M10 15h14l-7 15z%22 fill=%22%23F9A800%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500;600;700&display=swap">
+<style>
+/* Token-System: RAL-Farben aus der Industrie, IBM Plex als technische Schrift */
+:root{
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --cond:"IBM Plex Sans Condensed","Arial Narrow","IBM Plex Sans",system-ui,sans-serif;
+  --ink:#1F2A33; --ink2:#55616B; --ink3:#86919A;
+  --line:#D9DFE4; --line2:#ECEFF2; --bg:#F3F5F7; --panel:#FFFFFF;
+  --anthrazit:#2F3539;   /* RAL 7016 Anthrazitgrau (abgedunkelt) */
+  --anthrazit2:#3E464B;
+  --signal:#F9A800;      /* RAL 1003 Signalgelb */
+  --signal-soft:#FFF3D1;
+  --sea:#0E518D; --sea-soft:#E3EDF7;     /* RAL 5017 Verkehrsblau */
+  --air:#B3141F; --air-soft:#FAE6E7;     /* RAL 3020 Verkehrsrot */
+  --split:#5E4F92; --split-soft:#ECE9F6;
+  --rail:#9A5426; --rail-soft:#F5EAE2;   /* RAL 8023 Orangebraun */
+  --ok:#2C7A41; --ok-soft:#E3F1E7; --warn:#9A6200; --warn-soft:#FFF1D2; --bad:#B3141F; --bad-soft:#FAE6E7;
+  --r:8px; --r-s:6px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:400 14.5px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+body{font-variant-numeric:tabular-nums}
+a{color:var(--sea);text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--sea);outline-offset:2px;border-radius:4px}
+.app{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}
+.app>div{min-width:0}
+
+/* Seitenleiste */
+.side{background:var(--anthrazit);color:#D7DCE0;position:sticky;top:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+.brand{display:flex;gap:12px;align-items:center;padding:20px 20px 18px;border-bottom:1px solid #454D53}
+.brand .lamp{width:34px;height:34px;flex:none}
+.brand b{display:block;font:600 16px/1.2 var(--cond);color:#fff;letter-spacing:.1px}
+.brand span{font-size:12px;color:#A8B1B8;display:block}
+.routesel{margin:6px 0 3px;width:100%;max-width:190px;background:#3A4247;color:#fff;border:1px solid #5A6369;border-radius:6px;padding:5px 6px;font:500 12.5px var(--sans)}
+.routesel:focus{outline:2px solid var(--signal);outline-offset:1px}
+.rbanner{display:flex;gap:10px;align-items:flex-start}
+.nav{padding:10px 10px 20px;flex:1}
+.nav h4{font:500 12px var(--sans);color:#8F99A1;margin:16px 10px 6px}
+.nav a{display:flex;gap:10px;align-items:center;color:#D7DCE0;text-decoration:none;padding:7px 10px;border-radius:6px;font-size:14px;line-height:1.3;position:relative}
+.nav a svg{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
+.nav a:hover{background:var(--anthrazit2);color:#fff}
+.nav a.on{background:#fff;color:var(--ink);font-weight:600}
+.nav a.on svg{opacity:1;color:var(--ink)}
+.nav a.on::after{content:"";position:absolute;right:10px;width:8px;height:8px;border-radius:50%;background:var(--signal)}
+.nav a.dim{opacity:.38}
+
+.side .foot{padding:14px 20px;font-size:11.5px;color:#8F99A1;border-top:1px solid #454D53}
+
+/* Kopfleiste: Szenario der Sendung */
+.top{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.topin{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:10px 28px}
+.topmini{display:none;align-items:center;gap:8px 18px;flex-wrap:wrap;padding:7px 28px;font-size:13px;color:var(--ink2)}
+.topmini b{color:var(--ink);font-weight:600}
+.top.min .topmini{display:flex}.top.min .topin,.top.min .kpis{display:none}
+.tbtn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:5px 12px;font:500 12.5px var(--sans);cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.tbtn:hover{border-color:var(--ink)}
+.topmini .tbtn{margin-left:auto}
+.tbtn.strong{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:600;padding:7px 14px;font-size:13px}
+.tbtn.strong:hover{background:#000}
+.topin #topToggle{order:99;margin-left:auto}
+.ship{display:flex;gap:0;align-items:stretch;border:1px solid var(--line);border-radius:var(--r-s);overflow:hidden}
+.ship div{padding:4px 12px;border-left:1px solid var(--line);line-height:1.2}
+.ship div:first-child{border-left:none}
+.ship small{display:block;font-size:11px;color:var(--ink3)}
+.ship b{font:600 14.5px var(--cond)}
+.segc{display:inline-flex;border:1px solid var(--line);border-radius:var(--r-s);overflow:hidden;background:#fff}
+.segc button{border:0;background:none;padding:7px 12px;font:500 13.5px var(--sans);color:var(--ink2);cursor:pointer;display:flex;gap:7px;align-items:center;border-left:1px solid var(--line)}
+.segc button:first-child{border-left:0}
+.segc button .dot{width:8px;height:8px;border-radius:50%}
+.segc button.on{background:var(--ink);color:#fff}
+.topctl{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--ink2)}
+.topctl input,.topctl select{font:500 13.5px var(--sans);border:1px solid var(--line);border-radius:var(--r-s);padding:6px 8px;color:var(--ink);background:#fff}
+.topctl input[type=number]{width:70px}
+.grow{flex:1}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* Kennzahlen als Datenblattzeile */
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:1px solid var(--line2)}
+.kpi{padding:10px 28px 12px;border-left:1px solid var(--line2)}
+.kpi:first-child{border-left:none}
+.kpi .l{font-size:12px;color:var(--ink2)}
+.kpi .v{font:600 23px/1.15 var(--cond);margin-top:2px;white-space:nowrap}
+.kpi .s{font-size:12px;color:var(--ink3)}
+
+main{padding:26px 28px 70px;max-width:1320px}
+.ph{display:flex;gap:24px;align-items:flex-end;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap}
+.ph h1{font:600 30px/1.15 var(--cond);margin:0;letter-spacing:-.2px}
+.ph p{margin:6px 0 0;color:var(--ink2);max-width:76ch}
+.depts{display:flex;gap:6px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;border:1px solid var(--line);border-radius:999px;padding:2px 9px;color:var(--ink2);background:#fff;white-space:nowrap}
+.chip.sea{border-color:transparent;background:var(--sea-soft);color:var(--sea)}
+.chip.air{border-color:transparent;background:var(--air-soft);color:var(--air)}
+.chip.split{border-color:transparent;background:var(--split-soft);color:var(--split)}
+.chip.rail{border-color:transparent;background:var(--rail-soft);color:var(--rail)}
+.chip.ok{border-color:transparent;background:var(--ok-soft);color:var(--ok)}
+.chip.warn{border-color:transparent;background:var(--warn-soft);color:var(--warn)}
+.chip.bad{border-color:transparent;background:var(--bad-soft);color:var(--bad)}
+
+.grid{display:grid;gap:18px}
+.grid>*{min-width:0}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.g21{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}.g12{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px}
+.panel>header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:-2px 0 12px}
+.panel h2{font:600 16px/1.3 var(--sans);margin:0}
+.panel header .note{font-size:12.5px;color:var(--ink3)}
+.panel.flat{background:transparent;border-style:dashed}
+.mt{margin-top:18px}
+h3{font:600 14px var(--sans);margin:0 0 8px}
+p{margin:0 0 10px}
+.muted{color:var(--ink2)}.small{font-size:12.5px}.tiny{font-size:11.5px;color:var(--ink3)}
+.big{font:600 34px/1.05 var(--cond);letter-spacing:-.3px}
+.mid{font:600 22px/1.15 var(--cond)}
+.nowrap{white-space:nowrap}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line2);text-align:left;vertical-align:top}
+thead th{background:var(--bg);font-weight:600;color:var(--ink2);border-bottom:1px solid var(--line);font-size:12.5px}
+td.r,th.r{text-align:right;white-space:nowrap}
+td.c,th.c{text-align:center}
+tr.sum td{font-weight:600;border-top:1.5px solid var(--ink);border-bottom:none}
+tr.sub td{color:var(--ink2)}
+tr.hl td{background:var(--signal-soft)}
+.tbl-wrap{overflow-x:auto}
+
+/* Formulare */
+.f{display:block;font-size:12.5px;color:var(--ink2);font-weight:500}
+.f input,.f select,.f textarea{display:block;width:100%;margin-top:4px;padding:7px 9px;border:1px solid var(--line);border-radius:var(--r-s);font:500 14px var(--sans);color:var(--ink);background:#fff}
+.f .hint{display:block;font-weight:400;color:var(--ink3);font-size:11.5px;margin-top:3px}
+.fr{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 14px}
+.fr3{grid-template-columns:repeat(3,minmax(0,1fr))}.fr2{grid-template-columns:repeat(2,minmax(0,1fr))}.fr5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.rng{display:grid;grid-template-columns:150px 1fr 54px;gap:10px;align-items:center;font-size:13.5px;margin:6px 0}
+.rng input{width:100%;accent-color:var(--ink)}
+.rng output{text-align:right;font-weight:600}
+.btn{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:var(--r-s);padding:7px 13px;font:500 13.5px var(--sans);cursor:pointer}
+.btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+.btn.signal{background:var(--signal);border-color:var(--signal);color:#251b00}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:18px;flex-wrap:wrap}
+.tabs button{border:0;background:none;padding:9px 14px;font:500 14px var(--sans);color:var(--ink2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs button.on{color:var(--ink);border-bottom-color:var(--ink);font-weight:600}
+
+/* Hinweise */
+.note-box{border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;background:#fff;font-size:13.5px}
+.note-box.info{background:var(--sea-soft);border-color:#C8DAEC}
+.note-box.warn{background:var(--warn-soft);border-color:#F0D9A6}
+.note-box.bad{background:var(--bad-soft);border-color:#F0C4C7}
+.note-box.ok{background:var(--ok-soft);border-color:#C3DFCB}
+.list-plain{margin:0;padding:0;list-style:none}
+.list-plain li{padding:9px 0;border-bottom:1px solid var(--line2);display:grid;grid-template-columns:22px 1fr;gap:8px}
+.list-plain li:last-child{border-bottom:none}
+.list-plain li svg{width:18px;height:18px;margin-top:2px;stroke:var(--ink2);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.bar{height:8px;background:var(--line2);border-radius:4px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--ink)}
+
+/* Rechenblatt */
+.calc td{padding:8px 10px}
+.calc td.op{width:34px;text-align:center;font:600 16px var(--cond);color:var(--ink3)}
+.calc td.v{text-align:right;font:600 16px var(--cond);white-space:nowrap}
+.calc tr.res td{background:var(--bg)}
+.calc tr.res td.v{font-size:18px}
+.calc tr.key td{background:var(--ink);color:#fff}.calc tr.key td.op{color:#fff}
+
+/* Glossar-Tooltips */
+abbr.gl{text-decoration:underline dotted var(--ink3);text-underline-offset:3px;cursor:help;position:relative}
+abbr.gl:hover::after,abbr.gl:focus::after{content:attr(data-tip);position:absolute;left:0;top:calc(100% + 6px);z-index:50;width:max-content;max-width:300px;background:var(--ink);color:#fff;font:400 12.5px/1.45 var(--sans);padding:8px 10px;border-radius:6px;white-space:normal;box-shadow:0 6px 20px rgba(31,42,51,.25)}
+
+/* Angebot als Dokument */
+.doc{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:30px 34px;font-size:13.5px}
+.doc h3{font:600 22px var(--cond);margin:0}
+
+/* Checkliste */
+.chk{display:grid;grid-template-columns:22px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--line2);cursor:pointer}
+.chk input{width:17px;height:17px;margin-top:2px;accent-color:var(--ok)}
+.chk b{font-weight:600}
+.chk span span{display:block;color:var(--ink3);font-size:12.5px}
+
+.ms td input,.ms td select{padding:5px 7px;border:1px solid var(--line);border-radius:6px;font:500 13px var(--sans);width:100%;background:#fff}
+.toast{position:fixed;bottom:22px;right:22px;background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-weight:500;opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s;pointer-events:none;z-index:80}
+.toast.on{opacity:1;transform:none}
+svg text{font-family:var(--sans)}
+svg .cond{font-family:var(--cond)}
+.svgwrap{overflow-x:auto}
+.inc td.s{background:var(--sea-soft);color:var(--sea);text-align:center;font-weight:600}
+.inc td.b{background:#F1F2F3;color:var(--ink);text-align:center;font-weight:600}
+.inc tbody tr{cursor:pointer}
+.inc tbody tr.sel td{box-shadow:inset 0 2px 0 var(--ink),inset 0 -2px 0 var(--ink)}
+.score{display:inline-block;min-width:34px;text-align:center;border-radius:4px;padding:1px 6px;font-weight:600}
+.leg{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--ink2)}
+.leg i{display:inline-block;width:12px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+pre.copy{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-s);padding:14px;font:400 12.5px/1.55 var(--sans);max-height:420px;overflow:auto;margin:0}
+
+@media (max-width:1100px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .app>div{min-width:0}
+  .side{position:relative;height:auto}
+  .nav{display:flex;flex-wrap:nowrap;overflow-x:auto;padding:8px}
+  .nav h4,.side .foot{display:none}
+  .nav a{white-space:nowrap}
+  .nav a.on::after{display:none}
+  .top{position:static}
+  .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:720px){
+  .ship{display:none}
+  .topin{gap:8px}
+  .ph h1{font-size:25px}
+  .g2,.g3,.g4,.g21,.g12,.fr,.fr3,.fr5{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  main,.topin{padding-left:14px;padding-right:14px}
+  .kpi{padding:8px 14px}
+  .rng{grid-template-columns:110px 1fr 46px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* Risiko */
+.hm{display:grid;grid-template-columns:20px 22px repeat(5,minmax(0,1fr));gap:4px}
+.hm .ylab{grid-row:1/span 5;grid-column:1;writing-mode:vertical-rl;transform:rotate(180deg);font-size:11.5px;color:var(--ink3);text-align:center;align-self:center}
+.hm .ax{font-size:11.5px;color:var(--ink3);display:flex;align-items:center;justify-content:center;min-height:18px}
+.hm .c{min-height:48px;border-radius:6px;display:flex;flex-wrap:wrap;gap:3px;align-content:center;justify-content:center;padding:4px}
+.rk{font:600 11px var(--sans);background:#fff;border:1px solid rgba(47,53,57,.25);border-radius:4px;padding:1px 5px;color:var(--ink)}
+.rk.off{opacity:.35}
+.tl{list-style:none;margin:0 0 12px 6px;padding:0 0 0 18px;border-left:2px solid var(--line)}
+.tl li{position:relative;padding:0 0 13px 2px}
+.tl li::before{content:'';position:absolute;left:-25px;top:3px;width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 0 2px #fff}
+.leg i.sq{width:12px;height:12px;border-radius:2px}
+
+.mbr{display:grid;grid-template-columns:92px 1fr 58px 58px;gap:8px;align-items:center;font-size:13px;padding:5px 0}
+.mbr.on span:first-child{font-weight:600}
+.mbr .mbt{height:12px;background:var(--line2);border-radius:3px;overflow:hidden}
+.mbr .mbt i{display:block;height:100%;border-radius:3px}
+.mbr b{text-align:right;font-weight:600}
+.mbr .chip{justify-self:start}
+
+.decision{background:#2F3539;border-color:#2F3539;display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:24px;align-items:center}
+.decision .dec-r{display:grid;gap:10px}
+.decision .dec-r div{display:flex;gap:10px;align-items:center;color:#fff;font-size:13.5px;background:#3A4247;border-radius:8px;padding:9px 12px}
+.decision .dec-r svg{width:18px;height:18px;stroke:#F9A800;fill:none;stroke-width:1.8;flex:none}
+.kpis.rep{background:#fff;border:1px solid var(--line);border-radius:var(--r-m,10px);border-top:1px solid var(--line)}
+.kpis.rep .kpi:first-child{border-left:none}
+.mbr2{display:grid;grid-template-columns:170px 1fr 64px;gap:10px;align-items:center;font-size:13px;padding:6px 0}
+.mbr2.on span{font-weight:600}
+.mbr2 .mbt{height:14px;background:var(--line2);border-radius:3px;overflow:hidden}.mbr2 .mbt i{display:block;height:100%}
+.mbr2 b{text-align:right}
+@media (max-width:900px){.decision{grid-template-columns:1fr}.mbr2{grid-template-columns:120px 1fr 60px}}
+.est{display:inline-block;margin-left:6px;font:600 10px/1.6 var(--sans);letter-spacing:.2px;color:#8A4B00;background:#FFE7C2;border:1px solid #F3C27A;border-radius:4px;padding:0 5px;vertical-align:1px;cursor:help}
+.est.src{color:#1F5E33;background:#E3F1E7;border-color:#A9D3B5;text-decoration:none}
+details.rs{border-bottom:1px solid var(--line2);padding:10px 0}
+details.rs:last-child{border-bottom:none}
+details.rs summary{display:flex;gap:10px;align-items:center;cursor:pointer;font-weight:600;font-size:14px}
+details.rs summary::-webkit-details-marker{display:none}
+details.rs summary::before{content:'▸';color:var(--ink3);font-size:12px}
+details.rs[open] summary::before{content:'▾'}
+@media (max-width:700px){details.rs summary .tiny{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <svg class="lamp" viewBox="0 0 34 34" aria-hidden="true"><path d="M6 6h22l-4 9H10z" fill="#5A6369"/><path d="M10 15h14l-7 15z" fill="#F9A800" opacity=".9"/><rect x="15" y="2" width="4" height="4" fill="#8F99A1"/></svg>
+      <div><b>Albleuchten Import-Cockpit</b><span id="routeSub"></span></div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="foot">Fallstudie AEB × Hochschule Pforzheim. Falldaten aus dem Skript, Marktraten als änderbare Annahmen.</div>
+  </aside>
+  <div>
+    <header class="top">
+      <div class="topmini" id="topmini"></div>
+      <div class="topin" id="topbar"></div>
+      <div class="kpis" id="kpis"></div>
+    </header>
+    <main id="page"></main>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+
+/* ================= Annahmen ================= */
+const DEF = {
+  // Skript (Folie 19/51)
+  cartons:48, L:60, B:40, H:45, kg:12.5, upc:48, pcsPerUnit:6,
+  usd:1.06, cny:7.33, duty:4.7, vat:19, lclMax:12.5, budget:50000, prodDays:30,
+  tiers:[[1,49.90],[100,24.90],[1000,17.90],[2000,14.90],[5000,9.90]],
+  // Palettierung
+  palletize:false, palL:120, palB:80, palH:15, palKg:10, maxH:150,
+  priceOverride:0,
+  // See
+  seaRate:65, seaDest:28, seaDO:95, truckSea:42, seaMain:35, seaPort:4, seaTruck:2,
+  // Luft
+  airRate:4.90, airHand:0.20, airDocs:62, truckAir:32, airMain:3, airPort:2, airTruck:1,
+  // Bahn (Exkurs)
+  railRate:200, railHub:30, railTruck:38, railMain:18, railPort:3, railTruckD:1,
+  // FCL (Vollcontainer), Stand 16.11.2026
+  seaCont:'lcl', fcl20:2210, fcl40:3504, fclTHC20:280, fclTHC40:380, fclTruck20:1100, fclTruck40:1250, fclPort:3,
+  // Ursprung (für Incoterm-Verteilung)
+  oPre:180, oExp:60, oTHC:20,
+  // Allgemein
+  customs:52.5, ins:0.25, truckFactor:200, splitPal:1,
+  orderDate:'2026-11-02', fobLead:3, fbaDays:3, refundDays:40,
+  co2Air:0.67, co2Sea:0.016, co2Rail:0.014, co2Truck:0.101,
+  kmAir:8900, kmSea:19800, kmRail:11000, kmTruckSea:770, kmTruckAir:365, kmTruckRail:600,
+  launchFix:4500,
+  // Verkauf
+  price:64.99, chan:'fba', amzRef:15, fbaFee:3.50, shopPay:2.5, plFee:6.20, mkt:12.5, ret:9.5, salesPm:350, b2bMarkup:55,
+  // Finanzen & Disposition
+  interest:8, holdRate:20, orderFix:450, safetyDays:14,
+  // Risikomanagement
+  lostShare:30,
+  // Route und Vorlauf (nur Export)
+  route:'cn', preTruck:0, preTruckAir:0, preCFS:0,
+  // Nutzwertanalyse
+  wCost:35, wTime:25, wCo2:15, wRel:15, wRisk:10,
+  relSea:3, relAir:4, relSplit:4, relRail:3, riskSea:3, riskAir:4, riskSplit:4, riskRail:2,
+};
+const LS = 'alb2_';
+function load(k, d){ try{ const v = localStorage.getItem(LS+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } }
+function store(k, v){ try{ localStorage.setItem(LS+k, JSON.stringify(v)); }catch(e){} }
+let S = load('state', null) || JSON.parse(JSON.stringify(DEF));
+/* Einmalige Umstellung: Sammelgut ab China wird lose gestaut */
+if (!S.v3){ S.palletize = false; S.v3 = 1; }
+if (!S.v4){ S.fcl20 = DEF.fcl20; S.fcl40 = DEF.fcl40; S.v4 = 1; }
+/* Werte mit Quelle (Stand 16.11.2026) einmalig übernehmen */
+if (!S.v9){ S.maxH = DEF.maxH; S.v9 = 1; }
+if (!S.v8){ S.mkt = DEF.mkt; S.v8 = 1; }
+if (!S.v7){ S.price = DEF.price; S.v7 = 1; }
+if (!S.v6){ S.ret = DEF.ret; S.v6 = 1; }
+if (!S.v5){ ['seaDest','seaDO','airHand','airDocs','customs','co2Air','co2Rail','co2Truck','kmTruckAir','fbaFee'].forEach(k => S[k] = DEF[k]); S.v5 = 1; }
+for (const k in DEF) if (!(k in S)) S[k] = JSON.parse(JSON.stringify(DEF[k]));
+/* ================= Routen ================= */
+const ROUTES = {
+  cn:{name:'Shanghai → Graben', sub:'Pilot #1: Import aus China', from:'Shanghai', to:'Graben', pol:'Shanghai', pod:'Hamburg', apol:'PVG Shanghai', apod:'FRA Frankfurt', imp:'EU', taxName:'EUSt', dutyNote:'4,7 % Drittlandszoll (Skript)', patch:{}},
+};
+const ROUTE_KEYS = [...new Set(Object.values(ROUTES).flatMap(r => Object.keys(r.patch)))];
+const RT = () => ROUTES[S.route] || ROUTES.cn;
+/* Alte Route aus dem Browser-Speicher (z. B. der entfernte Export) auf den Pilot zurücksetzen */
+if (!ROUTES[S.route]){ ['seaRate','seaDest','truckSea','seaMain','seaPort','seaTruck','airRate','airHand','truckAir','airMain','airPort','airTruck','fcl20','fcl40','fclTHC20','fclTHC40','fclTruck20','fclTruck40','fclPort','duty','vat','customs','kmTruckSea','kmTruckAir','preTruck','preTruckAir','preCFS','kmSea','kmAir'].forEach(k => S[k] = DEF[k]); S.route = 'cn'; }
+function setRoute(id){
+  if (!ROUTES[id] || id === S.route) return;
+  S.routeVals = S.routeVals || {};
+  S.routeVals[S.route] = Object.fromEntries(ROUTE_KEYS.map(k => [k, S[k]]));
+  const v = S.routeVals[id] || Object.assign(Object.fromEntries(ROUTE_KEYS.map(k => [k, DEF[k]])), ROUTES[id].patch);
+  Object.assign(S, v); S.route = id;
+}
+let UI = Object.assign({mode:'sea', role:'alle', p2:'bpmn', inc:'FOB'}, load('ui', {}));
+
+function withS(patch, fn){
+  const bak = {};
+  for (const k in patch){ bak[k] = S[k]; S[k] = patch[k]; }
+  try { return fn(); } finally { for (const k in bak) S[k] = bak[k]; }
+}
+
+/* ================= Format ================= */
+const nf = (v, d=2) => (isFinite(v) ? v : 0).toLocaleString('de-DE', {minimumFractionDigits:d, maximumFractionDigits:d});
+const eur = (v, d=2) => nf(v, d) + ' €';
+const eur0 = v => nf(v, 0) + ' €';
+const pct = (v, d=1) => nf(v*100, d) + ' %';
+const DAY = 864e5;
+const dParse = s => { const [y,m,d] = s.split('-').map(Number); return Date.UTC(y, m-1, d); };
+const dAdd = (t, n) => t + n*DAY;
+const dFmt = t => { const d = new Date(t); return String(d.getUTCDate()).padStart(2,'0') + '.' + String(d.getUTCMonth()+1).padStart(2,'0') + '.' + d.getUTCFullYear(); };
+const dShort = t => { const d = new Date(t); return d.getUTCDate() + '.' + (d.getUTCMonth()+1) + '.'; };
+const dIso = t => new Date(t).toISOString().slice(0,10);
+const MON = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+const mLab = t => { const d = new Date(t); return MON[d.getUTCMonth()] + ' ' + String(d.getUTCFullYear()).slice(2); };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const days = (a, b) => Math.round((b - a) / DAY);
+
+/* ================= Rechenkern ================= */
+const MODES = {
+  sea:{get name(){ return S.seaCont === '20' ? 'Seefracht FCL 20 Fuß' : S.seaCont === '40' ? 'Seefracht FCL 40 Fuß' : 'Seefracht LCL'; }, short:'See', col:'#0E518D', cls:'sea'},
+  air:{name:'Luftfracht', short:'Luft', col:'#B3141F', cls:'air'},
+  split:{get name(){ const n = Math.max(0, Math.round(S.splitPal)); return S.palletize ? 'Split (' + n + ' Pal. Luft + See)' : 'Split (' + n*12 + ' Kartons Luft + See)'; }, short:'Split', col:'#5E4F92', cls:'split'},
+};
+function tierPrice(units){ let p = S.tiers[0][1]; for (const [q, pr] of S.tiers) if (units >= q) p = pr; return p; }
+function palletInfo(){
+  const a = Math.floor(S.palL/S.L)*Math.floor(S.palB/S.B), b = Math.floor(S.palL/S.B)*Math.floor(S.palB/S.L);
+  const perLayer = Math.max(a, b, 1), layers = Math.max(1, Math.floor((S.maxH - S.palH)/S.H));
+  return {perLayer, layers, perPal: perLayer*layers, h: S.palH + layers*S.H, rot: b > a};
+}
+/* Container: Innenmaße (mm), Volumen, Nutzlast nach Hapag-Lloyd-Spezifikation */
+const CONT = {
+  '20':{name:'20 Fuß Standard', short:"20'", L:5895, B:2350, H:2392, cbm:33.2, kg:28000},
+  '40':{name:'40 Fuß Standard', short:"40'", L:12033, B:2350, H:2394, cbm:67.7, kg:26680},
+};
+/* Wie viele Kartons passen in einen Container? */
+function contFit(type){
+  const c = CONT[type], cd = [S.L*10, S.B*10, S.H*10];
+  const byKg = Math.floor(c.kg/S.kg);
+  if (S.palletize){
+    const p = palletInfo(), PL = S.palL*10, PB = S.palB*10;
+    const rowsMixed = (PL + PB <= c.B) ? Math.floor(c.L/PB) + Math.floor(c.L/PL) : 0;   // eine Reihe quer, eine längs
+    const rowsLong = Math.floor(c.B/PB)*Math.floor(c.L/PL), rowsCross = Math.floor(c.B/PL)*Math.floor(c.L/PB);
+    const slots = Math.max(rowsMixed, rowsLong, rowsCross), tiers = Math.max(1, Math.floor(c.H/(p.h*10)));
+    const byKgPal = Math.floor(c.kg/(p.perPal*S.kg + S.palKg))*p.perPal;
+    return {cap: Math.min(slots*tiers*p.perPal, byKgPal), slots, tiers, perPal: p.perPal, mixed: rowsMixed >= Math.max(rowsLong, rowsCross), byKg: byKgPal, pal:true};
+  }
+  const perms = [[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]];
+  let best = {n:0};
+  perms.forEach(([a, b, h]) => { const nl = Math.floor(c.L/cd[a]), nb = Math.floor(c.B/cd[b]), nh = Math.floor(c.H/cd[h]), n = nl*nb*nh; if (n > best.n) best = {n, nl, nb, nh, dl: cd[a], db: cd[b]}; });
+  return {cap: Math.min(best.n, byKg), grid: best, byKg, pal:false};
+}
+function contPlan(cartons, type){
+  const f = contFit(type), n = Math.max(1, Math.ceil(cartons/Math.max(f.cap, 1)));
+  return {...f, type, n, fill: cartons/(n*f.cap)};
+}
+function ship(cartons){
+  const cbmC = S.L*S.B*S.H/1e6;
+  let cbm, kg, nPal = 0;
+  if (S.palletize){ const p = palletInfo(); nPal = Math.ceil(cartons/p.perPal); cbm = nPal*S.palL*S.palB*p.h/1e6; kg = cartons*S.kg + nPal*S.palKg; }
+  else { cbm = cartons*cbmC; kg = cartons*S.kg; }
+  return { cartons, cbm, kg, nPal, cbmC,
+    airCW: Math.max(kg, cbm*1e6/6000), seaWM: Math.max(cbm, kg/1000), truckCW: Math.max(kg, cbm*S.truckFactor),
+    truckIntCW: Math.max(kg, cbm*333), courierC: Math.max(S.kg, cbmC*1e6/5000) };
+}
+function legCost(sh, mode, goods){
+  let main, det, dd, co2;
+  const t = sh.kg/1000;
+  if (mode === 'air'){
+    main = sh.airCW*S.airRate/S.usd;
+    const R = RT(), a1 = R.apol.split(' ')[0], a2 = R.apod.split(' ')[0];
+    det = [[`Luftfracht ${a1} → ${a2} (all-in)`, main, 'vor'], ['Transportversicherung', 0, 'vor'], [`Flughafen-Handling ${a2}`, sh.airCW*S.airHand, 'nach'], ['Dokumente / Avis', S.airDocs, 'nach'], ['Zollabfertigung Spediteur', S.customs, 'nach'], [`Nachlauf LKW ${a2} → ${R.to}`, sh.truckCW/100*S.truckAir, 'nach']];
+    if (S.preTruckAir > 0) det.splice(1, 0, [`Vorlauf LKW Graben → ${a1} und Ausfuhranmeldung`, sh.truckCW/100*S.preTruckAir + S.oExp, 'vor']);
+    dd = {main:S.airMain, port:S.airPort, truck:S.airTruck};
+    co2 = t*(S.kmAir*S.co2Air + S.kmTruckAir*S.co2Truck);
+  } else if (mode === 'rail'){
+    main = sh.seaWM*S.railRate/S.usd;
+    det = [['Bahnfracht LCL China → EU-Grenze', main, 'vor'], ['Transportversicherung', 0, 'vor'], ['Umschlag Terminal', sh.seaWM*S.railHub, 'nach'], ['Dokumente', S.seaDO, 'nach'], ['Zollabfertigung Spediteur', S.customs, 'nach'], ['Nachlauf LKW Terminal → Graben', sh.truckCW/100*S.railTruck, 'nach']];
+    dd = {main:S.railMain, port:S.railPort, truck:S.railTruckD};
+    co2 = t*(S.kmRail*S.co2Rail + S.kmTruckRail*S.co2Truck);
+  } else if (S.seaCont === '20' || S.seaCont === '40'){
+    const c = S.seaCont, cp = contPlan(sh.cartons, c), n = cp.n;
+    main = n*S['fcl' + c]/S.usd;
+    const R = RT();
+    det = [[`Seefracht FCL ${n} × ${c} Fuß ${R.pol.split(' (')[0]} → ${R.pod}`, main, 'vor'], ['Transportversicherung', 0, 'vor'], [`THC ${R.pod} (${n} × ${nf(S['fclTHC' + c], 0)} €)`, n*S['fclTHC' + c], 'nach'], ['D/O und Dokumente', S.seaDO, 'nach'], ['Zollabfertigung Spediteur', S.customs, 'nach'], [`Containertransport ${R.pod} → ${R.to} (${n} ×)`, n*S['fclTruck' + c], 'nach']];
+    if (S.preTruck > 0) det.splice(1, 0, [`Vorlauf Graben → ${R.pol} (${n} ×) und Ausfuhranmeldung`, n*S['fclTruck' + c] + S.oExp, 'vor']);
+    dd = {main:S.seaMain, port:S.fclPort, truck:S.seaTruck};
+    co2 = t*(S.kmSea*S.co2Sea + S.kmTruckSea*S.co2Truck);
+    sh.cont = cp;
+  } else {
+    main = sh.seaWM*S.seaRate/S.usd;
+    const R = RT();
+    det = [[`Seefracht LCL ${R.pol.split(' (')[0]} → ${R.pod}`, main, 'vor'], ['Transportversicherung', 0, 'vor'], [`THC / CFS ${R.pod}`, sh.seaWM*S.seaDest, 'nach'], ['D/O und Dokumente', S.seaDO, 'nach'], ['Zollabfertigung Spediteur', S.customs, 'nach'], [`Nachlauf LKW ${R.pod} → ${R.to}`, sh.truckCW/100*S.truckSea, 'nach']];
+    if (S.preTruck > 0) det.splice(1, 0, [`Vorlauf LKW Graben → ${R.pol}, CFS und Ausfuhranmeldung`, sh.truckCW/100*S.preTruck + sh.seaWM*S.preCFS + S.oExp, 'vor']);
+    dd = {main:S.seaMain, port:S.seaPort, truck:S.seaTruck};
+    co2 = t*(S.kmSea*S.co2Sea + S.kmTruckSea*S.co2Truck);
+  }
+  const pre = det.filter(d => d[2] === 'vor' && d[0] !== 'Transportversicherung').reduce((s, d) => s + d[1], 0) - main;
+  const ins = S.ins/100*(goods + main + pre)*1.1; det.find(d => d[0] === 'Transportversicherung')[1] = ins;
+  const zollwert = goods + main + pre + ins, duty = zollwert*S.duty/100;
+  const after = det.filter(d => d[2]==='nach').reduce((s, d) => s + d[1], 0);
+  const eustBase = zollwert + duty + after, eust = eustBase*S.vat/100;
+  main += pre;
+  return {mode, sh, goods, main, ins, zollwert, duty, after, eustBase, eust, freight: main + ins + after,
+    landed: zollwert + duty + after, det, days: dd, door: dd.main + dd.port + dd.truck, co2};
+}
+function scenario(mode){
+  mode = mode || UI.mode;
+  const cartons = S.cartons, units = cartons*S.upc;
+  const priceUsd = S.priceOverride > 0 ? S.priceOverride : tierPrice(units);
+  const goodsUsd = units*priceUsd, goods = goodsUsd/S.usd;
+  let legs;
+  if (mode === 'split'){
+    const p = palletInfo();
+    const airC = Math.min(cartons, Math.max(0, Math.round(S.splitPal))*(S.palletize ? p.perPal : 12));
+    const seaC = cartons - airC;
+    legs = [];
+    if (airC > 0) legs.push(legCost(ship(airC), 'air', goods*airC/cartons));
+    if (seaC > 0) legs.push(legCost(ship(seaC), 'sea', goods*seaC/cartons));
+  } else legs = [legCost(ship(cartons), mode, goods)];
+  const sum = k => legs.reduce((s, l) => s + l[k], 0);
+  const r = {mode, cartons, units, priceUsd, goodsUsd, goods, legs, sh: ship(cartons),
+    main: sum('main'), ins: sum('ins'), zollwert: sum('zollwert'), duty: sum('duty'), after: sum('after'),
+    eustBase: sum('eustBase'), eust: sum('eust'), freight: sum('freight'), landed: sum('landed'), co2: sum('co2')};
+  r.perUnit = r.landed/units; r.cash = r.landed + r.eust;
+  const t0 = dParse(S.orderDate);
+  r.t0 = t0; r.prodEnd = dAdd(t0, S.prodDays); r.fob = dAdd(t0, S.prodDays + S.fobLead);
+  legs.forEach(l => { l.eta = dAdd(r.fob, l.days.main); l.clear = dAdd(l.eta, l.days.port); l.pod = dAdd(l.clear, l.days.truck); l.live = dAdd(l.pod, S.fbaDays); l.units = Math.round(units*l.sh.cartons/cartons); });
+  r.firstLive = Math.min(...legs.map(l => l.live)); r.lastLive = Math.max(...legs.map(l => l.live));
+  r.door = Math.max(...legs.map(l => l.door)); r.firstDoor = Math.min(...legs.map(l => l.door));
+  // Kapitalbindung der bezahlten Ware während des Transports (FOB bis verkaufsbereit)
+  r.capital = legs.reduce((s, l) => s + l.goods*S.interest/100*days(r.fob, l.live)/365, 0);
+  r.tco = r.landed + r.capital;
+  return r;
+}
+function unitEcon(perUnit, price){
+  const p = price ?? S.price, net = p/(1 + S.vat/100);
+  const fees = S.chan === 'fba' ? p*S.amzRef/100 + S.fbaFee : p*S.shopPay/100 + S.plFee;
+  const mkt = p*S.mkt/100, ret = net*S.ret/100;   /* Marketing wie Amazon-TACoS: % vom Bruttoumsatz */
+  const db = net - fees - mkt - ret - perUnit;
+  return {gross:p, net, fees, mkt, ret, cost:perUnit, db, dbPct: db/net, cashIn: net - fees - mkt - ret};
+}
+function minPrice(cost){ for (let p = 1; p < 400; p += 0.1){ if (unitEcon(cost, p).db >= 0) return p; } return 0; }
+
+function cashflow(r){
+  r = r || scenario();
+  const ev = [];
+  ev.push([r.t0, -S.launchFix, 'Einmalkosten Launch (Labor, Listing, Registrierungen)']);
+  ev.push([r.t0, -0.4*r.goods, 'Anzahlung 40 % an Lieferanten']);
+  ev.push([r.fob, -0.6*r.goods, 'Restzahlung 60 % zum FOB-Datum']);
+  r.legs.forEach(l => {
+    const n = MODES[l.mode].short;
+    ev.push([l.mode === 'air' ? r.fob : l.eta, -(l.main + l.ins), 'Hauptlauf + Versicherung (' + n + ')']);
+    ev.push([l.clear, -(l.duty + l.eust), 'Zoll + EUSt (' + n + ')']);
+    ev.push([l.pod, -l.after, 'Kosten ab Grenze (' + n + ')']);
+    ev.push([dAdd(l.clear, S.refundDays), l.eust, 'Vorsteuer-Erstattung EUSt (' + n + ')']);
+  });
+  const ue = unitEcon(r.perUnit);
+  const daily = S.salesPm/30, end = dAdd(r.lastLive, Math.ceil(r.units/Math.max(daily, .01)) + 45);
+  let stock = 0, sold = 0, cash = S.budget, pts = [], minC = Infinity, minT = r.t0, payback = null, soldOut = null, carry = 0;
+  const monthly = {};
+  for (let t = r.t0; t <= end; t += DAY){
+    for (const e of ev) if (e[0] === t) cash += e[1];
+    for (const l of r.legs) if (l.live === t) stock += l.units;
+    if (stock > 0){ carry += daily; const q = Math.min(stock, Math.floor(carry)); carry -= q; stock -= q; sold += q; cash += q*ue.cashIn;
+      const mk = dIso(t).slice(0,7); monthly[mk] = monthly[mk] || {units:0, rev:0}; monthly[mk].units += q; monthly[mk].rev += q*ue.net;
+      if (stock === 0 && sold >= r.units && !soldOut) soldOut = t; }
+    if (cash < minC){ minC = cash; minT = t; }
+    if (payback === null && t > r.firstLive && cash >= S.budget) payback = t;
+    pts.push([t, cash]);
+  }
+  return {pts, ev, minC, minT, peakNeed: S.budget - minC, payback, soldOut, end, profit: cash - S.budget, ue, monthly};
+}
+function maxCartonsInBudget(){
+  let best = 0;
+  for (let c = 1; c <= 200; c++){
+    const ok = withS({cartons:c}, () => { const r = scenario('sea'); return r.cash + S.launchFix <= S.budget && (S.seaCont !== 'lcl' || r.sh.cbm <= S.lclMax + 1e-9); });
+    if (ok) best = c;
+  }
+  return best;
+}
+
+function inventorySim(){
+  const r = scenario('sea');
+  const d = S.salesPm/30, lead = S.prodDays + S.fobLead + S.seaMain + S.seaPort + S.seaTruck + S.fbaDays;
+  const SB = Math.ceil(d*S.safetyDays), rop = Math.ceil(d*lead) + SB, Q = r.units;
+  const end = dAdd(r.t0, 480);
+  let stock = 0, carry = 0, pts = [], orders = [{t: r.t0, kind:'Erstbestellung'}], arrivals = [{t: r.firstLive, q: Q}], pending = false, stockout = 0;
+  for (let t = r.t0; t <= end; t += DAY){
+    for (const a of arrivals) if (a.t === t){ stock += a.q; pending = false; }
+    if (t >= r.firstLive){ if (stock <= 0) stockout++; else { carry += d; const q = Math.min(stock, Math.floor(carry)); carry -= q; stock -= q; } }
+    if (t >= r.firstLive && !pending && stock <= rop){ pending = true; orders.push({t, kind:'Nachbestellung'}); arrivals.push({t: dAdd(t, lead), q: Q}); }
+    pts.push([t, stock]);
+  }
+  const reorders = orders.filter(o => o.kind === 'Nachbestellung');
+  return {r, d, lead, SB, rop, Q, pts, orders, arrivals, reorders, reach: Q/d, stockout};
+}
+
+function fclCurve(){
+  const kgPerCbm = withS({}, () => { const sh = ship(S.cartons); return sh.kg/sh.cbm; });
+  const lcl = v => v*S.seaRate/S.usd + v*S.seaDest + S.seaDO + S.customs + Math.max(v*kgPerCbm, v*S.truckFactor)/100*S.truckSea;
+  const f20 = S.fcl20/S.usd + S.fclTHC20 + S.seaDO + S.customs + S.fclTruck20;
+  const f40 = S.fcl40/S.usd + S.fclTHC40 + S.seaDO + S.customs + S.fclTruck40;
+  let be20 = null; for (let v = 0.5; v <= 33; v += 0.1){ if (lcl(v) >= f20){ be20 = v; break; } }
+  return {lcl, f20, f40, be20};
+}
+
+
+/* ---------- Incoterms ---------- */
+const INC = [
+  ['EXW','alle','Ab Werk: Käufer trägt fast alles, auch die Export-Verzollung'],
+  ['FCA','alle','Frei Frachtführer: richtig für Luftfracht ab Shanghai Pudong'],
+  ['CPT','alle','Frachtfrei: Verkäufer zahlt Hauptlauf, Risiko geht bei Übergabe an den ersten Frachtführer über'],
+  ['CIP','alle','wie CPT, zusätzlich Versicherung mit Deckung nach Klausel A'],
+  ['DAP','alle','Geliefert benannter Ort: Verkäufer liefert bis Graben, unentladen'],
+  ['DPU','alle','Geliefert benannter Ort entladen'],
+  ['DDP','alle','Geliefert verzollt: Verkäufer trägt auch Zoll und Einfuhrumsatzsteuer'],
+  ['FAS','See','Frei Längsseite Schiff'],
+  ['FOB','See','Frei an Bord: unser Kaufvertrag für die Seefracht'],
+  ['CFR','See','Kosten und Fracht bis Zielhafen, Risiko ab Bord'],
+  ['CIF','See','wie CFR, zusätzlich Versicherung mit Deckung nach Klausel C']];
+const SEG = ['Export-Zoll','Vorlauf','Verladung','Hauptlauf','Versicherung','Zielhafen','Nachlauf','Import-Zoll'];
+function incWho(term, seg){
+  const D = ['DAP','DPU','DDP'].includes(term);
+  if (seg === 0) return term === 'EXW' ? 'K' : 'V';
+  if (seg === 4) return (['CIP','CIF'].includes(term) || D) ? 'V' : 'K';
+  if (seg === 5 || seg === 6) return D ? 'V' : 'K';
+  if (seg === 7) return term === 'DDP' ? 'V' : 'K';
+  if (D) return 'V';
+  const m = {EXW:0, FCA:2, FAS:2, FOB:3, CPT:4, CIP:4, CFR:4, CIF:4}[term];
+  return seg < m ? 'V' : 'K';
+}
+function incAlloc(){
+  const r = scenario('sea'), l = r.legs[0], wm = l.sh.seaWM;
+  const seg = [S.oExp, S.oPre, S.oTHC*wm, l.main, l.ins, wm*S.seaDest + S.seaDO, l.sh.truckCW/100*S.truckSea, S.customs + l.duty];
+  return {r, seg, rows: INC.map(([t]) => { let v = 0, k = 0; seg.forEach((x, i) => { if (incWho(t, i) === 'V') v += x; else k += x; }); return {t, v, k}; })};
+}
+
+/* ================= Diagramme (SVG) ================= */
+const CC = {ink:'#1F2A33', ink2:'#55616B', ink3:'#86919A', grid:'#ECEFF2', axis:'#AEB7BE', mute:'#A9B2B9', signal:'#F9A800'};
+function niceStep(x){ if (x <= 0) return 1; const p = Math.pow(10, Math.floor(Math.log10(x))), n = x/p; return (n < 1.5 ? 1 : n < 3 ? 2 : n < 7 ? 5 : 10)*p; }
+function ticks(mn, mx, n=5){ const st = niceStep((mx - mn)/n), t = []; for (let v = Math.ceil(mn/st)*st; v <= mx + st*1e-6; v += st) t.push(+v.toFixed(10)); return t; }
+const kfmt = v => Math.abs(v) >= 1000 ? nf(v/1000, Math.abs(v) >= 10000 ? 0 : 1) + 'k' : nf(v, 0);
+const tx = (x, y, s, o={}) => `<text x="${x}" y="${y}" font-size="${o.fs||11.5}" fill="${o.c||CC.ink2}" text-anchor="${o.a||'start'}" font-weight="${o.w||400}"${o.cls?` class="${o.cls}"`:''}${o.halo?' paint-order="stroke" stroke="#fff" stroke-width="4" stroke-linejoin="round"':''}>${s}</text>`;
+
+/* Liniendiagramm: Zeit- oder Zahlenachse */
+function lineChart(o){
+  const W = o.W || 760, H = o.H || 300, l = o.l || 60, r = o.r || 24, t = o.t || 16, b = o.legend ? 58 : 34;
+  const all = o.series.flatMap(s => s.pts);
+  const xs = all.map(p => p[0]); let x0 = o.xMin ?? Math.min(...xs), x1 = o.xMax ?? Math.max(...xs);
+  const ys = all.map(p => p[1]).concat((o.refs||[]).map(r => r.y));
+  let y0 = o.yMin ?? Math.min(0, ...ys), y1 = o.yMax ?? Math.max(...ys);
+  if (o.yMax == null) y1 += (y1 - y0)*0.08;
+  const X = v => l + (v - x0)/((x1 - x0) || 1)*(W - l - r), Y = v => H - b - (v - y0)/((y1 - y0) || 1)*(H - t - b);
+  let g = '';
+  (o.bands||[]).forEach(bd => { g += `<rect x="${X(bd.x0)}" y="${t}" width="${Math.max(0, X(bd.x1) - X(bd.x0))}" height="${H - t - b}" fill="${bd.c || '#FFF3D1'}"/>` + (bd.label ? tx(X(bd.x0) + 6, t + 14, bd.label, {fs:11, c:bd.tc || '#8A5A00', w:600}) : ''); });
+  ticks(y0, y1).forEach(v => { g += `<line x1="${l}" x2="${W - r}" y1="${Y(v)}" y2="${Y(v)}" stroke="${CC.grid}"/>` + tx(l - 8, Y(v) + 4, (o.yFmt || kfmt)(v), {a:'end', fs:11, c:CC.ink3}); });
+  if (o.x === 'date'){
+    const d = new Date(x0); let m = Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1); let i = 0;
+    const span = (x1 - x0)/DAY, every = span > 500 ? 3 : span > 260 ? 2 : 1;
+    while (m <= x1){ const dd = new Date(m); if (i++ % every === 0) g += `<line x1="${X(m)}" x2="${X(m)}" y1="${H - b}" y2="${H - b + 4}" stroke="${CC.axis}"/>` + tx(X(m), H - b + 17, MON[dd.getUTCMonth()] + (dd.getUTCMonth() === 0 ? ' ' + String(dd.getUTCFullYear()).slice(2) : ''), {a:'middle', fs:11, c:CC.ink3}); m = Date.UTC(dd.getUTCFullYear(), dd.getUTCMonth() + 1, 1); }
+  } else {
+    ticks(x0, x1, o.xTicks || 7).forEach(v => { g += `<line x1="${X(v)}" x2="${X(v)}" y1="${H - b}" y2="${H - b + 4}" stroke="${CC.axis}"/>` + tx(X(v), H - b + 17, (o.xFmt || kfmt)(v), {a:'middle', fs:11, c:CC.ink3}); });
+    if (o.xLabel) g += tx(W - r, H - b + 32, o.xLabel, {a:'end', fs:11, c:CC.ink3});
+  }
+  g += `<line x1="${l}" x2="${W - r}" y1="${Y(Math.max(y0, 0))}" y2="${Y(Math.max(y0, 0))}" stroke="${CC.axis}"/>`;
+  (o.refs||[]).forEach(rf => { g += `<line x1="${l}" x2="${W - r}" y1="${Y(rf.y)}" y2="${Y(rf.y)}" stroke="${rf.c || CC.ink3}" stroke-dasharray="5 4"/>` + tx(rf.a === 'start' ? l + 6 : W - r - 4, Y(rf.y) - 6, rf.label, {a: rf.a || 'end', fs:11.5, c: rf.c || CC.ink2, w:600, halo:true}); });
+  (o.vlines||[]).forEach(v => { g += `<line x1="${X(v.x)}" x2="${X(v.x)}" y1="${t}" y2="${H - b}" stroke="${v.c || CC.ink3}" stroke-dasharray="3 4"/>` + (v.label ? tx(X(v.x) + 5, t + 12 + (v.dy||0), v.label, {fs:11, c: v.c || CC.ink2, w:600, halo:true}) : ''); });
+  o.series.forEach(s => {
+    if (!s.pts.length) return;
+    const d = s.pts.map((p, i) => (i ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1)).join('');
+    if (s.area) g += `<path d="${d}L${X(s.pts.at(-1)[0])} ${Y(Math.max(y0,0))}L${X(s.pts[0][0])} ${Y(Math.max(y0,0))}Z" fill="${s.color}" opacity=".08"/>`;
+    g += `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="${s.width || 2.2}"${s.dash ? ` stroke-dasharray="${s.dash}"` : ''} stroke-linejoin="round"/>`;
+    if (s.dots) s.pts.forEach(p => g += `<circle cx="${X(p[0])}" cy="${Y(p[1])}" r="3" fill="${s.color}"/>`);
+  });
+  (o.marks||[]).forEach(m => { g += `<circle cx="${X(m.x)}" cy="${Y(m.y)}" r="5" fill="${m.c}" stroke="#fff" stroke-width="1.5"/>` + tx(X(m.x) + (m.a === 'end' ? -9 : 9), Y(m.y) + (m.dy ?? -9), m.label, {a: m.a || 'start', fs:12, c:m.c, w:600, halo:true}); });
+  if (o.legend){ let lx = l; o.series.filter(s => s.name).forEach(s => { g += `<line x1="${lx}" x2="${lx + 18}" y1="${H - 14}" y2="${H - 14}" stroke="${s.color}" stroke-width="3"${s.dash ? ` stroke-dasharray="${s.dash}"` : ''}/>` + tx(lx + 24, H - 10, s.name, {fs:11.5}); lx += 34 + s.name.length*6.3; }); }
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${esc(o.title || 'Diagramm')}">${g}</svg>`;
+}
+
+/* Horizontale Balken */
+function hbars(rows, o={}){
+  const W = o.W || 620, lw = o.lw || 170, rw = o.rw || 110, rowH = o.rowH || 32, H = rows.length*rowH + 8;
+  const max = (o.max || Math.max(...rows.map(x => x.v)))*1.02;
+  let g = '';
+  rows.forEach((x, i) => { const y = 4 + i*rowH, w = Math.max(1.5, (W - lw - rw)*Math.max(x.v, 0)/max);
+    g += tx(lw - 10, y + rowH/2 + 4, x.label, {a:'end', fs:12.5, c:CC.ink, w: x.bold ? 600 : 400}) + `<rect x="${lw}" y="${y + 7}" width="${w}" height="${rowH - 14}" rx="3" fill="${x.c || CC.mute}"/>` + tx(lw + w + 8, y + rowH/2 + 4, x.txt, {fs:12.5, c:CC.ink, w: x.bold ? 600 : 400}); });
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${esc(o.title || 'Balkendiagramm')}">${g}</svg>`;
+}
+
+/* Wasserfall (Brücke) */
+function waterfall(items, o={}){
+  const W = o.W || 760, H = o.H || 270, l = 20, b = 54, t = 26, n = items.length, bw = (W - l - 20)/n;
+  let run = 0;
+  const segs = items.map(it => { if (it.total){ const s = {y0:0, y1:it.v, ...it}; run = it.v; return s; } const s = {y0:run, y1:run + it.v, ...it}; run += it.v; return s; });
+  const max = Math.max(...segs.map(s => Math.max(s.y0, s.y1)))*1.1, Y = v => H - b - v/max*(H - t - b);
+  let g = `<line x1="${l}" x2="${W - 10}" y1="${H - b}" y2="${H - b}" stroke="${CC.axis}"/>`;
+  segs.forEach((s, i) => { const x = l + i*bw + bw*0.18, w = bw*0.64, yt = Y(Math.max(s.y0, s.y1)), h = Math.max(Math.abs(Y(s.y0) - Y(s.y1)), 2);
+    g += `<rect x="${x}" y="${yt}" width="${w}" height="${h}" fill="${s.c}"/>` + tx(x + w/2, yt - 7, (o.fmt || nf)(s.v), {a:'middle', fs:12.5, c:CC.ink, w:600}) + tx(x + w/2, H - b + 17, s.label, {a:'middle', fs:12, c:CC.ink2}) + (s.sub ? tx(x + w/2, H - b + 32, s.sub, {a:'middle', fs:11, c:CC.ink3}) : '');
+    if (i < segs.length - 1 && !segs[i+1].total) g += `<line x1="${x + w}" x2="${x + bw}" y1="${Y(s.y1)}" y2="${Y(s.y1)}" stroke="${CC.axis}" stroke-dasharray="2 3"/>`; });
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${esc(o.title || 'Wasserfall')}">${g}</svg>`;
+}
+
+/* Tornado um einen Basiswert */
+function tornadoChart(rows, base, o={}){
+  const W = o.W || 760, lw = 200, rowH = 34, t = 30, H = rows.length*rowH + t + 26;
+  const vals = rows.flatMap(r => [r.good, r.bad]).concat(base);
+  const mn = Math.min(...vals), mx = Math.max(...vals), pad = (mx - mn)*0.18;
+  const X = v => lw + (v - (mn - pad))/((mx + pad) - (mn - pad))*(W - lw - 30);
+  let g = `<line x1="${X(base)}" x2="${X(base)}" y1="${t - 8}" y2="${H - 22}" stroke="${CC.ink}" stroke-width="1.2"/>` + tx(X(base), t - 14, 'Basis ' + eur(base), {a:'middle', fs:12, c:CC.ink, w:600});
+  rows.forEach((r, i) => { const y = t + i*rowH;
+    g += tx(lw - 12, y + rowH/2 + 4, r.label, {a:'end', fs:12.5, c:CC.ink});
+    [['good', '#2C7A41', r.goodL], ['bad', '#B3141F', r.badL]].forEach(([k, c, lab]) => { const v = r[k], xa = Math.min(X(v), X(base)), w = Math.abs(X(v) - X(base));
+      g += `<rect x="${xa}" y="${y + 7}" width="${Math.max(w, 1)}" height="${rowH - 14}" fill="${c}" opacity=".78"/>`;
+      const right = v >= base; g += tx(right ? X(v) + 6 : X(v) - 6, y + rowH/2 + 4, eur(v) + ' (' + lab + ')', {a: right ? 'start' : 'end', fs:11, c:CC.ink2}); }); });
+  g += tx(lw, H - 6, 'grün = günstige Ausprägung, rot = ungünstige Ausprägung, Wert = Deckungsbeitrag je Einheit', {fs:11, c:CC.ink3});
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Tornado-Diagramm">${g}</svg>`;
+}
+
+/* Gestapelte horizontale Balken (zwei Teile) */
+function stackH(rows, o={}){
+  const W = o.W || 760, lw = 64, rw = 150, rowH = 30, t = 6, H = rows.length*rowH + t + 30;
+  const max = Math.max(...rows.map(r => r.parts.reduce((s, p) => s + p.v, 0)));
+  let g = '';
+  rows.forEach((r, i) => { const y = t + i*rowH; let x = lw;
+    g += tx(lw - 10, y + rowH/2 + 4, r.label, {a:'end', fs:12.5, c:CC.ink, w: r.bold ? 600 : 400});
+    r.parts.forEach(p => { const w = (W - lw - rw)*p.v/max; g += `<rect x="${x}" y="${y + 6}" width="${w}" height="${rowH - 12}" fill="${p.c}"${r.bold ? ' stroke="#1F2A33" stroke-width="1.5"' : ''}/>`; x += w; });
+    g += tx(x + 8, y + rowH/2 + 4, r.txt, {fs:12, c:CC.ink2}); });
+  let lx = lw; (o.legend||[]).forEach(L => { g += `<rect x="${lx}" y="${H - 18}" width="12" height="10" fill="${L.c}"/>` + tx(lx + 18, H - 9, L.label, {fs:11.5}); lx += 30 + L.label.length*6.5; });
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${esc(o.title || 'Verteilung')}">${g}</svg>`;
+}
+
+/* Vertikale Säulen (gruppiert) */
+function vbars(cats, series, o={}){
+  const W = o.W || 760, H = o.H || 240, l = 52, r = 14, t = 14, b = o.legend ? 50 : 30;
+  const max = Math.max(...series.flatMap(s => s.vals))*1.12 || 1, Y = v => H - b - v/max*(H - t - b);
+  const cw = (W - l - r)/cats.length, bw = Math.min(28, cw*0.7/series.length);
+  let g = '';
+  ticks(0, max, 4).forEach(v => g += `<line x1="${l}" x2="${W - r}" y1="${Y(v)}" y2="${Y(v)}" stroke="${CC.grid}"/>` + tx(l - 8, Y(v) + 4, (o.yFmt || kfmt)(v), {a:'end', fs:11, c:CC.ink3}));
+  cats.forEach((c, i) => { const cx = l + i*cw + cw/2;
+    series.forEach((s, j) => { const v = s.vals[i], x = cx - series.length*bw/2 + j*bw; g += `<rect x="${x}" y="${Y(v)}" width="${bw - 2}" height="${H - b - Y(v)}" fill="${s.c}"/>`; });
+    g += tx(cx, H - b + 16, c, {a:'middle', fs:11, c:CC.ink3}); });
+  g += `<line x1="${l}" x2="${W - r}" y1="${H - b}" y2="${H - b}" stroke="${CC.axis}"/>`;
+  if (o.legend){ let lx = l; series.forEach(s => { g += `<rect x="${lx}" y="${H - 18}" width="12" height="10" fill="${s.c}"/>` + tx(lx + 18, H - 9, s.name, {fs:11.5}); lx += 30 + s.name.length*6.5; }); }
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${esc(o.title || 'Säulendiagramm')}">${g}</svg>`;
+}
+
+/* Kleiner Verlauf für Kennzahlenkacheln */
+function spark(vals, c){
+  const W = 120, H = 30, mx = Math.max(...vals), mn = Math.min(...vals);
+  const d = vals.map((v, i) => (i ? 'L' : 'M') + (i/(vals.length - 1)*W).toFixed(1) + ' ' + (H - 3 - (v - mn)/((mx - mn) || 1)*(H - 6)).toFixed(1)).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" width="120" height="30" aria-hidden="true"><path d="${d}" fill="none" stroke="${c || CC.ink}" stroke-width="1.8"/></svg>`;
+}
+
+/* ================= Oberfläche: Bausteine ================= */
+const IC = {
+  cockpit:'<path d="M4 16a8 8 0 1 1 16 0"/><path d="M12 16l4.5-5"/><path d="M4 20h16"/>',
+  fracht:'<path d="M3 7.5l9-4.5 9 4.5v9l-9 4.5-9-4.5z"/><path d="M3 7.5l9 4.5 9-4.5M12 12v9"/>',
+  mode:'<circle cx="6" cy="18" r="2.2"/><circle cx="18" cy="6" r="2.2"/><path d="M8.2 18H15a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h6.8"/>',
+  zoll:'<path d="M12 3l8 3v6c0 4.8-3.4 8-8 9-4.6-1-8-4.2-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+  inc:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.3 3 14.7 0 18M12 3c-3 3.3-3 14.7 0 18"/>',
+  track:'<path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  einkauf:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M15.5 15h2.5"/>',
+  dispo:'<path d="M4 13a8 8 0 0 1 14.3-5M20 11a8 8 0 0 1-14.3 5"/><path d="M18.5 3.5V8H14M5.5 20.5V16H10"/>',
+  check:'<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 12.5l3 3 5-6"/>',
+  verkauf:'<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+  angebot:'<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/>',
+  sens:'<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
+  bi:'<path d="M4 20V11M10 20V5M16 20v-6M2.5 20h19"/>',
+  pilot:'<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',
+  bericht:'<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 3.5h6v3H9zM9 11h6M9 15h4"/>',
+  annahmen:'<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>',
+  glossar:'<path d="M4 4.5h6a2 2 0 0 1 2 2V20a1.8 1.8 0 0 0-1.8-1.8H4zM20 4.5h-6a2 2 0 0 0-2 2V20a1.8 1.8 0 0 1 1.8-1.8H20z"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.5"/>',
+  warn:'<path d="M12 3l9.5 17h-19z"/><path d="M12 10v4.5M12 17v.5"/>',
+  ok:'<circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.5"/>',
+  euro:'<path d="M17 6.5A7 7 0 1 0 17 17.5"/><path d="M4 10.5h9M4 13.5h9"/>',
+  leaf:'<path d="M5 19c0-8 5-14 15-14 0 10-6 15-14 15"/><path d="M5 19l7-7"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  radar:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><path d="M12 12l6-6"/><circle cx="12" cy="12" r="1.2"/>',
+  copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
+};
+const icon = (k, cls) => `<svg viewBox="0 0 24 24" aria-hidden="true"${cls ? ` class="${cls}"` : ''}>${IC[k] || ''}</svg>`;
+
+const NAV = [
+  ['Überblick', [['cockpit','Cockpit','cockpit','alle'], ['bericht','Management-Bericht','bericht','gl']]],
+  ['Logistik', [['fracht','Frachtrechner','fracht','logistik'], ['verkehr','Luft oder See','mode','logistik gl'], ['zoll','Zoll & Tarifierung','zoll','logistik einkauf'], ['incoterms','Incoterms','inc','einkauf logistik']]],
+  ['Risiko', [['risiko','Risiko & Lagebild','radar','logistik einkauf gl']]],
+  ['Einkauf', [['einkauf','Staffel & Cashflow','einkauf','einkauf gl'], ['compliance','Compliance-Check','check','einkauf gl']]],
+  ['Verkauf', [['verkauf','Preis & Marge','verkauf','verkauf gl']]],
+  ['System', [['annahmen','Annahmen','annahmen','alle'], ['glossar','Glossar & Fakten','glossar','alle']]],
+];
+const ROLES = [['alle','Alle Abteilungen'], ['einkauf','Einkauf'], ['logistik','Logistik'], ['verkauf','Verkauf'], ['gl','Geschäftsleitung']];
+const DEPT = {einkauf:'Einkauf', logistik:'Logistik', verkauf:'Verkauf', gl:'Geschäftsleitung'};
+
+/* Glossar (auch für Tooltips) */
+const GL = {
+  'W/M':'Weight or Measure: Seefracht wird nach Tonnen oder Kubikmetern berechnet, je nachdem, was größer ist (1 cbm = 1 t).',
+  'LCL':'Less than Container Load: Sammelgut, die Sendung teilt sich einen Container mit anderen Versendern.',
+  'FCL':'Full Container Load: ein ganzer Container (20 oder 40 Fuß) für eine Sendung.',
+  'TEU':'Twenty-foot Equivalent Unit: Maß für Containerkapazität, ein 20-Fuß-Container = 1 TEU.',
+  'THC':'Terminal Handling Charges: Umschlagskosten im Hafen.',
+  'CFS':'Container Freight Station: Lager im Hafen, in dem LCL-Sendungen zusammengestellt oder aufgelöst werden.',
+  'D/O':'Delivery Order: Freistellung der Ware im Zielhafen durch die Reederei bzw. den Spediteur.',
+  'B/L':'Bill of Lading (Konnossement): Seefrachtbrief und Wertpapier, berechtigt zur Herausgabe der Ware.',
+  'AWB':'Air Waybill: Luftfrachtbrief.',
+  'ETA':'Estimated Time of Arrival: geplante Ankunft.',
+  'ETD':'Estimated Time of Departure: geplante Abfahrt.',
+  'POD':'Proof of Delivery: Zustellnachweis beim Empfänger.',
+  'FOB':'Free on Board (Incoterms 2020): Verkäufer liefert an Bord des Schiffs im Verschiffungshafen. Nur für See- und Binnenschiffstransport.',
+  'FCA':'Free Carrier (Incoterms 2020): Verkäufer übergibt an den Frachtführer des Käufers am benannten Ort. Für alle Verkehrsträger, z. B. Luftfracht.',
+  'DAP':'Delivered at Place (Incoterms 2020): geliefert an den benannten Ort, unentladen, unverzollt.',
+  'EUSt':'Einfuhrumsatzsteuer (19 %): wird bei der Einfuhr erhoben und ist für Unternehmen als Vorsteuer abziehbar.',
+  'Zollwert':'Bemessungsgrundlage für den Zoll: Warenwert plus Transport- und Versicherungskosten bis zur EU-Grenze (Art. 70/71 UZK).',
+  'EUSt-Wert':'Bemessungsgrundlage der EUSt: Zollwert + Zoll + Beförderungskosten bis zum ersten Bestimmungsort in der EU.',
+  'TARIC':'Integrierter Zolltarif der EU, liefert Zollsätze und Maßnahmen je Warennummer.',
+  'vZTA':'Verbindliche Zolltarifauskunft: rechtsverbindliche Einreihung einer Ware durch den Zoll, 3 Jahre gültig.',
+  'EORI':'Economic Operators Registration and Identification: Pflichtnummer für Zollanmeldungen in der EU.',
+  'ATLAS':'IT-Verfahren der deutschen Zollverwaltung für Zollanmeldungen.',
+  'Landed Cost':'Einstandspreis frei Lager: Ware + Fracht + Versicherung + Zoll + Kosten bis zum Lager (ohne erstattungsfähige EUSt).',
+  'GPSR':'General Product Safety Regulation (EU) 2023/988, gilt seit 13.12.2024.',
+  'WEEE':'Elektroaltgeräte-Richtlinie; in Deutschland ElektroG mit Registrierung bei der stiftung ear.',
+  'EPREL':'EU-Produktdatenbank für Energielabels.',
+  'FBA':'Fulfillment by Amazon: Amazon lagert, verpackt und versendet die Ware.',
+  '3PL':'Third-Party-Logistics: externer Logistikdienstleister.',
+  'MOQ':'Minimum Order Quantity: Mindestbestellmenge, hier 1 Karton.',
+  'DB':'Deckungsbeitrag: Netto-Erlös minus variable Kosten.',
+  'LDM':'Lademeter: Länge der Ladefläche eines LKW, die eine Sendung belegt.',
+  'UZK':'Unionszollkodex: Zollrecht der EU.',
+  'Meldebestand':'Lagerbestand, bei dem nachbestellt werden muss: Verbrauch während der Wiederbeschaffungszeit plus Sicherheitsbestand.',
+};
+const T = (term, label) => GL[term] ? `<abbr class="gl" tabindex="0" data-tip="${esc(GL[term])}">${label || term}</abbr>` : (label || term);
+
+const ph = (title, lead, depts) => `<div class="ph"><div><h1>${title}</h1>${lead ? `<p>${lead}</p>` : ''}</div>${depts ? `<div class="depts">${depts.split(' ').map(d => `<span class="chip">${DEPT[d] || d}</span>`).join('')}</div>` : ''}</div>`;
+const panel = (title, body, note, cls) => `<section class="panel${cls ? ' ' + cls : ''}">${title ? `<header><h2>${title}</h2>${note ? `<span class="note">${note}</span>` : ''}</header>` : ''}${body}</section>`;
+/* Selbst geschätzte Werte (keine Skript- oder Quellenzahl) */
+const EST = {
+  truckSea:'Schätzung, Stückgut-Tarif für ca. 770 km; öffentliche Stückgutpreise gibt es nur auf Anfrage (DSLV-Kostenindex: +4,7 % im 1. Halbjahr 2026). Vor Buchung Angebot einholen',
+  seaPort:'Schätzung', seaTruck:'Schätzung', truckAir:'Schätzung, Stückgut-Tarif für ca. 365 km; Preise nur auf Anfrage',
+  airMain:'Schätzung', airPort:'Schätzung', airTruck:'Schätzung', railMain:'Schätzung', railHub:'Schätzung', railTruck:'Schätzung',
+  fcl20:'abgeleitet: rund 63 % der 40-Fuß-Rate (Markt: 60–70 %)', fclTHC20:'Schätzung innerhalb 300–450 USD je Container (Topway)', fclTHC40:'Schätzung innerhalb 300–450 USD je Container (Topway)',
+  fclTruck20:'Schätzung: 1,20–1,80 € je km × ca. 650 km', fclTruck40:'Schätzung: 1,20–1,80 € je km × ca. 650 km', fclPort:'Annahme: ein Tag weniger, weil das CFS-Lager entfällt',
+  oPre:'Schätzung', oExp:'Schätzung', oTHC:'Schätzung',
+  fobLead:'Annahme', fbaDays:'Annahme', holdRate:'Annahme', orderFix:'Annahme', safetyDays:'Annahme', refundDays:'Annahme; gesetzlich gibt es keine Auszahlungsfrist (§ 168 AO), Voranmeldung bis zum 10. des Folgemonats (§ 18 UStG)',
+  salesPm:'Annahme zur Nachfrage, keine Quelle; genau das soll der Pilot testen', b2bMarkup:'Annahme', shopPay:'Annahme', plFee:'Annahme',
+  relSea:'Urteil des Teams', relAir:'Urteil des Teams', relSplit:'Urteil des Teams', relRail:'Urteil des Teams', riskSea:'Urteil des Teams', riskAir:'Urteil des Teams', riskSplit:'Urteil des Teams', riskRail:'Urteil des Teams',
+  lostShare:'Annahme', palletize:'Annahme: Sammelgut ab China wird meist lose gestaut',
+  wCost:'Gewichtung des Teams', wTime:'Gewichtung des Teams', wCo2:'Gewichtung des Teams', wRel:'Gewichtung des Teams', wRisk:'Gewichtung des Teams',
+};
+const EST_R = {
+  cn:{},
+};
+const estOf = k => (EST_R[S.route] || {})[k] || (S.route === 'cn' || !(k in (ROUTES[S.route] || {patch:{}}).patch) ? EST[k] : '') || '';
+/* Werte mit Quelle (recherchiert am 16.11.2026) */
+const QV = {
+  seaRate:{l:'Seefracht LCL Shanghai → Hamburg', t:'DTFU Logistics (26.01.2026): Shanghai–Hamburg LCL 49–84 USD/cbm; FreightAmigo (06.05.2026): 50–120 USD/cbm. Wir liegen in der Mitte.', u:'https://dtfulogistics.com/news/shipping-from-shanghai-to-germany/'},
+  seaDest:{l:'LCL-Servicegebühr Hamburg', t:'Forto Tarif Deutschland Q3 2026 (aktuellster öffentlicher Tarif, gültig bis 30.09.2026): LCL-Servicegebühr 28 €/W/M.', u:'https://explore.forto.com/hubfs/General%20tariff/2026/July%202026/Q3%20General%20Tariff%20_%20Germany_valid%20until%202026-09-30.pdf'},
+  seaDO:{l:'Dokumente, Freistellung, Terminal Hamburg', t:'Forto Q3 2026: Dokumentation 35 € + Port Secure Release 15 € + Terminal und Lager 45 € = 95 € je Sendung.', u:'https://explore.forto.com/hubfs/General%20tariff/2026/July%202026/Q3%20General%20Tariff%20_%20Germany_valid%20until%202026-09-30.pdf'},
+  customs:{l:'Zollabfertigung Spediteur', t:'Forto Q3 2026: Importverzollung 52,50 € je Anmeldung inkl. einer Warennummer (+7 € je weitere).', u:'https://explore.forto.com/hubfs/General%20tariff/2026/July%202026/Q3%20General%20Tariff%20_%20Germany_valid%20until%202026-09-30.pdf'},
+  ins:{l:'Transportversicherung', t:'Sino-Shipping (Nov. 2026): Klausel A 0,15–0,5 % des Versicherungswerts; Basis CIF + 10 % (Maersk). Wir liegen im unteren Mittel.', u:'https://www.sino-shipping.com/de/freight-china-germany/cargo-insurance/'},
+  seaMain:{l:'Seetransit Hafen zu Hafen', t:'SEKO Logistics (05.11.2026): über Suez 32–35 Tage, über das Kap 45–60 Tage. 35 Tage gelten nur auf einem Suez-Dienst (günstigster Fall).', u:'https://www.sekologistics.com/en/resource-hub/knowledge-hub/asia-europe-trade-lane-guide-mastering-the-worlds-largest-shipping-corridor-in-2026/'},
+  kmSea:{l:'Seeweg', t:'CarraGlobe (26.09.2026): Shanghai–Rotterdam über Suez 10.600 sm (ca. 19.600 km), Hamburg etwas weiter.', u:'https://carraglobe.com/suez-vs-cape-of-good-hope-transit-times/'},
+  airRate:{l:'Luftfracht China → Europa', t:'Freightos Air Index (via AJOT, 10.11.2026): China–Nordeuropa 4,87 USD/kg. Leicht aufgerundet als Puffer, die Rate schwankt stark (13.10.2026: 3,58 USD/kg).', u:'https://www.ajot.com/news/freightos-weekly-update-la-lb-strike-deadline-extended-dem-win-increasing-trade-uncertainty'},
+  airHand:{l:'Handling Flughafen Frankfurt', t:'Forto Q3 2026: Luftfracht-Import THC 0,20 €/kg (Swissport FRA ab 01.04.2026: 0,18 €/kg).', u:'https://explore.forto.com/hubfs/General%20tariff/2026/July%202026/Q3%20General%20Tariff%20_%20Germany_valid%20until%202026-09-30.pdf'},
+  airDocs:{l:'Dokumente Luftfracht', t:'Forto Q3 2026: Handling 40 € + ATLAS-Importdokument 22 € je Luftfrachtbrief.', u:'https://explore.forto.com/hubfs/General%20tariff/2026/July%202026/Q3%20General%20Tariff%20_%20Germany_valid%20until%202026-09-30.pdf'},
+  kmAir:{l:'Flugstrecke', t:'Großkreis PVG–FRA 8.859 km (myflight.life); die tatsächliche Route ist etwas länger.', u:'https://myflight.life/flight-distance-and-time/result/from/FRA/to/PVG'},
+  kmTruckSea:{l:'LKW-Strecke Hamburg → Graben', t:'ADAC Routenplaner: Hamburg–Augsburg 747 km, plus Weg nach Graben (Amazon MUC3, 86836 Graben).', u:'https://maps.adac.de/routenplaner/route-von-hamburg-nach-augsburg'},
+  kmTruckAir:{l:'LKW-Strecke Frankfurt → Graben', t:'ADAC Routenplaner: Frankfurt–Augsburg 362–365 km.', u:'https://maps.adac.de/routenplaner/route-von-frankfurt-nach-augsburg'},
+  co2Sea:{l:'CO2 Containerschiff (kg/tkm)', t:'DESNZ 2026 (britische Regierung): Containerschiff ab 8.000 TEU 0,0155 kg CO2e/tkm. Der GLEC-Wert für Asien–Europa ist niedriger, wir rechnen also vorsichtig.', u:'https://logistivo.com/en/freight-emissions-calculator-co2-iso-14083'},
+  co2Air:{l:'CO2 Luftfracht (kg/tkm)', t:'DESNZ 2026: internationale Luftfracht 0,666 kg CO2e/tkm (GLEC: 0,61–0,79).', u:'https://logistivo.com/en/freight-emissions-calculator-co2-iso-14083'},
+  co2Truck:{l:'CO2 LKW (kg/tkm)', t:'Umweltbundesamt TREMOD 2024: Last- und Sattelzüge 0,101 kg CO2e/tkm.', u:'https://www.umweltbundesamt.de/sites/default/files/medien/366/bilder/dateien/vtv_2024_gv_tab_pdf.pdf'},
+  co2Rail:{l:'CO2 Bahn (kg/tkm)', t:'Umweltbundesamt TREMOD 2024: Schienengüterverkehr 0,014 kg CO2e/tkm.', u:'https://www.umweltbundesamt.de/sites/default/files/medien/366/bilder/dateien/vtv_2024_gv_tab_pdf.pdf'},
+  maxH:{l:'Ladehöhe Palette inkl. Holz', t:'Vorgabe aus dem Skript (AEB-Präsentation, Folie 19): Europalette 120 × 80 cm, 150 cm hoch, 12 Kartons in 3 Lagen, 160 kg, 1,44 cbm. Gilt nur im Palettenmodus; lose Kartons werden bis zur Container-Innenhöhe von 239 cm gestapelt (Folie 13).', u:''},
+  palKg:{l:'Gewicht Palette', t:'Wie im Skript (Folie 19: 160 kg je Palette mit 12 Kartons). Eine echte Europalette wiegt laut EPAL rund 25 kg.', u:'https://www.epal-pallets.org/fileadmin/user_upload/ntg_package/images/Produktdownloads/Produktdatenbla__tter/D/230309_EPAL_Produktdatenblatt_DE.pdf'},
+  amzRef:{l:'Amazon-Verkaufsgebühr', t:'Amazon Seller Central DE: 15 % für „Alles andere“ und Haushaltsprodukte über 20 €.', u:'https://sell.amazon.de/preisgestaltung'},
+  fbaFee:{l:'FBA-Versandgebühr', t:'AMALYTIX (01.11.2026), Tarif DE ab 01.07.2026: Standardpaket bis 400 g 3,42 € + 2 % Treibstoffzuschlag = 3,49 €, gerundet 3,50 €. In der Hochsaison bis 14.01.2027: 3,66 €.', u:'https://www.amalytix.com/en/knowledge/logistics/amazon-fba-fees/'},
+  interest:{l:'Kapitalkosten', t:'Bundesbank MFI-Zinsstatistik (01.10.2026): Unternehmenskredite bis 250.000 € 3,93 %. Unsere 8 % enthalten bewusst einen Puffer für ein junges Projekt.', u:'https://www.bundesbank.de/resource/blob/964884/37fc1e33c4e286356ad5b89489fb2a46/472B63F073F071307366337C94F8C870/2026-10-01-mfi-zinsstatistik-download.pdf'},
+  price:{l:'Verkaufspreis brutto', t:'AEB-Präsentation zur Fallstudie (Folie „Überlegungen – Verkauf“): Amazon.de-Angebot „Sechseck Wandleuchte … 6 Stück“ von Amailtom, regulärer Preis 64,99 € (rabattiert 62,99 €, −3 %). Wir nehmen den nicht rabattierten Preis.', u:''},
+  mkt:{l:'Marketing (% vom Bruttopreis, Amazon-TACoS)', t:'TACoS = Werbekosten in % vom Umsatz auf Amazon. sellerboard (15.07.2026, Daten 1. Halbjahr 2026): etablierte Konten 10–15 %; Eightx (30.06.2026): 10–15 %, Kategorie Home & Garden ebenfalls 10–15 %. Wir nehmen die Mitte 12,5 %. Zum Produktstart sind laut Eightx 25–40 % üblich (nicht eingerechnet).', u:'https://blog.sellerboard.com/2026/07/15/how-does-amazon-ppc-actually-affect-your-profit/'},
+  ret:{l:'Retouren (% vom Netto)', t:'Forschungsgruppe Retourenmanagement, Uni Bamberg: Retourenquote Unterhaltungselektronik 5,39 % (Vorkasse), 8,75 % (E-Payment), 14,35 % (Rechnung). Wir nehmen den Mittelwert 9,5 %; eine Zahl nur für Leuchten gibt es nicht.', u:'http://www.retourenforschung.de/definition_statistiken-retouren-deutschland.html'},
+  launchFix:{l:'Einmalkosten Launch', t:'DPMA Marke online 290 €, stiftung ear rund 160 € im ersten Jahr, LUCID kostenlos, CE-Prüfung LVD/EMV 500–8.000 USD; der Rest ist Puffer.', u:'https://dpma.de/service/gebuehren/marken/index.html'},
+};
+const srcTag = k => !QV[k] ? '' : QV[k].u ? `<a class="est src" href="${esc(QV[k].u)}" target="_blank" rel="noopener" title="${esc('Quelle: ' + QV[k].t)}">Quelle</a>` : `<span class="est src" title="${esc('Quelle: ' + QV[k].t)}">Quelle</span>`;
+const estTag = k => { const e = estOf(k); return e ? `<span class="est" title="${esc('Selbst geschätzt: ' + e)}">Schätzung</span>` : srcTag(k); };
+const field = (k, lab, step='any', hint='', extra='') => `<label class="f">${lab}${estTag(k)}<input type="number" step="${step}" data-k="${k}" value="${S[k]}" ${extra}>${hint ? `<span class="hint">${hint}</span>` : ''}</label>`;
+const rng = (k, lab, min, max, step=1, suf='') => `<div class="rng"><label for="r_${k}">${lab}${estTag(k)}</label><input id="r_${k}" type="range" min="${min}" max="${max}" step="${step}" data-k="${k}" data-range="1" value="${S[k]}"><output id="o_${k}">${S[k]}${suf}</output></div>`;
+const chipMode = m => `<span class="chip ${MODES[m].cls}">${MODES[m].name}</span>`;
+const note = (kind, html) => `<div class="note-box ${kind}">${html}</div>`;
+const kv = rows => `<table><tbody>${rows.map(r => `<tr${r[2] ? ` class="${r[2]}"` : ''}><td>${r[0]}</td><td class="r">${r[1]}</td></tr>`).join('')}</tbody></table>`;
+const stat = (label, val, sub, color) => `<div><div class="small muted">${label}</div><div class="big"${color ? ` style="color:${color}"` : ''}>${val}</div>${sub ? `<div class="tiny">${sub}</div>` : ''}</div>`;
+
+/* ================= Seiten A: Überblick & Logistik ================= */
+const P = {};
+
+/* Laufweg der Sendung (Cockpit-Kopf) */
+function routeSvg(r){
+  const W = 1000, l = 60, rr = 60, rowH = r.legs.length > 1 ? 128 : 120, H = 44 + r.legs.length*rowH;
+  const step = (W - l - rr)/6, X = i => l + i*step;
+  let g = '';
+  // EU-Grenze
+  g += `<line x1="${X(3)}" x2="${X(3)}" y1="${r.legs.length > 1 ? 18 : 62}" y2="${H - 22}" stroke="#1F2A33" stroke-dasharray="4 4"/>` +
+       tx(X(3) - 8, H - 8, '← Kosten bis Grenze: Zollwert', {a:'end', fs:12, c:CC.ink, w:600}) + tx(X(3) + 8, H - 8, 'Kosten ab Grenze: ' + RT().taxName + '-Wert →', {fs:12, c:CC.ink, w:600});
+  r.legs.forEach((lg, k) => {
+    const y = (r.legs.length > 1 ? 62 : 46) + k*rowH, col = MODES[lg.mode].col;
+    const nodes = [['Bestellung', r.t0], ['Produktion fertig', r.prodEnd], [lg.mode === 'air' ? 'Übergabe FCA' : lg.mode === 'rail' ? 'Verladung Bahn' : 'An Bord (FOB)', r.fob], [lg.mode === 'air' ? 'Ankunft ' + RT().apod.split(' ')[0] : lg.mode === 'rail' ? 'Ankunft Terminal' : 'Ankunft ' + RT().pod, lg.eta], ['Verzollt', lg.clear], ['Zugestellt ' + RT().to, lg.pod], ['Verkaufsbereit', lg.live]];
+    const segs = [['Produktion', S.prodDays + ' Tage', 'Anzahlung ' + eur0(0.4*lg.goods)], ['Vorlauf', S.fobLead + ' Tage', RT().export ? 'trägt Albleuchten' : 'trägt Lieferant'], ['Hauptlauf', lg.days.main + ' Tage', eur0(lg.main + lg.ins)], ['Verzollung', lg.days.port + ' Tage', 'Zoll ' + eur0(lg.duty)], ['Nachlauf', lg.days.truck + ' Tage', eur0(lg.after)], ['Einlagerung', S.fbaDays + ' Tage', lg.units + ' Einheiten']];
+    if (r.legs.length > 1) g += tx(l - 50, y - 42, MODES[lg.mode].name.replace(/ \(.*\)$/, '') + ': ' + lg.sh.cartons + ' Kartons', {fs:12, c:col, w:600});
+    g += `<line x1="${X(0)}" x2="${X(2)}" y1="${y}" y2="${y}" stroke="#AEB7BE" stroke-width="3"/><line x1="${X(2)}" x2="${X(6)}" y1="${y}" y2="${y}" stroke="${col}" stroke-width="3"/>`;
+    segs.forEach((s, i) => { const cx = (X(i) + X(i + 1))/2; g += tx(cx, y + 26, s[0], {a:'middle', fs:12, c:CC.ink, w:600}) + tx(cx, y + 42, s[1], {a:'middle', fs:11.5, c:CC.ink2}) + tx(cx, y + 58, s[2], {a:'middle', fs:11.5, c: i >= 2 && i <= 4 ? CC.ink : CC.ink3, w: i >= 2 && i <= 4 ? 600 : 400}); });
+    nodes.forEach((n, i) => { const fob = i === 2;
+      g += fob ? `<path d="M${X(i)} ${y - 9}l9 9-9 9-9-9z" fill="#F9A800" stroke="#1F2A33" stroke-width="1.2"/>` : `<circle cx="${X(i)}" cy="${y}" r="${i === 6 ? 7 : 5.5}" fill="${i === 6 ? col : '#fff'}" stroke="${i < 2 ? '#86919A' : col}" stroke-width="2"/>`;
+      g += tx(X(i), y - 26, n[0], {a:'middle', fs:12, c:CC.ink, w: i === 6 ? 600 : 500}) + tx(X(i), y - 13, 'Tag ' + days(r.t0, n[1]) + ' · ' + dShort(n[1]), {a:'middle', fs:11, c:CC.ink3}); });
+  });
+  g += `<path d="M${l - 46} ${H - 12}l5 5-5 5-5-5z" fill="#F9A800" stroke="#1F2A33"/>` + tx(l - 36, H - 8, 'Gefahrübergang', {fs:11.5, c:CC.ink2});
+  return `<div class="svgwrap"><svg viewBox="0 0 ${W} ${H}" style="min-width:760px" width="100%" role="img" aria-label="Laufweg der Sendung">${g}</svg></div>`;
+}
+
+function hints(){
+  const r = scenario(), sea = scenario('sea'), air = scenario('air'), split = scenario('split'), cf = cashflow(r);
+  const xmas = dParse(S.orderDate.slice(0,4) + '-12-20'), out = [];
+  out.push(['euro', `Seefracht spart <b>${eur0(air.landed - sea.landed)}</b> gegenüber Luftfracht, das sind ${eur(( air.landed - sea.landed)/sea.units)} je Einheit.`]);
+  const sl = split.legs.find(l => l.mode === 'air');
+  if (sea.firstLive > xmas && air.firstLive <= xmas && sl) out.push(['clock', `Per See ist die Ware erst ab ${dFmt(sea.firstLive)} verkaufsbereit. Ein Split mit ${S.palletize ? S.splitPal + ' Palette(n)' : S.splitPal*12 + ' Kartons'} per Luft kostet ${eur0(split.landed - sea.landed)} mehr und bringt ${sl.units} Einheiten bis ${dFmt(sl.live)} in den Verkauf, also vor Weihnachten.`]);
+  out.push(['einkauf', `Spitzen-Kapitalbedarf: <b>${eur0(cf.peakNeed)}</b> von ${eur0(S.budget)}. Per See wären höchstens ${maxCartonsInBudget()} Kartons finanzierbar (Ware, Fracht, Zoll, EUSt und Launch zusammen bis ${eur0(S.budget)}, ohne Rückflüsse).`]);
+  out.push(['inc', `${T('FOB')} gilt nur für Seefracht. Für Luftanteile im Kaufvertrag ${T('FCA')} ${RT().apol} vereinbaren.`]);
+  if (S.seaCont === 'lcl' && r.sh.cbm > S.lclMax) out.push(['warn', `<b>LCL-Grenze überschritten:</b> ${nf(r.sh.cbm)} cbm > ${nf(S.lclMax, 1)} cbm. Sendung teilen oder ${T('FCL')} anfragen.`]);
+  return out;
+}
+
+function ctScatter(ms){
+  const W = 720, H = 190, l = 60, r = 30, t = 18, b = 38;
+  const xs = ms.map(m => days(m.t0, m.firstLive)), ys = ms.map(m => m.perUnit);
+  const x0 = 0, x1 = Math.max(...xs)*1.1, y0 = Math.min(...ys)*0.97, y1 = Math.max(...ys)*1.02;
+  const X = v => l + (v - x0)/(x1 - x0)*(W - l - r), Y = v => H - b - (v - y0)/(y1 - y0)*(H - t - b);
+  let g = '';
+  ticks(y0, y1, 3).forEach(v => g += `<line x1="${l}" x2="${W - r}" y1="${Y(v)}" y2="${Y(v)}" stroke="${CC.grid}"/>` + tx(l - 8, Y(v) + 4, nf(v, 2) + ' €', {a:'end', fs:11, c:CC.ink3}));
+  ticks(x0, x1, 5).forEach(v => g += tx(X(v), H - b + 16, nf(v, 0), {a:'middle', fs:11, c:CC.ink3}));
+  g += tx(W - r, H - 6, 'Tage von der Bestellung bis verkaufsbereit', {a:'end', fs:11, c:CC.ink3}) + tx(l, 12, 'Landed Cost je Einheit', {fs:11, c:CC.ink3});
+  const xm = dParse(S.orderDate.slice(0,4) + '-12-20');
+  const xd = days(ms[0].t0, xm);
+  if (xd > 0 && xd < x1) g += `<line x1="${X(xd)}" x2="${X(xd)}" y1="${t}" y2="${H - b}" stroke="#F9A800" stroke-dasharray="4 4"/>` + tx(X(xd) + 6, H - b - 6, 'Weihnachtsgeschäft endet', {fs:11, c:'#8A5A00', w:600});
+  ms.forEach(m => { const x = X(days(m.t0, m.firstLive)), y = Y(m.perUnit); g += `<circle cx="${x}" cy="${y}" r="7" fill="${MODES[m.mode].col}"/>` + tx(x + 12, y + 4, MODES[m.mode].short + ' ' + eur(m.perUnit), {fs:12, c:CC.ink, w:600, halo:true}); });
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Kosten gegen Zeit" style="margin-top:12px">${g}</svg>`;
+}
+P.cockpit = () => {
+  const r = scenario(), cf = cashflow(r), ms = ['sea','air','split'].map(m => scenario(m));
+  const best = ms.reduce((a, b) => b.perUnit < a.perUnit ? b : a);
+  const focus = {
+    einkauf:['Staffelpreis und Budget prüfen', 'Zahlungsplan 40/60 freigeben', 'CE-Unterlagen beim Lieferanten anfordern'],
+    logistik:['Modus und Split festlegen', 'Spediteur für FOB Shanghai → DAP Graben buchen', 'Ankunft und Verzollung mit dem Spediteur abstimmen'],
+    verkauf:['Verkaufspreis und Kanal festlegen', 'Amazon-Listing vorbereiten', 'Verkaufsstart nach Wareneingang planen'],
+    gl:['Kapitalbedarf und Payback prüfen', 'Risiken in der Sensitivität ansehen', 'Freigabe der Bestellung'],
+  }[UI.role];
+  return ph('Cockpit', `Alle Abteilungen arbeiten mit denselben Zahlen. Transportmodus und Kartonzahl oben ändern, jede Seite rechnet sofort neu. Aktuell: ${MODES[UI.mode].name}.`) +
+  panel('Laufweg der Sendung', routeSvg(r), 'Tage ab Bestellung, Kosten je Abschnitt') +
+  `<div class="grid g21 mt">` +
+    panel('Entscheidungsvorlage', `<div class="tbl-wrap"><table><thead><tr><th></th>${ms.map(m => `<th class="r">${chipMode(m.mode)}</th>`).join('')}</tr></thead><tbody>
+      <tr><td>Landed Cost je Einheit</td>${ms.map(m => `<td class="r"><b>${eur(m.perUnit)}</b></td>`).join('')}</tr>
+      <tr><td>Frachtkosten gesamt</td>${ms.map(m => `<td class="r">${eur0(m.freight)}</td>`).join('')}</tr>
+      <tr><td>Verkaufsbereit ab</td>${ms.map(m => `<td class="r">${dFmt(m.firstLive)}</td>`).join('')}</tr>
+      <tr><td>Kapitalbindung im Transport</td>${ms.map(m => `<td class="r">${eur0(m.capital)}</td>`).join('')}</tr></tbody></table></div>
+      ${ctScatter(ms)}
+      <p class="small muted" style="margin-top:6px">Günstigste Variante: ${MODES[best.mode].name}. Empfehlung des Teams: Split, weil er die Weihnachtssaison erreicht und nur wenig teurer ist.</p>`) +
+    panel('Hinweise', `<ul class="list-plain">${hints().map(h => `<li>${icon(h[0])}<span>${h[1]}</span></li>`).join('')}</ul>`, 'aus den aktuellen Zahlen') +
+  `</div>` +
+  `<div class="grid g21 mt">` +
+    panel('Liquidität des Pilotbudgets', lineChart({title:'Liquidität', x:'date', H:280, series:[{pts:cf.pts, color: MODES[UI.mode].col, area:true}], refs:[{y:S.budget, label:'Budget ' + eur0(S.budget)}], marks:[{x:cf.minT, y:cf.minC, c:'#B3141F', label:'Tiefpunkt ' + eur0(cf.minC)}].concat(cf.payback ? [{x:cf.payback, y:S.budget, c:'#2C7A41', label:'Budget zurück ' + dFmt(cf.payback), a:'end', dy:22}] : [])}) + `<p class="tiny">Kontostand ab Bestellung: Anzahlung, Restzahlung, Fracht, Zoll und EUSt fließen ab, die EUSt kommt nach ${S.refundDays} Tagen als Vorsteuer zurück, Verkäufe fließen netto nach Gebühren zu.</p>`) +
+    panel(UI.role === 'alle' ? 'Ergebnis des Pilots' : 'Nächste Schritte: ' + DEPT[UI.role],
+      UI.role === 'alle' ? `<div class="grid" style="gap:14px">${stat('Gewinn nach Abverkauf', eur0(cf.profit), cf.soldOut ? 'Abverkauf bis ' + dFmt(cf.soldOut) : '', '#2C7A41')}${stat('Deckungsbeitrag je Einheit', eur(cf.ue.db), pct(cf.ue.dbPct) + ' vom Netto-Erlös')}${stat('Rendite auf gebundenes Kapital', pct(cf.profit/cf.peakNeed, 0), 'Gewinn ÷ Spitzen-Kapitalbedarf')}</div>`
+      : `<ol style="margin:0;padding-left:18px">${focus.map(f => `<li style="margin-bottom:8px">${f}</li>`).join('')}</ol>`) +
+  `</div>`;
+};
+
+/* Technische Zeichnung: Karton und Palette mit Bemaßung */
+function drawingSvg(){
+  const p = palletInfo(), sh = ship(S.cartons);
+  const s = 2.0, cw = S.L*s, chh = S.H*s, dx = S.B*s*0.55, dy = S.B*s*0.38, x0 = 60, y0 = 70 + dy;
+  const arrowDefs = `<defs><marker id="dimA" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 2L5 5L0 8" fill="none" stroke="#55616B" stroke-width="1.4"/></marker></defs>`;
+  const dim = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#55616B" stroke-width="1" marker-start="url(#dimA)" marker-end="url(#dimA)"/>`;
+  let g = arrowDefs;
+  // Karton isometrisch
+  g += `<path d="M${x0} ${y0}h${cw}l${dx} ${-dy}h${-cw}z" fill="#EBD5A8" stroke="#8C6A2F"/>`;
+  g += `<path d="M${x0 + cw} ${y0}l${dx} ${-dy}v${chh}l${-dx} ${dy}z" fill="#D9BC86" stroke="#8C6A2F"/>`;
+  g += `<rect x="${x0}" y="${y0}" width="${cw}" height="${chh}" fill="#F2E2BF" stroke="#8C6A2F"/>`;
+  g += `<line x1="${x0 + cw/2}" y1="${y0}" x2="${x0 + cw/2 + dx}" y2="${y0 - dy}" stroke="#C9A866" stroke-width="5" opacity=".7"/>`;
+  g += tx(x0 + cw/2, y0 + chh/2 + 2, nf(S.kg, 1) + ' kg', {a:'middle', fs:14, c:CC.ink, w:600, cls:'cond'}) + tx(x0 + cw/2, y0 + chh/2 + 18, S.upc + ' Einheiten', {a:'middle', fs:11.5, c:CC.ink2});
+  g += dim(x0, y0 + chh + 16, x0 + cw, y0 + chh + 16) + tx(x0 + cw/2, y0 + chh + 32, S.L + ' cm', {a:'middle', fs:12.5, c:CC.ink, w:600});
+  g += dim(x0 + cw + dx + 16, y0 - dy, x0 + cw + dx + 16, y0 - dy + chh) + tx(x0 + cw + dx + 24, y0 - dy + chh/2 + 4, S.H + ' cm', {fs:12.5, c:CC.ink, w:600});
+  g += dim(x0 - 6, y0 - 14, x0 - 6 + dx, y0 - 14 - dy) + tx(x0 + dx/2 - 14, y0 - dy/2 - 22, S.B + ' cm', {a:'end', fs:12.5, c:CC.ink, w:600});
+  g += tx(x0, 24, 'Karton', {fs:13, c:CC.ink, w:600}) + tx(x0, 40, nf(sh.cbmC, 3) + ' cbm je Karton', {fs:11.5, c:CC.ink3});
+  // Palette Vorderansicht
+  if (S.palletize){
+    const px = 380, s2 = 1.25, pw = S.palL*s2, base = 260, perRow = Math.max(1, Math.floor(S.palL/(p.rot ? S.B : S.L))), cwid = pw/perRow, lh = S.H*s2;
+    g += tx(px, 24, 'Europalette, Vorderansicht', {fs:13, c:CC.ink, w:600}) + tx(px, 40, p.perLayer + ' Kartons je Lage × ' + p.layers + ' Lagen = ' + p.perPal + ' Kartons', {fs:11.5, c:CC.ink3});
+    g += `<rect x="${px}" y="${base}" width="${pw}" height="${S.palH*s2*0.45}" fill="#B98C4F"/>`;
+    [0, 0.5, 1].forEach(f => g += `<rect x="${px + f*(pw - 16)}" y="${base + S.palH*s2*0.45}" width="16" height="${S.palH*s2*0.55}" fill="#9B7139"/>`);
+    for (let L = 0; L < p.layers; L++) for (let c = 0; c < perRow; c++) g += `<rect x="${px + c*cwid + 1}" y="${base - (L + 1)*lh}" width="${cwid - 2}" height="${lh - 2}" fill="#F2E2BF" stroke="#8C6A2F"/>`;
+    const top = base - p.layers*lh, rx = px + pw + 18;
+    g += dim(px, base + S.palH*s2 + 14, px + pw, base + S.palH*s2 + 14) + tx(px + pw/2, base + S.palH*s2 + 30, S.palL + ' cm', {a:'middle', fs:12.5, c:CC.ink, w:600});
+    g += dim(rx, top, rx, base + S.palH*s2) + tx(rx + 8, (top + base)/2, p.h + ' cm', {fs:12.5, c:CC.ink, w:600}) + tx(rx + 8, (top + base)/2 + 15, '= ' + S.palH + ' + ' + p.layers + ' × ' + S.H, {fs:11, c:CC.ink3});
+    g += tx(rx + 8, (top + base)/2 + 30, nf(S.palL*S.palB*p.h/1e6, 3) + ' cbm', {fs:11, c:CC.ink3});
+    // Sendung
+    const sx = 690;
+    g += tx(sx, 24, 'Sendung', {fs:13, c:CC.ink, w:600}) + tx(sx, 40, sh.nPal + ' Paletten · ' + S.cartons + ' Kartons', {fs:11.5, c:CC.ink3});
+    const n = sh.nPal, cols = Math.min(n, 4), w2 = 56;
+    for (let i = 0; i < n && i < 12; i++){ const cx = sx + (i % cols)*(w2 + 10), cy = 70 + Math.floor(i/cols)*72;
+      const onPal = Math.min(p.perPal, S.cartons - i*p.perPal);
+      g += `<rect x="${cx}" y="${cy}" width="${w2}" height="44" fill="#F2E2BF" stroke="#8C6A2F"/><rect x="${cx}" y="${cy + 44}" width="${w2}" height="7" fill="#B98C4F"/>` + tx(cx + w2/2, cy + 27, onPal + ' Kt.', {a:'middle', fs:11.5, c:CC.ink, w:600}); }
+    const yy = 70 + Math.ceil(Math.min(n,12)/cols)*72 + 16;
+    g += tx(sx, yy, nf(sh.cbm, 2) + ' cbm', {fs:20, c:CC.ink, w:600, cls:'cond'}) + tx(sx + 110, yy, nf(sh.kg, 0) + ' kg', {fs:20, c:CC.ink, w:600, cls:'cond'});
+    g += tx(sx, yy + 16, 'Volumen', {fs:11, c:CC.ink3}) + tx(sx + 110, yy + 16, 'Bruttogewicht', {fs:11, c:CC.ink3});
+  } else {
+    g += tx(400, 120, 'Lose Kartons ohne Palette', {fs:14, c:CC.ink, w:600}) + tx(400, 142, S.cartons + ' × ' + nf(sh.cbmC, 3) + ' cbm = ' + nf(sh.cbm, 3) + ' cbm, ' + nf(sh.kg, 0) + ' kg', {fs:12.5, c:CC.ink2});
+  }
+  return `<div class="svgwrap"><svg viewBox="0 0 960 340" style="min-width:720px" width="100%" role="img" aria-label="Technische Zeichnung Karton und Palette">${g}</svg></div>`;
+}
+
+/* ---------- Containerwahl ---------- */
+function contSvg(type, cartons){
+  const c = CONT[type], cp = contPlan(cartons, type), W = 1060, pad = 20, sc = (W - pad - 46)/CONT['40'].L, w = c.L*sc, h = c.B*sc, x0 = pad, y0 = 34;
+  let g = `<rect x="${x0}" y="${y0}" width="${w}" height="${h}" fill="#F3F5F7" stroke="#2F3539" stroke-width="2"/>` +
+    `<line x1="${x0 + w}" x2="${x0 + w}" y1="${y0}" y2="${y0 + h}" stroke="#2F3539" stroke-width="5"/>` + tx(x0 + w + 8, y0 + h/2 + 4, 'Tür', {fs:11.5, c:CC.ink2}) +
+    tx(x0, y0 - 12, `${c.name}: innen ${nf(c.L/1000, 2)} × ${nf(c.B/1000, 2)} × ${nf(c.H/1000, 2)} m · ${nf(c.cbm, 1)} cbm · max. ${nf(c.kg, 0)} kg Nutzlast`, {fs:12.5, c:CC.ink, w:600});
+  const inThis = Math.min(cartons, cp.cap);
+  if (cp.pal){
+    const PL = S.palL*10*sc, PB = S.palB*10*sc, used = Math.ceil(inThis/cp.perPal), pos = [];
+    if (cp.mixed){ const nA = Math.floor(c.L/(S.palB*10)), nB = Math.floor(c.L/(S.palL*10));
+      for (let i = 0; i < nA; i++) pos.push([x0 + i*PB, y0, PB, PL]);
+      for (let i = 0; i < nB; i++) pos.push([x0 + i*PL, y0 + PL, PL, PB]); }
+    else { const nr = Math.floor(c.B/(S.palB*10)), nl = Math.floor(c.L/(S.palL*10)); for (let j = 0; j < nr; j++) for (let i = 0; i < nl; i++) pos.push([x0 + i*PL, y0 + j*PB, PL, PB]); }
+    pos.sort((a, b) => a[0] - b[0] || a[1] - b[1]).forEach((q, i) => { const on = i < used;
+      g += `<rect x="${q[0] + 1.5}" y="${q[1] + 1.5}" width="${q[2] - 3}" height="${q[3] - 3}" rx="2" fill="${on ? '#F9A800' : '#fff'}" stroke="${on ? '#9A6200' : '#B9C1C7'}" stroke-dasharray="${on ? '0' : '4 3'}"/>`; });
+    g += tx(x0, y0 + h + 22, `${cp.slots} Stellplätze für Europaletten${cp.tiers > 1 ? ', ' + cp.tiers + '-fach gestapelt' : ' (Palettenhöhe ' + nf(palletInfo().h, 0) + ' cm, nicht stapelbar)'} · belegt: ${used} Palette(n) mit ${inThis} Kartons`, {fs:12, c:CC.ink2});
+  } else {
+    const G = cp.grid, cw = G.dl*sc, cb = G.db*sc, layerN = G.nl*G.nb, full = Math.floor(inThis/layerN), rest = inThis % layerN;
+    for (let j = 0; j < G.nb; j++) for (let i = 0; i < G.nl; i++){ const k = j*G.nl + i, depth = full + (k < rest ? 1 : 0);
+      g += `<rect x="${x0 + i*cw + 1}" y="${y0 + j*cb + 1}" width="${cw - 2}" height="${cb - 2}" fill="${depth ? '#F9A800' : '#fff'}" fill-opacity="${depth ? 0.35 + 0.65*depth/G.nh : 1}" stroke="${depth ? '#9A6200' : '#D5DBE0'}"/>`; }
+    g += tx(x0, y0 + h + 22, `Lose gestaut: ${G.nl} × ${G.nb} Kartons je Lage, ${G.nh} Lagen = ${nf(G.nl*G.nb*G.nh, 0)} Kartons · Farbe = Stapelhöhe, ${inThis} Kartons geladen`, {fs:12, c:CC.ink2});
+  }
+  const H = y0 + h + 34;
+  return `<div class="svgwrap"><svg viewBox="0 0 ${W} ${H}" style="min-width:720px" width="100%" role="img" aria-label="Stauplan ${c.name}">${g}</svg></div>`;
+}
+function contPanel(){
+  const opts = ['lcl', '20', '40'];
+  const now = opts.map(c => withS({seaCont: c}, () => { const r = scenario('sea'), cp = c === 'lcl' ? null : contPlan(S.cartons, c); return {c, r, cp}; }));
+  const full = ['20', '40'].map(c => withS({seaCont: c}, () => { const cap = contFit(c).cap; return withS({cartons: cap}, () => { const r = scenario('sea'); return {c, cap, r, need: r.cash + S.launchFix}; }); }));
+  const lab = c => c === 'lcl' ? 'LCL Sammelgut' : CONT[c].name;
+  const lclK = (() => { let k = 0; while (k < 400 && ship(k + 1).cbm <= S.lclMax + 1e-9) k++; return k; })();
+  const be = c => { const cap = withS({seaCont: c}, () => contFit(c).cap); for (let k = 1; k <= cap; k++){ const v = withS({cartons:k}, () => [withS({seaCont:'lcl'}, () => scenario('sea').freight), withS({seaCont:c}, () => scenario('sea').freight)]); if (v[1] <= v[0]) return k; } return null; };
+  const be20 = be('20'), be40 = be('40');
+  return panel('Containerwahl: Sammelgut, 20 Fuß oder 40 Fuß', `<div class="btns" role="group" aria-label="Container wählen" style="margin-bottom:14px">${opts.map(c => `<button class="btn${S.seaCont === c ? '' : ' ghost'}" data-cont="${c}" aria-pressed="${S.seaCont === c}">${lab(c)}</button>`).join('')}</div>
+    ${S.seaCont === 'lcl' ? note('info', `Gewählt ist Sammelgut (LCL). Mit einem Klick auf 20 oder 40 Fuß rechnet die ganze App mit einem eigenen Container: Frachtkosten, Landed Cost, Cashflow, Termine und Risiko.`) : contSvg(S.seaCont, S.cartons)}
+    <div class="tbl-wrap mt"><table><thead><tr><th>Für unsere ${S.cartons} Kartons</th>${now.map(x => `<th class="r">${lab(x.c)}${S.seaCont === x.c ? ' ✓' : ''}</th>`).join('')}</tr></thead><tbody>
+      <tr><td>Behälter</td>${now.map(x => `<td class="r">${x.cp ? x.cp.n + ' Container' : 'Anteil am Sammelcontainer'}</td>`).join('')}</tr>
+      <tr><td>Abrechnung</td>${now.map(x => `<td class="r">${x.cp ? nf(S['fcl' + x.c], 0) + ' USD je Container' : nf(x.r.sh.seaWM, 2) + ' W/M × ' + nf(S.seaRate, 0) + ' USD'}</td>`).join('')}</tr>
+      <tr><td>Auslastung</td>${now.map(x => `<td class="r">${x.cp ? nf(x.cp.fill*100, 0) + ' %' : nf(x.r.sh.cbm/S.lclMax*100, 0) + ' % der LCL-Grenze'}</td>`).join('')}</tr>
+      <tr><td>Frachtkosten bis Graben</td>${now.map(x => `<td class="r">${eur0(x.r.freight)}</td>`).join('')}</tr>
+      <tr><td>Landed Cost je Einheit</td>${now.map(x => `<td class="r"><b>${eur(x.r.perUnit)}</b></td>`).join('')}</tr>
+      <tr><td>Hafen und Zoll in Hamburg</td>${now.map(x => `<td class="r">${x.r.legs[0].days.port} Tage</td>`).join('')}</tr>
+      <tr><td>Verkaufsbereit ab</td>${now.map(x => `<td class="r">${dFmt(x.r.firstLive)}</td>`).join('')}</tr>
+    </tbody></table></div>
+    <div class="tbl-wrap mt"><table><thead><tr><th>Wenn der Container voll gemacht wird</th>${full.map(x => `<th class="r">${CONT[x.c].name}</th>`).join('')}</tr></thead><tbody>
+      <tr><td>Kartons und Einheiten</td>${full.map(x => `<td class="r">${nf(x.cap, 0)} Kartons · ${nf(x.r.units, 0)} Einheiten</td>`).join('')}</tr>
+      <tr><td>Preisstaffel des Lieferanten</td>${full.map(x => `<td class="r">${nf(x.r.priceUsd)} USD je Einheit</td>`).join('')}</tr>
+      <tr><td>Landed Cost je Einheit</td>${full.map(x => `<td class="r"><b>${eur(x.r.perUnit)}</b></td>`).join('')}</tr>
+      <tr><td>Kapitalbedarf (Ware, Fracht, Zoll, EUSt, Launch)</td>${full.map(x => `<td class="r">${eur0(x.need)} ${x.need <= S.budget ? '<span class="chip ok">im Budget</span>' : '<span class="chip bad">über Budget</span>'}</td>`).join('')}</tr>
+      <tr><td>Reichweite bei ${nf(S.salesPm, 0)} Einheiten je Monat</td>${full.map(x => `<td class="r">${nf(x.r.units/S.salesPm, 1)} Monate</td>`).join('')}</tr>
+    </tbody></table></div>
+    <p class="small muted" style="margin-top:10px">Sammelgut ist bis zur LCL-Grenze von ${nf(S.lclMax, 1)} cbm möglich, das sind bei uns ${lclK} Kartons. Rein rechnerisch wäre ein 20-Fuß-Container ${be20 ? 'ab ' + be20 + ' Kartons' : 'selbst voll beladen nicht'} günstiger als Sammelgut, ein 40-Fuß-Container ${be40 ? 'ab ' + be40 + ' Kartons' : 'selbst voll beladen nicht'}. Über der LCL-Grenze ist ein Container Pflicht: 20 Fuß bis ${full[0].cap} Kartons, 40 Fuß bis ${full[1].cap}. Bei 48 Kartons zahlt man beim Container vor allem Luft. Ein voller Container bringt zwar die beste Preisstaffel, sprengt aber das Budget von ${eur0(S.budget)} und reicht für viele Monate.</p>
+    <p class="tiny">Raten Stand 16.11.2026: 40 Fuß ${nf(S.fcl40, 0)} USD (Drewry WCI Shanghai–Rotterdam, 12.11.2026, ohne THC am Ziel), 20 Fuß ${nf(S.fcl20, 0)} USD (20 Fuß kostet meist 60–70 % der 40-Fuß-Rate), THC Hamburg ${nf(S.fclTHC20, 0)} / ${nf(S.fclTHC40, 0)} €, Containertransport nach Graben ${nf(S.fclTruck20, 0)} / ${nf(S.fclTruck40, 0)} €. Innenmaße nach Hapag-Lloyd; der 20-Fuß-Container entspricht dem Skript (AEB-Präsentation, Folie 13: innen 590 × 235 × 239 cm). Alle Werte unter „Annahmen“ änderbar.</p>`, 'gilt für den Seeweg');
+}
+
+P.fracht = () => {
+  const sh = ship(S.cartons), sea = scenario('sea'), air = scenario('air'), lcl = sh.cbm/S.lclMax;
+  const cmp = [true, false].map(pal => withS({palletize: pal}, () => { const s = scenario('sea'), a = scenario('air'); return {pal, sh: s.sh, sea: s.freight, air: a.freight}; }));
+  const costT = r => `<table><tbody>${r.legs[0].det.map(d => `<tr><td>${d[0]}<span class="tiny"> · ${d[2] === 'vor' ? 'bis Grenze' : 'ab Grenze'}</span></td><td class="r">${eur(d[1])}</td></tr>`).join('')}<tr class="sum"><td>Frachtkosten gesamt</td><td class="r">${eur(r.freight)}</td></tr><tr class="sub"><td>je Einheit</td><td class="r">${eur(r.freight/r.units)}</td></tr></tbody></table>`;
+  return ph('Frachtrechner', 'Packstück eingeben: Die App rechnet mit lose gestauten Kartons, wie im Sammelgut ab China üblich (wahlweise palettiert wie im Skript-Beispiel Folie 19), ermittelt Volumen und das frachtpflichtige Gewicht je Verkehrsträger und rechnet die Frachtkosten FOB Shanghai bis DAP Graben.', 'logistik') +
+  panel('Packstück und Ladungsträger', `<div class="fr">${field('L','Länge Karton (cm)',1)}${field('B','Breite Karton (cm)',1)}${field('H','Höhe Karton (cm)',1)}${field('kg','Gewicht Karton (kg)',0.1)}${field('cartons','Anzahl Kartons',1,'','min="1"')}${field('upc','Einheiten je Karton',1)}
+    <label class="f">Ladungsträger<select data-k="palletize" data-type="bool"><option value="false" ${!S.palletize ? 'selected' : ''}>Lose Kartons (Standard im Sammelgut)</option><option value="true" ${S.palletize ? 'selected' : ''}>Europalette 120 × 80 cm (Skript Folie 19)</option></select></label>${(S.palletize ? field('maxH','Ladehöhe Palette inkl. Holz (cm)',1) : '')}</div>`) +
+  `<div class="mt">${panel('Technische Zeichnung', drawingSvg())}</div>` +
+  `<div class="mt">${contPanel()}</div>` +
+  `<div class="grid g21 mt">` +
+    panel(`Frachtpflichtiges Gewicht`, `<div class="tbl-wrap"><table><thead><tr><th>Verkehrsträger</th><th>Umrechnung</th><th class="r">Volumengewicht</th><th class="r">Frachtpflichtig</th><th>Abrechnung</th></tr></thead><tbody>
+      <tr><td><span class="chip air">Luftfracht</span></td><td>1 : 6, 1 cbm = 166,67 kg</td><td class="r">${nf(sh.cbm*166.667, 1)} kg</td><td class="r"><b>${nf(sh.airCW, 1)} kg</b></td><td>${sh.airCW > sh.kg ? 'Volumen schlägt Gewicht' : 'Gewicht'}</td></tr>
+      <tr><td><span class="chip sea">Seefracht</span></td><td>1 : 1, 1 cbm = 1 t</td><td class="r">${nf(sh.cbm*1000, 0)} kg</td><td class="r"><b>${nf(sh.seaWM, 2)} ${T('W/M')}</b></td><td>${nf(sh.seaWM/(sh.kg/1000), 1)}-fach messend</td></tr>
+      <tr><td><span class="chip">LKW national</span></td><td>1 cbm = 200 kg</td><td class="r">${nf(sh.cbm*200, 0)} kg</td><td class="r"><b>${nf(sh.truckCW, 0)} kg</b></td><td>Nachlauf bis Graben</td></tr>
+      <tr><td><span class="chip">LKW international</span></td><td>1 cbm = 333 kg</td><td class="r">${nf(sh.cbm*333, 0)} kg</td><td class="r"><b>${nf(sh.truckIntCW, 0)} kg</b></td><td>Lieferung in andere EU-Länder</td></tr>
+      <tr><td><span class="chip">Kurier</span></td><td>1 : 5 je Packstück</td><td class="r">${nf(sh.cbmC*200, 1)} kg</td><td class="r"><b>${nf(sh.courierC, 1)} kg</b> je Karton</td><td>Muster, Kleinmengen</td></tr></tbody></table></div>`) +
+    (S.seaCont === 'lcl' ? panel('LCL-Auslastung', `<div class="big">${nf(lcl*100, 0)} %</div><div class="bar" style="margin:10px 0"><i style="width:${Math.min(100, lcl*100)}%;background:${lcl > 1 ? 'var(--bad)' : 'var(--signal)'}"></i></div><p class="small muted">${nf(sh.cbm, 2)} von max. ${nf(S.lclMax, 1)} cbm je ${T('LCL')}-Sendung (Skript). ${lcl > 1 ? 'Grenze überschritten: Sendung teilen oder FCL.' : 'Noch Platz für ' + Math.floor((S.lclMax - sh.cbm)/(S.palletize ? S.palL*S.palB*palletInfo().h/1e6 : sh.cbmC)) + (S.palletize ? ' Paletten.' : ' Kartons.')}</p>`)
+      : (() => { const cp = contPlan(S.cartons, S.seaCont); return panel('Container-Auslastung', `<div class="big">${nf(cp.fill*100, 0)} %</div><div class="bar" style="margin:10px 0"><i style="width:${Math.min(100, cp.fill*100)}%;background:var(--signal)"></i></div><p class="small muted">${S.cartons} von ${nf(cp.n*cp.cap, 0)} Kartons in ${cp.n} × ${CONT[S.seaCont].name}. ${cp.fill < 0.5 ? 'Bezahlt wird der ganze Container, auch der leere Teil.' : 'Gut ausgelastet.'}</p>`); })()) +
+  `</div>` +
+  `<div class="mt">${panel('Lose oder palettiert?', `<div class="tbl-wrap"><table><thead><tr><th>Variante</th><th class="r">Volumen</th><th class="r">Gewicht</th><th class="r">Luft frachtpfl.</th><th class="r">Frachtkosten See</th><th class="r">Frachtkosten Luft</th></tr></thead><tbody>${cmp.map(c => `<tr${c.pal === S.palletize ? ' class="hl"' : ''}><td>${c.pal ? 'Europaletten' : 'Lose Kartons'}</td><td class="r">${nf(c.sh.cbm, 2)} cbm</td><td class="r">${nf(c.sh.kg, 0)} kg</td><td class="r">${nf(c.sh.airCW, 0)} kg</td><td class="r">${eur0(c.sea)}</td><td class="r">${eur0(c.air)}</td></tr>`).join('')}</tbody></table></div>
+    <p class="small muted" style="margin-top:10px">Paletten kosten Volumen: Die Leerräume und das Palettenholz erhöhen das frachtpflichtige Gewicht. Per Luft sind lose Kartons ${eur0(cmp[0].air - cmp[1].air)} günstiger, per See ${eur0(cmp[0].sea - cmp[1].sea)}. Im Sammelgut ab China stauen die Konsolidierer die Kartons deshalb meist lose, um den Container maximal zu füllen; das ist unser Standard. Paletten lassen sich schneller umschlagen und schützen die Ware besser; das Skript-Beispiel (Folie 19) rechnet mit ihnen.</p>`)}</div>` +
+  `<div class="grid g2 mt">` +
+    panel(`${MODES.sea.name} · ${eur0(sea.freight)}`, costT(sea), `${S.seaCont === 'lcl' ? nf(S.seaRate) + ' USD/W/M' : nf(S['fcl' + S.seaCont], 0) + ' USD je Container'} · ${sea.door} Tage`) +
+    panel(`Luftfracht · ${eur0(air.freight)}`, costT(air), `${nf(S.airRate)} USD/kg · ${air.door} Tage`) +
+  `</div>` + `<p class="tiny mt">Einige Kostensätze (Hafen, Dokumente, Nachlauf, Zollabfertigung) sind selbst geschätzt und unter „Annahmen“ als <span class="est">Schätzung</span> markiert.</p>`;
+};
+
+P.verkehr = () => {
+  const xmas = dParse(S.orderDate.slice(0,4) + '-12-20'), ids = ['sea','air','split'], sc = ids.map(id => scenario(id));
+  const rows = [
+    ['Frachtpflichtig', r => r.legs.map(l => l.mode === 'air' ? nf(l.sh.airCW, 0) + ' kg' : nf(l.sh.seaWM, 2) + ' W/M').join(' + ')],
+    ['Frachtkosten gesamt', r => eur0(r.freight)], ['Zoll', r => eur0(r.duty)], ['Landed Cost je Einheit', r => `<b>${eur(r.perUnit)}</b>`],
+    ['Kapitalbindung im Transport (' + S.interest + ' % p. a.)', r => eur0(r.capital)],
+    ['Tür zu Tür', r => r.legs.map(l => l.door + ' T.').join(' / ')], ['Verkaufsbereit', r => r.legs.map(l => dShort(l.live)).join(' / ')],
+    ['Vor Weihnachten im Verkauf', r => r.firstLive <= xmas ? `<span class="chip ok">ja${r.lastLive > xmas ? ', Teilmenge' : ''}</span>` : '<span class="chip bad">nein</span>']];
+  const sh = ship(S.cartons), lcl = sh.cbm/S.lclMax;
+  return ph('Luftfracht oder Seefracht', `Luft gegen See (Seefracht als ${T('LCL')} bis ${nf(S.lclMax, 1)} cbm je Sendung oder im eigenen ${T('FCL','Container')}) und als Mittelweg der Split: eine Palette per Luft, der Rest per See. FOB Shanghai bis DAP Graben.`, 'logistik gl') +
+  panel('Vergleich der Verkehrsträger', `<div class="tbl-wrap"><table><thead><tr><th></th>${ids.map(id => `<th class="r">${chipMode(id)}</th>`).join('')}</tr></thead><tbody>${rows.map(([lab, f]) => `<tr><td>${lab}</td>${sc.map(r => `<td class="r">${f(r)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
+    <p class="small muted" style="margin-top:8px">Unsere Sendung: ${nf(sh.cbm, 2)} cbm, das sind ${nf(lcl*100, 0)} % der LCL-Grenze von ${nf(S.lclMax, 1)} cbm.</p>`) +
+  `<div class="mt">${panel('Kosten gegen Zeit', ctScatter(sc), 'Landed Cost je Einheit und Tage bis verkaufsbereit')}</div>` +
+  (() => { const fc = fclCurve(), lin = []; for (let v = 0.5; v <= 35; v += 0.5) lin.push([v, fc.lcl(v)]);
+    return `<div class="mt">${panel('Ab wann lohnt sich ein eigener Container?', lineChart({title:'LCL gegen FCL', x:'num', W:1100, H:320, xLabel:'Volumen in cbm', xFmt: v => nf(v, 0), yFmt: v => kfmt(v) + ' €', legend:true,
+      series:[{name:'LCL (Sammelgut)', pts: lin, color:'#0E518D', width:2.4}, {name:'FCL 20 Fuß', pts:[[0.5, fc.f20],[33, fc.f20]], color:'#55616B', dash:'6 4'}, {name:'FCL 40 Fuß', pts:[[0.5, fc.f40],[35, fc.f40]], color:'#86919A', dash:'2 4'}],
+      vlines:[{x: sh.cbm, label:'unsere Sendung ' + nf(sh.cbm, 2) + ' cbm', c:'#F9A800'}, {x: S.lclMax, label:'LCL-Grenze ' + nf(S.lclMax, 1) + ' cbm', c:'#B3141F', dy:18}].concat(fc.be20 ? [{x: fc.be20, label:'Break-even 20 Fuß ≈ ' + nf(fc.be20, 1) + ' cbm', c:'#1F2A33', dy:36}] : [])}) +
+      `<p class="small muted">Frachtkosten bis Graben ohne Versicherung. Bis zur LCL-Grenze von ${nf(S.lclMax, 1)} cbm ist Sammelgut immer günstiger. Ein 20-Fuß-Container rechnet sich erst ab etwa ${fc.be20 ? nf(fc.be20, 0) : '–'} cbm. Container wählen: oben in der Leiste oder im Frachtrechner.</p>`)}</div>`; })();
+};
+
+P.zoll = () => {
+  const r = scenario(), d0 = r.legs[0];
+  const clearT = Math.min(...r.legs.map(l => l.clear)), cd = new Date(clearT);
+  const aufschub = Date.UTC(cd.getUTCFullYear(), cd.getUTCMonth() + 1, 16), eustDue = Date.UTC(cd.getUTCFullYear(), cd.getUTCMonth() + 2, 26), refund = Date.UTC(cd.getUTCFullYear(), cd.getUTCMonth() + 1, 28);
+  const rowsC = [
+    ['', 'Warenwert', nf(r.units, 0) + ' Einheiten × ' + nf(r.priceUsd) + ' USD ÷ ' + nf(S.usd, 2), eur(r.goods)],
+    ['+', 'Transport bis EU-Grenze', 'Hauptlauf ' + eur0(r.main) + ' + Versicherung ' + eur0(r.ins), eur(r.main + r.ins)],
+    ['=', T('Zollwert'), 'Bemessungsgrundlage für den Zoll', eur(r.zollwert), 'res'],
+    ['×', 'Zollsatz ' + nf(S.duty, 1) + ' %', 'Drittlandszollsatz ex China', eur(r.duty)],
+    ['+', 'Transport ab Grenze bis Zustellung', 'Handling, Verzollung, Nachlauf', eur(r.after)],
+    ['=', T('EUSt-Wert') + ' = ' + T('Landed Cost'), 'Zollwert + Zoll + Transport ab Grenze, ' + eur(r.perUnit) + ' je Einheit', eur(r.eustBase), 'key'],
+    ['×', 'Einfuhrumsatzsteuer ' + nf(S.vat, 0) + ' %', 'wird bezahlt und als Vorsteuer erstattet, keine Kosten', eur(r.eust)]];
+  return ph('Zoll & Tarifierung', `Rechenweg nach Skript für ${MODES[UI.mode].name}. Der Zoll erhöht die Kosten dauerhaft, die EUSt belastet nur die Liquidität.`, 'logistik einkauf') +
+  `<div class="grid g2">` +
+    panel('Rechenblatt', `<table class="calc"><tbody>${rowsC.map(c => `<tr${c[4] ? ` class="${c[4]}"` : ''}><td class="op">${c[0]}</td><td><b>${c[1]}</b><div class="tiny" style="color:inherit;opacity:.75">${c[2]}</div></td><td class="v">${c[3]}</td></tr>`).join('')}</tbody></table>`) +
+    panel('Einstandspreis je Einheit', waterfall([{label:'Ware', v:r.goods/r.units, c:'#B9C1C7'}, {label:'Hauptlauf', sub:'+ Versicherung', v:(r.main + r.ins)/r.units, c:'#0E518D'}, {label:'Zoll', v:r.duty/r.units, c:'#B3141F'}, {label:'ab Grenze', v:r.after/r.units, c:'#5B7EA6'}, {label:'Landed Cost', v:r.perUnit, total:true, c:'#1F2A33'}], {fmt: v => nf(v) + ' €', title:'Landed-Cost-Brücke', W:560, H:250}) +
+      `<p class="small muted">Von ${eur(r.goods/r.units)} Warenwert zu ${eur(r.perUnit)} frei Lager Graben: Aufschlag ${pct(r.perUnit/(r.goods/r.units) - 1)}.</p>
+      <h3 style="margin-top:14px">Welche Kosten zählen wohin?</h3><table><thead><tr><th>Kostenposition</th><th class="r">Betrag</th><th>zählt zu</th></tr></thead><tbody>${r.legs.flatMap(l => l.det.map(d => [d[0] + (r.legs.length > 1 ? ' (' + MODES[l.mode].short + ')' : ''), d[1], d[2]])).map(d => `<tr><td>${d[0]}</td><td class="r">${eur(d[1])}</td><td>${d[2] === 'vor' ? '<span class="chip sea">Zollwert</span>' : '<span class="chip">EUSt-Wert</span>'}</td></tr>`).join('')}</tbody></table>`) +
+  `</div>` +
+  `<div class="grid g2 mt">` +
+    panel('Aufbau der Warennummer', `<div class="svgwrap">${tariffSvg()}</div><p class="small muted">Das Skript nennt als Beispiel 9405 11 40 90 (Leuchten für LED-Lichtquellen) mit 4,7 % Drittlandszoll ex China. Rechtssicherheit bringt eine ${T('vZTA')} beim Zoll.</p>
+      <p class="small">Recherche: <a href="https://auskunft.ezt-online.de/ezto/Welcome.do">EZT-online</a> · <a href="https://ec.europa.eu/taxation_customs/dds2/taric/taric_consultation.jsp?Lang=de">TARIC</a> · <a href="https://trade.ec.europa.eu/access-to-markets/de/results?product=9405114090&origin=CN&destination=DE">Access2Markets CN → DE</a></p>`) +
+    panel('Warum tarifieren?', `<ul class="list-plain">${[['euro','Fiskalische Maßnahmen: Zoll, Einfuhrumsatzsteuer, Verbrauchsteuern'],['warn','Verbote und Beschränkungen'],['check','Genehmigungs- oder Lizenzpflichten bei Ein- und Ausfuhr'],['bi','Außenhandelsstatistik, besondere Maßeinheiten'],['angebot','Vorlage von Unterlagen, z. B. Ursprungsnachweise'],['info','Meldepflichten bestimmter Maßnahmen']].map(x => `<li>${icon(x[0])}<span>${x[1]}</span></li>`).join('')}</ul>
+      <p class="tiny">Skript Folie 24. Rund 18.253 Warennummern im Import und 9.536 im Export (Folie 27); die Nummern unterscheiden sich je Land.</p>`) +
+  `</div>` +
+  `<div class="mt">${panel('Liquidität: Zahlungsaufschub nutzen', `<div class="grid g3">
+      ${stat('Ohne Aufschubkonto', days(clearT, refund) + ' Tage', 'EUSt fällig bei Verzollung am ' + dFmt(clearT) + ', Erstattung ca. ' + dFmt(refund))}
+      ${stat('Mit Aufschubkonto', Math.max(0, days(eustDue, refund)) + ' Tage', 'Zoll fällig am ' + dFmt(aufschub) + ' (16. des Folgemonats), EUSt erst am ' + dFmt(eustDue) + ' (26. des zweiten Folgemonats), also nach der Erstattung')}
+      ${stat('Vorfinanzierte EUSt', eur0(r.eust), 'bei ' + S.interest + ' % p. a. ≈ ' + eur0(r.eust*S.interest/100*days(clearT, refund)/365) + ' Zinskosten ohne Aufschub')}</div>
+      <p class="tiny" style="margin-top:10px">Vereinfachung: Erstattung über die monatliche Umsatzsteuer-Voranmeldung zum 10. des Folgemonats, Auszahlung bis etwa zum 28. Fälligkeiten mit Aufschub laut <a href="https://www.zoll.de/DE/Fachthemen/Zoelle/Abgabenerhebung/Zahlung-der-Abgaben/Mit-Zahlungserleichterung/mit-zahlungserleichterung_node.html" target="_blank" rel="noopener">zoll.de</a>. Für das Aufschubkonto braucht Albleuchten eine Sicherheit beim Hauptzollamt, eine ${T('EORI')}-Nummer ist Pflicht.</p>`)}</div>`;
+};
+function tariffSvg(){
+  const parts = [['94', 'Kapitel', 'HS 2', 'Leuchten u. a.'], ['05', 'Position', 'HS 4', 'Leuchten'], ['11', 'Unterposition', 'HS 6', 'weltweit gleich'], ['40', 'KN', '8-stellig', 'EU'], ['90', 'TARIC', '10-stellig', 'EU-Maßnahmen']];
+  let g = '', x = 6;
+  parts.forEach((p, i) => { const w = 104; g += `<rect x="${x}" y="8" width="${w - 10}" height="54" rx="5" fill="${i < 3 ? '#E3EDF7' : '#F3F5F7'}" stroke="${i < 3 ? '#0E518D' : '#AEB7BE'}"/>` + tx(x + (w - 10)/2, 45, p[0], {a:'middle', fs:26, c:CC.ink, w:600, cls:'cond'}) + tx(x + (w - 10)/2, 82, p[1], {a:'middle', fs:12, c:CC.ink, w:600}) + tx(x + (w - 10)/2, 97, p[2], {a:'middle', fs:11, c:CC.ink2}) + tx(x + (w - 10)/2, 111, p[3], {a:'middle', fs:11, c:CC.ink3}); x += w; });
+  g += tx(6 + 3*104 - 5, 128, 'international (Harmonisiertes System)', {a:'end', fs:10.5, c:'#0E518D'});
+  return `<svg viewBox="0 0 526 134" width="100%" role="img" aria-label="Aufbau der Warennummer 9405 11 40 90">${g}</svg>`;
+}
+
+P.incoterms = () => {
+  const a = incAlloc(), sel = UI.inc, selRow = a.rows.find(x => x.t === sel);
+  return ph('Incoterms® 2020', 'Wer zahlt welchen Abschnitt, und was bedeutet das in Euro für unsere Sendung? Klausel anklicken. V = Verkäufer in China, K = Käufer Albleuchten.', 'einkauf logistik') +
+  panel('Kostenverteilung nach Klausel', `<div class="tbl-wrap"><table class="inc"><thead><tr><th>Klausel</th><th>Modus</th>${SEG.map(s => `<th class="c">${s}</th>`).join('')}</tr></thead><tbody>
+    ${INC.map(([t, m]) => `<tr data-inc="${t}" class="${t === sel ? 'sel' : ''}" tabindex="0"><td><b>${t}</b></td><td>${m}</td>${SEG.map((_, i) => { const w = incWho(t, i); return `<td class="${w === 'V' ? 's' : 'b'}">${w}</td>`; }).join('')}</tr>`).join('')}</tbody></table></div>
+    ${note('info', `<b>${sel}:</b> ${INC.find(x => x[0] === sel)[2]}. Für unsere Sendung trägt Albleuchten damit <b>${eur0(selRow.k)}</b> der Logistik- und Zollkosten, der Lieferant ${eur0(selRow.v)} (im Warenpreis enthalten).`)}`) +
+  `<div class="grid g21 mt">` +
+    panel('Was die Klausel in Euro bedeutet', stackH(a.rows.map(x => ({label: x.t, bold: x.t === sel, parts:[{v:x.v, c:'#B9C1C7'}, {v:x.k, c:'#0E518D'}], txt: 'Käufer ' + eur0(x.k)})), {legend:[{c:'#B9C1C7', label:'Verkäufer trägt (im Preis)'}, {c:'#0E518D', label:'Albleuchten trägt'}], title:'Kostenverteilung'}) +
+      `<p class="tiny">Kostenblöcke der Seefracht-Sendung: Export-Zoll ${eur0(a.seg[0])}, Vorlauf ${eur0(a.seg[1])}, Verladung ${eur0(a.seg[2])}, Hauptlauf ${eur0(a.seg[3])}, Versicherung ${eur0(a.seg[4])}, Zielhafen ${eur0(a.seg[5])}, Nachlauf ${eur0(a.seg[6])}, Verzollung + Zoll ${eur0(a.seg[7])}. Ursprungskosten sind Annahmen. Die EUSt ist nicht enthalten, weil sie als Vorsteuer zurückkommt.</p>`) +
+    panel('Vertragssicher formulieren', `<p><b>FOB Yangshan Deep Water Port, Shanghai, Incoterms® 2020</b></p><p><b>FCA Shanghai Pudong International Airport (PVG), Incoterms® 2020</b></p><p class="small muted">Klausel + genauer Ort + Version (Skript Folie 33). FOB passt nur zur Seefracht, für Luftfracht ist FCA richtig. Bei FOB und FCA trägt Albleuchten ab der Übergabe in China Kosten und Risiko und bucht deshalb selbst den Spediteur bis DAP Graben.</p>`) +
+  `</div>`;
+};
+
+/* ================= Seiten B: Einkauf, Verkauf, Analyse ================= */
+P.einkauf = () => {
+  const r = scenario(), cf = cashflow(r), maxC = maxCartonsInBudget();
+  const tiers = S.tiers.map(([q, p]) => { const c = Math.ceil(q/S.upc); return withS({cartons:c}, () => { const sc = scenario('sea'); return {q, p, c, landed: sc.perUnit, cash: sc.cash + S.launchFix, fit: sc.cash + S.launchFix <= S.budget, lcl: sc.sh.cbm <= S.lclMax + 1e-9}; }); });
+  const fx = r.goodsUsd/S.usd - r.goodsUsd/(S.usd + 0.01);
+  return ph('Staffelpreise, Budget und Cashflow', `Wie viel kann Albleuchten mit ${eur0(S.budget)} bestellen, wann wird gezahlt, und wann ist das Geld zurück?`, 'einkauf gl') +
+  panel('Preisstaffel des Lieferanten', `<div class="tbl-wrap"><table><thead><tr><th>ab Einheiten</th><th class="r">USD</th><th class="r">EUR</th><th class="r">CNY</th><th class="r">Kartons</th><th class="r">Landed Cost je Einheit</th><th class="r">Kapitalbedarf</th><th>Budget</th><th>LCL</th></tr></thead><tbody>
+    ${tiers.map(t => `<tr${r.priceUsd === t.p && !S.priceOverride ? ' class="hl"' : ''}><td>${nf(t.q, 0)}</td><td class="r">${nf(t.p)}</td><td class="r">${nf(t.p/S.usd)}</td><td class="r">${nf(t.p/S.usd*S.cny)}</td><td class="r">${t.c}</td><td class="r">${eur(t.landed)}</td><td class="r">${eur0(t.cash)}</td><td>${t.fit ? '<span class="chip ok">passt</span>' : '<span class="chip bad">zu hoch</span>'}</td><td>${t.lcl ? '<span class="chip ok">ok</span>' : '<span class="chip warn">über 12,5 cbm</span>'}</td></tr>`).join('')}</tbody></table></div>
+    <p class="tiny" style="margin-top:8px">FOB Shanghai, Kurs 1 € = ${nf(S.usd, 2)} USD = ${nf(S.cny, 2)} CNY. Kapitalbedarf = Ware + Fracht + Zoll + EUSt-Vorfinanzierung + ${eur0(S.launchFix)} Einmalkosten. Markiert: aktuelle Bestellung mit ${S.cartons} Kartons.</p>`) +
+  `<div class="grid g2 mt">` +
+    panel('Einkaufsstrategie', `<ol style="margin:0;padding-left:18px">
+      <li style="margin-bottom:8px"><b>Pilot mit ${S.cartons} Kartons</b> (${nf(r.units, 0)} Einheiten) zu ${nf(r.priceUsd)} USD. Mit dem Budget wären höchstens ${maxC} Kartons per See finanzierbar (Ware, Fracht, Zoll, EUSt und Launch zusammen bis ${eur0(S.budget)}, ohne Rückflüsse).</li>
+      <li style="margin-bottom:8px"><b>Rahmenvertrag</b> über 5.000 Einheiten pro Jahr mit Abrufen: 9,90 USD sichern, aber nur abrufen, was verkauft wird.</li>
+      <li style="margin-bottom:8px"><b>Zahlung absichern:</b> 40 % nur gegen Proforma-Rechnung, 60 % erst nach Pre-Shipment-Inspection und ${T('B/L')}-Kopie.</li>
+      <li><b>Kurs sichern:</b> ${nf(r.goodsUsd, 0)} USD per Devisentermingeschäft fixieren. 1 Cent Kursänderung ≈ ${eur0(fx)}.</li></ol>`) +
+    panel('Zahlungsplan', `<table><tbody>${cf.ev.slice().sort((a, b) => a[0] - b[0]).map(e => `<tr><td class="nowrap">${dFmt(e[0])}</td><td>${e[2]}</td><td class="r" style="color:${e[1] < 0 ? 'var(--bad)' : 'var(--ok)'}">${eur0(e[1])}</td></tr>`).join('')}</tbody></table>`, MODES[UI.mode].name) +
+  `</div>` +
+  `<div class="mt">${panel('Cashflow-Rechnung', `<div class="grid g4" style="margin-bottom:14px">${stat('Spitzen-Kapitalbedarf', eur0(cf.peakNeed), 'am ' + dFmt(cf.minT))}${stat('Tiefster Kontostand', eur0(cf.minC), 'Reserve im Budget')}${stat('Budget zurück', cf.payback ? dFmt(cf.payback) : '–', 'Payback')}${stat('Gewinn Pilot', eur0(cf.profit), cf.soldOut ? 'nach Abverkauf ' + dFmt(cf.soldOut) : '', '#2C7A41')}</div>
+    ${lineChart({title:'Cashflow', x:'date', W:1100, H:300, series:[{pts:cf.pts, color:'#1F2A33', area:true}], refs:[{y:S.budget, label:'Budget'}], marks:[{x:cf.minT, y:cf.minC, c:'#B3141F', label:'Tiefpunkt ' + eur0(cf.minC)}]})}
+    <div class="fr" style="margin-top:10px">${field('budget','Budget (€)',100)}${field('launchFix','Einmalkosten Launch (€)',100)}${field('salesPm','Absatz je Monat (Einheiten)',10)}${field('refundDays','Tage bis Vorsteuer-Erstattung',1)}</div>`)}</div>`;
+};
+
+/* Compliance */
+let CK = load('ck', {});
+const CHECK = [
+  ['Zoll','Warennummer festlegen (Kapitel 94, Position 9405), verbindliche Zolltarifauskunft beantragen','EZT-online, TARIC; Skript Folie 23–30'],
+  ['Zoll','EORI-Nummer und Aufschubkonto beim Hauptzollamt','Zoll und EUSt erst am 16. des Folgemonats'],
+  ['Zoll','Incoterm im Kaufvertrag: FOB Shanghai für See, FCA PVG für Luft, Version 2020','Ort so genau wie möglich (Folie 33)'],
+  ['Produkt','CE: Niederspannung, EMV, RoHS; Konformitätserklärung und Prüfberichte vom Lieferanten','Stichprobe im akkreditierten Labor'],
+  ['Produkt','GPSR: verantwortlicher Wirtschaftsakteur in der EU, Name und Anschrift auf Produkt oder Verpackung','gilt seit 13.12.2024'],
+  ['Produkt','Ökodesign (EU) 2019/2020 und Energielabel (EU) 2019/2015, EPREL-Registrierung','Label im Shop anzeigen'],
+  ['Produkt','Bedienungsanleitung und Sicherheitshinweise auf Deutsch','Pflicht für Verbraucherprodukte'],
+  ['Umwelt','ElektroG: Registrierung bei der stiftung ear, WEEE-Nummer im Shop','vor dem ersten Verkauf'],
+  ['Umwelt','VerpackG: LUCID-Registrierung und Systembeteiligung','für B2C-Verpackungen'],
+  ['Vertrieb','Marke beim DPMA anmelden (DPMAdirekt), Voraussetzung für die Amazon-Markenregistrierung','Skript Folie 50: Sonstiges'],
+  ['Vertrieb','Amazon Seller Central: Marke, FBA-Versandplan, FNSKU-Etiketten','Kartons beim Lieferanten etikettieren lassen'],
+  ['Vertrieb','Rechtstexte im Shop: Impressum, AGB, Widerruf, Datenschutz','Abmahnrisiko'],
+  ['Finanzen','Kurs absichern, Transportversicherung abschließen','Versicherungswert CIF + 10 %'],
+];
+P.compliance = () => {
+  const done = CHECK.filter((_, i) => CK[i]).length, cats = [...new Set(CHECK.map(c => c[0]))];
+  return ph('Compliance-Check', 'Als Importeur haftet Albleuchten wie ein Hersteller. Diese Punkte müssen erledigt sein, bevor die erste Leuchte verkauft wird.', 'einkauf gl') +
+  panel('', `<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div class="mid">${done} von ${CHECK.length} erledigt</div>${done === CHECK.length ? '<span class="chip ok">Verkaufsfreigabe möglich</span>' : '<span class="chip warn">' + (CHECK.length - done) + ' offen</span>'}</div><div class="bar" style="margin-top:10px"><i style="width:${done/CHECK.length*100}%;background:var(--ok)"></i></div>`) +
+  `<div class="grid g2 mt">${cats.map(c => panel(c, CHECK.map((x, i) => x[0] !== c ? '' : `<label class="chk"><input type="checkbox" data-ck="${i}" ${CK[i] ? 'checked' : ''}><span><b>${x[1]}</b><span>${x[2]}</span></span></label>`).join(''))).join('')}</div>`;
+};
+
+P.verkauf = () => {
+  const r = scenario(), ue = unitEcon(r.perUnit), be = Math.ceil(S.launchFix/Math.max(ue.db, 0.01));
+  const other = withS({chan: S.chan === 'fba' ? 'shop' : 'fba'}, () => unitEcon(r.perUnit));
+  const curve = []; for (let p = 25; p <= 95; p += 1) curve.push([p, unitEcon(r.perUnit, p).db]);
+  const minP = minPrice(r.perUnit);
+  return ph('Preis, Marge und Kanal', 'Was bleibt je verkaufter Einheit nach Umsatzsteuer, Gebühren, Marketing und Retouren, und ab wann sind die Einmalkosten verdient?', 'verkauf gl') +
+  panel('Annahmen Verkauf', `<div class="fr">${field('price','Verkaufspreis brutto (€)',0.1)}<label class="f">Kanal<select data-k="chan"><option value="fba" ${S.chan === 'fba' ? 'selected' : ''}>Amazon FBA (Lager Graben)</option><option value="shop" ${S.chan === 'shop' ? 'selected' : ''}>Eigener Shop + 3PL</option></select></label>${field('mkt','Marketing (% vom Bruttopreis, wie Amazon-TACoS)',0.5)}${field('ret','Retouren (% vom Netto)',0.5)}
+    ${S.chan === 'fba' ? field('amzRef','Amazon-Verkaufsgebühr (%)',0.5) + field('fbaFee','FBA-Versandgebühr (€ je Einheit)',0.1) : field('shopPay','Payment-Gebühr (%)',0.1) + field('plFee','3PL Pick, Pack, Versand (€)',0.1)}</div>`) +
+  `<div class="grid g12 mt">` +
+    panel('Stückrechnung', `<table><tbody><tr><td>Verkaufspreis brutto</td><td class="r">${eur(ue.gross)}</td></tr><tr class="sub"><td>− Umsatzsteuer ${S.vat} %</td><td class="r">${eur(ue.gross - ue.net)}</td></tr><tr><td><b>Netto-Erlös</b></td><td class="r"><b>${eur(ue.net)}</b></td></tr>
+      <tr class="sub"><td>− Kanal und Fulfillment</td><td class="r">${eur(ue.fees)}</td></tr><tr class="sub"><td>− Marketing (${nf(S.mkt, 1)} % vom Bruttopreis, Amazon-TACoS)</td><td class="r">${eur(ue.mkt)}</td></tr><tr class="sub"><td>− Retouren</td><td class="r">${eur(ue.ret)}</td></tr><tr class="sub"><td>− Landed Cost (${MODES[UI.mode].short})</td><td class="r">${eur(ue.cost)}</td></tr>
+      <tr class="sum"><td>${T('DB','Deckungsbeitrag')}</td><td class="r">${eur(ue.db)}</td></tr><tr class="sub"><td>Marge vom Netto</td><td class="r">${pct(ue.dbPct)}</td></tr></tbody></table>
+      <p class="small muted" style="margin-top:10px">Im anderen Kanal (${S.chan === 'fba' ? 'eigener Shop' : 'Amazon FBA'}) blieben ${eur(other.db)} je Einheit.</p>`) +
+    panel('Deckungsbeitrag nach Verkaufspreis', lineChart({title:'DB nach Preis', x:'num', H:270, xLabel:'Verkaufspreis brutto in €', xFmt: v => nf(v, 0), yFmt: v => nf(v, 0) + ' €', yMin: Math.min(...curve.map(p => p[1])), series:[{pts:curve, color:'#1F2A33', width:2.4}],
+      refs:[{y:0, label:'DB = 0', c:'#B3141F', a:'start'}], marks:[{x:S.price, y:ue.db, c:'#F9A800', label:eur(S.price) + ' → ' + eur(ue.db), a:'end', dy:-12}, {x:minP, y:0, c:'#B3141F', label:'Preisuntergrenze ' + eur(minP), dy:22}]}) +
+      `<div class="grid g3" style="margin-top:8px">${stat('Break-even Einmalkosten', nf(be, 0) + ' Einh.', eur0(S.launchFix) + ' ÷ ' + eur(ue.db))}${stat('Abverkauf Pilot', nf(r.units/S.salesPm, 1) + ' Monate', 'bei ' + S.salesPm + ' Einheiten je Monat')}${stat('DB der Pilotmenge', eur0(ue.db*r.units), nf(r.units, 0) + ' Einheiten')}</div>`) +
+  `</div>` +
+  `<div class="mt">${note('info', `<b>Zielgruppen.</b> B2C: Heimwerker, Wohnungsausstatter und Vermieter, die Leuchten im ${S.pcsPerUnit}er-Set kaufen. Graben ist Amazons Logistikzentrum MUC3, deshalb ist ${T('FBA')} der naheliegende Startkanal.`)}</div>`;
+};
+
+/* ================= Seiten C: Bericht, System ================= */
+/* Management-Bericht */
+function reportText(){
+  const r = scenario(), cf = cashflow(r), sea = scenario('sea'), air = scenario('air'), split = scenario('split');
+  return `Albleuchten GmbH – Pilot #1 Import LED-Leuchten
+Stand: ${dFmt(Date.now() - Date.now() % DAY)}, Modus: ${MODES[UI.mode].name}
+
+Sendung: ${r.cartons} Kartons (${nf(r.units, 0)} Einheiten), ${S.palletize ? r.sh.nPal + ' Europaletten' : 'lose gestaut'}, ${nf(r.sh.cbm, 2)} cbm, ${nf(r.sh.kg, 0)} kg
+Route: ${RT().from} → ${RT().to}, Bestellung ${dFmt(r.t0)}
+
+Landed Cost je Einheit: See ${eur(sea.perUnit)}, Luft ${eur(air.perUnit)}, Split ${eur(split.perUnit)}
+Frachtkosten: See ${eur0(sea.freight)}, Luft ${eur0(air.freight)}
+Frachtpflichtig: Luft ${nf(r.sh.airCW, 0)} kg, See ${nf(r.sh.seaWM, 2)} W/M
+Zollwert ${eur0(r.zollwert)}, Zoll ${eur0(r.duty)}, ${RT().taxName} ${eur0(r.eust)} (Vorsteuer)
+Verkaufsbereit: See ${dFmt(sea.firstLive)}, Luft ${dFmt(air.firstLive)}, Split ab ${dFmt(split.firstLive)}
+
+Spitzen-Kapitalbedarf: ${eur0(cf.peakNeed)} von ${eur0(S.budget)}
+Deckungsbeitrag je Einheit: ${eur(cf.ue.db)} (${pct(cf.ue.dbPct)})
+Budget zurück: ${cf.payback ? dFmt(cf.payback) : '–'}, Gewinn nach Abverkauf: ${eur0(cf.profit)}
+
+Empfehlung: 48 Kartons bestellen, 12 Kartons per Luft (FCA PVG) und 36 Kartons per See (FOB Shanghai), lose gestaut.
+Restzahlung erst nach Qualitätsprüfung. Rahmenvertrag 5.000 Einheiten/Jahr zu 9,90 USD mit Abrufen anstreben.`;
+}
+function reportTsv(){
+  const ms = ['sea','air','split'].map(m => scenario(m));
+  const rows = [['Kennzahl', ...ms.map(m => MODES[m.mode].name)],
+    ['Frachtkosten (€)', ...ms.map(m => nf(m.freight, 2))], ['Zollwert (€)', ...ms.map(m => nf(m.zollwert, 2))], ['Zoll (€)', ...ms.map(m => nf(m.duty, 2))],
+    ['EUSt (€)', ...ms.map(m => nf(m.eust, 2))], ['Landed Cost (€)', ...ms.map(m => nf(m.landed, 2))], ['Landed Cost je Einheit (€)', ...ms.map(m => nf(m.perUnit, 2))],
+    ['Tür zu Tür (Tage)', ...ms.map(m => m.door)]];
+  return rows.map(r => r.join('\t')).join('\n');
+}
+P.bericht = () => {
+  const r = scenario(), cf = cashflow(r), ms = ['sea','air','split'].map(m => scenario(m));
+  const rl = assess(UI.mode).filter(x => x.on).sort((a, b) => b.S - a.S || b.exp - a.exp), expSum = rl.reduce((s2, x) => s2 + x.exp, 0);
+  const st = impactOf(['e1','e3','e6'].map(evById), UI.mode);
+  const xmas = dParse(new Date(r.t0).getUTCFullYear() + '-12-20'), roi = cf.profit/Math.max(cf.peakNeed, 1);
+  const tile = (l, v, sub, c) => `<div class="kpi"><div class="l">${l}</div><div class="v"${c ? ` style="color:${c}"` : ''}>${v}</div><div class="s">${sub}</div></div>`;
+  const ok = cf.peakNeed <= S.budget;
+  return ph('Management-Bericht', `Entscheidungsvorlage für die Geschäftsleitung: Ergebnis, Kosten, Liquidität, Alternativen und Risiken des Piloten auf einer Seite. Berechnet für ${MODES[UI.mode].name}, Stand ${dFmt(Date.now() - Date.now() % DAY)}.`, 'gl') +
+  `<section class="panel decision"><div class="dec-l"><div class="tiny" style="color:#A8B1B8">EMPFEHLUNG</div><h2 style="color:#fff;font-size:22px;margin:4px 0 8px">${ok ? 'Pilot freigeben' : 'Pilot nur mit mehr Budget freigeben'}: ${r.cartons} Kartons, ${MODES[UI.mode].name}</h2>
+    <p style="color:#D5DBE0;margin:0">Landed Cost je Einheit: ${ms.map(m => MODES[m.mode].short + ' ' + eur(m.perUnit)).join(', ')}. Der Pilot ${ok ? 'bleibt mit ' + eur0(cf.peakNeed) + ' Spitzenbedarf im Budget' : 'braucht ' + eur0(cf.peakNeed) + ', also ' + eur0(cf.peakNeed - S.budget) + ' mehr als budgetiert'}, bringt nach Abverkauf ${eur0(cf.profit)} Gewinn und zahlt das Budget bis ${cf.payback ? dFmt(cf.payback) : '–'} zurück.</p></div>
+    <div class="dec-r">${[['Restzahlung erst nach Qualitätsprüfung', 'check'], ['Rate beim Buchen fixieren, 10 Tage Puffer', 'clock'], ['Lagebild vor der Buchung prüfen', 'radar']].map(x => `<div>${icon(x[1])}<span>${x[0]}</span></div>`).join('')}</div></section>` +
+  `<div class="kpis rep mt">` +
+    tile('Landed Cost je Einheit', eur(r.perUnit), 'Ware ' + eur(r.goods/r.units) + ' + ' + pct((r.perUnit - r.goods/r.units)/(r.goods/r.units), 0) + ' Nebenkosten') +
+    tile('Deckungsbeitrag je Einheit', eur(cf.ue.db), pct(cf.ue.dbPct) + ' vom Netto bei ' + eur(S.price), cf.ue.db > 0 ? '#2C7A41' : '#B3141F') +
+    tile('Kapitalbedarf (Spitze)', eur0(cf.peakNeed), pct(cf.peakNeed/S.budget, 0) + ' von ' + eur0(S.budget), ok ? null : '#B3141F') +
+    tile('Gewinn nach Abverkauf', eur0(cf.profit), 'Rendite ' + pct(roi, 0) + ' auf das Kapital', '#2C7A41') +
+    tile('Gesamtrisiko', lvl(rl[0] ? rl[0].S : 0), 'erwartete Risikokosten ' + eur0(expSum), lvlCol(rl[0] ? rl[0].S : 0)) +
+  `</div>` +
+  `<div class="mt">${panel('Zeitplan der Sendung', routeSvg(r), 'verkaufsbereit ' + dFmt(r.firstLive) + (r.firstLive <= xmas ? ', vor Weihnachten' : ', nach Weihnachten'))}</div>` +
+  `<div class="grid g2 mt">` +
+    panel('Woraus sich der Einstandspreis zusammensetzt', waterfall([{label:'Ware', v:r.goods/r.units, c:'#B9C1C7'}, {label:'Hauptlauf', sub:'+ Versicherung', v:(r.main + r.ins)/r.units, c:'#0E518D'}, {label:'Zoll', v:r.duty/r.units, c:'#B3141F'}, {label:'ab Grenze', v:r.after/r.units, c:'#5B7EA6'}, {label:'Landed Cost', v:r.perUnit, total:true, c:'#1F2A33'}], {W:560, H:270, fmt: v => nf(v) + ' €', title:'Landed Cost je Einheit'}) +
+      `<p class="small muted" style="margin-top:6px">Die Ware macht ${pct(r.goods/r.landed, 0)} der Kosten aus. Fracht und Zoll zusammen ${eur(( r.landed - r.goods)/r.units)} je Einheit; die ${RT().taxName} von ${eur0(r.eust)} ist Vorsteuer und kein Kostenfaktor.</p>`) +
+    panel('Liquidität: Wann kommt das Geld zurück?', lineChart({title:'Liquidität', x:'date', W:560, H:270, series:[{pts:cf.pts, color: MODES[UI.mode].col, area:true}], refs:[{y:S.budget, label:'Budget'}], marks:[{x:cf.minT, y:cf.minC, c:'#B3141F', label:'Tiefpunkt ' + eur0(cf.minC)}].concat(cf.payback ? [{x:cf.payback, y:S.budget, c:'#2C7A41', label:'zurück ' + dShort(cf.payback)}] : [])}) +
+      `<p class="small muted" style="margin-top:6px">Tiefster Kontostand am ${dFmt(cf.minT)}. Danach finanzieren die Verkäufe den Rückfluss.</p>`) +
+  `</div>` +
+  `<div class="grid mt">` +
+    panel('Verkehrsträger im Vergleich', hbars(ms.map(m => ({label: MODES[m.mode].short, v: m.perUnit, txt: eur(m.perUnit) + ' · ' + m.firstDoor + ' Tage', c: MODES[m.mode].col, bold: m.mode === UI.mode})), {W:1100, lw:60, rw:160}) +
+      `<div class="tbl-wrap" style="margin-top:8px"><table><thead><tr><th></th>${ms.map(m => `<th class="r">${MODES[m.mode].short}</th>`).join('')}</tr></thead><tbody><tr><td>Vor Weihnachten im Verkauf</td>${ms.map(m => `<td class="r">${m.firstLive <= xmas ? 'ja' : 'nein'}</td>`).join('')}</tr></tbody></table></div>`) +
+  `</div>` +
+  `<div class="grid g21 mt">` +
+    panel('Die fünf größten Risiken', `<div class="tbl-wrap"><table><thead><tr><th>Risiko</th><th>Stufe</th><th class="r">Schaden</th><th class="r">Erwartet</th><th>Maßnahme</th></tr></thead><tbody>${rl.slice(0, 5).map(x => `<tr><td><b>${x.id}</b> ${x.t}</td><td><span class="chip ${lvlCls(x.S)}">${lvl(x.S)}</span></td><td class="r">${x.imp ? eur0(x.imp.total) : '–'}</td><td class="r">${eur0(x.exp)}</td><td class="small">${x.mass.split('. ')[0].replace(/\.$/, '')}.</td></tr>`).join('')}</tbody></table></div>
+      <p class="tiny" style="margin-top:8px">Lagebild Stand ${RISK_ASOF}${LIVE_INFO ? ', automatisch aktualisiert' : ''}. Details unter „Risiko & Lagebild“.</p>`) +
+    panel('Stresstest: Rotes Meer zu, Sturm, Ratenspitze', `<div class="grid" style="gap:14px">${stat('Verzögerung', '+' + nf(st.delay, 0) + ' Tage', 'verkaufsbereit ' + dFmt(st.r1.firstLive), '#B3141F')}${stat('Schaden', eur0(st.total), pct(st.total/r.goods) + ' des Warenwerts')}${stat('Reserve empfohlen', eur0(Math.ceil(st.total/100)*100), 'plus ' + Math.ceil(st.delay/7) + ' Woche(n) Puffer')}</div>`) +
+  `</div>` +
+  `<div class="grid g2 mt">` + panel('Zusammenfassung', `<pre class="copy" id="repText">${esc(reportText())}</pre><div class="btns" style="margin-top:10px"><button class="btn" id="copyRep">${icon('copy').replace('<svg', '<svg width="16" height="16" style="stroke:currentColor;fill:none;stroke-width:1.8"')} Text kopieren</button></div>`) +
+  panel('Vergleichstabelle für Excel', `<pre class="copy">${esc(reportTsv())}</pre><div class="btns" style="margin-top:10px"><button class="btn ghost" id="copyTsv">Tabelle kopieren</button></div><p class="tiny" style="margin-top:8px">Tabulatorgetrennt: in Excel einfügen, die Spalten werden übernommen.</p>`) + `</div>`;
+};
+
+/* Annahmen */
+P.annahmen = () => {
+  const g = (t, items, src, cols) => panel(t, `<div class="fr${cols ? ' ' + cols : ''}">${items.map(i => field(i[0], i[1], i[2] || 'any', i[3] || '')).join('')}</div>${src ? `<p class="tiny" style="margin-top:10px">${src}</p>` : ''}`);
+  const LAB = {seaRate:'Seefracht LCL', seaDest:'THC/CFS Zielhafen', seaDO:'D/O und Dokumente', truckSea:'Nachlauf See', seaMain:'Seetransit', seaPort:'Hafen und Zoll See', seaTruck:'Nachlauf See (Tage)', airRate:'Luftfracht', airHand:'Handling Flughafen', airDocs:'Dokumente Luft', truckAir:'Nachlauf Luft', airMain:'Flug', airPort:'Zoll Luft', airTruck:'Nachlauf Luft (Tage)', kmAir:'Flugstrecke', kmSea:'Seeweg', railMain:'Bahn Transit', railHub:'Umschlag Bahn', railTruck:'Nachlauf Bahn', fcl20:'Seefracht 20 Fuß', fcl40:'Seefracht 40 Fuß', fclTHC20:'THC 20 Fuß', fclTHC40:'THC 40 Fuß', fclTruck20:'Containertransport 20 Fuß', fclTruck40:'Containertransport 40 Fuß', fclPort:'Hafen FCL', oPre:'Vorlauf Werk', oExp:'Export-Zollanmeldung', oTHC:'Verladung Ursprung', customs:'Zollabfertigung Spediteur', ins:'Versicherung', palKg:'Palettengewicht', maxH:'Max. Ladehöhe', fobLead:'Vorlauf bis FOB', fbaDays:'Einlagerung', interest:'Kapitalkosten', holdRate:'Lagerkostensatz', orderFix:'Bestellfixe Kosten', safetyDays:'Sicherheitsbestand', launchFix:'Einmalkosten Launch', refundDays:'Vorsteuer-Erstattung', salesPm:'Absatz je Monat', price:'Verkaufspreis', amzRef:'Amazon-Gebühr', fbaFee:'FBA-Gebühr', shopPay:'Payment-Gebühr', plFee:'3PL-Kosten', mkt:'Marketing', ret:'Retouren', lostShare:'Absatzverlust bei Verzug', preTruck:'Vorlauf LKW Export', preTruckAir:'Vorlauf LKW Export Luft', preCFS:'CFS Export', kmTruckSea:'LKW-Strecke See', kmTruckAir:'LKW-Strecke Luft'};
+  ['railMain','railHub','railTruck','orderFix','holdRate','preTruck','preTruckAir','preCFS'].forEach(k => delete LAB[k]);
+  const ests = Object.keys(LAB).filter(k => estOf(k)), estGroups = ['relSea','riskSea','co2Air','wCost'].filter(k => estOf(k));
+  return ph('Annahmen', 'Jede Zahl der App kommt von hier. Skript-Werte sind die Vorgaben der Fallstudie. Marktraten sind recherchiert (Stand Oktober/November 2026), alle mit „Schätzung“ markierten Werte haben wir selbst geschätzt. Vor der Bestellung durch echte Angebote ersetzen.') +
+  `<div class="grid" style="gap:18px">` +
+  panel(`Selbst geschätzte Werte (${ests.length + 1} Positionen)`, `<p class="small muted">Diese Werte stammen weder aus dem Skript noch direkt aus einer Quelle. Sie sind in der ganzen App mit <span class="est">Schätzung</span> markiert; beim Darüberfahren steht die Begründung.</p>
+    <div class="tbl-wrap"><table><thead><tr><th>Wert</th><th class="r">Ansatz</th><th>Begründung</th></tr></thead><tbody>${ests.map(k => `<tr><td>${LAB[k]}</td><td class="r">${nf(S[k], S[k] % 1 ? 2 : 0)}</td><td class="small">${esc(estOf(k))}</td></tr>`).join('')}
+    <tr><td>Risikoregister: Wahrscheinlichkeit, Auswirkung, Saisonkalender</td><td class="r">1–5</td><td class="small">Einschätzung des Teams auf Basis des recherchierten Lagebilds</td></tr></tbody></table></div>`, 'Hinweis') +
+  panel(`Werte mit Quelle (${Object.keys(QV).length} Positionen)`, `<p class="small muted">Diese Werte sind recherchiert (Stand 16.11.2026). In der App tragen sie ein grünes Schild <span class="est src">Quelle</span>; ein Klick öffnet die Quelle. Wo wir bewusst einen Puffer einrechnen, steht es dabei.</p>
+    <div class="tbl-wrap"><table><thead><tr><th>Wert</th><th class="r">Ansatz</th><th>Quelle und Befund</th></tr></thead><tbody>${Object.entries(QV).map(([k, q]) => `<tr><td>${q.l}</td><td class="r">${nf(S[k], S[k] % 1 ? (S[k] < 0.1 ? 3 : 2) : 0)}</td><td class="small">${esc(q.t)}${q.u ? ` <a href="${esc(q.u)}" target="_blank" rel="noopener">Quelle öffnen</a>` : ''}</td></tr>`).join('')}</tbody></table></div>`, 'recherchiert') +
+  g('Vorgaben aus dem Skript', [['usd','1 EUR = … USD'],['cny','1 EUR = … CNY'],['duty','Zollsatz (%)'],['vat','EUSt (%)'],['prodDays','Produktionszeit (Tage)',1],['lclMax','LCL max. (cbm)'],['budget','Budget (€)',100],['pcsPerUnit','Stück je Einheit',1]], 'Quelle: Aufgabenstellung AEB, Folie 51; Karton 60 × 40 × 45 cm, 12,5 kg, 48 Einheiten; MOQ 1 Karton; Zahlung 40 % bei Beauftragung, 60 % zum FOB-Datum.') +
+  panel('Preisstaffel (USD je Einheit, FOB)', `<div class="fr fr5">${S.tiers.map((t, i) => `<label class="f">ab ${nf(t[0], 0)} Einheiten<input type="number" step="0.01" data-tier="${i}" value="${t[1]}"></label>`).join('')}</div>`) +
+  g('Seefracht LCL', [['seaRate','Seefracht (USD/W/M)'],['seaDest','THC/CFS Hamburg (€/W/M)'],['seaDO','D/O und Dokumente (€)'],['truckSea','Nachlauf Hamburg → Graben (€/100 kg)'],['seaMain','Hafen zu Hafen (Tage)',1],['seaPort','Hafen und Zoll (Tage)',1],['seaTruck','Nachlauf (Tage)',1],['kmSea','Seeweg (km)',100]], 'Markt 2026: Shanghai–Hamburg LCL 49–84 USD/cbm (DTFU), 50–120 USD/cbm (FreightAmigo). Kosten in Hamburg nach dem Tarif von Forto (Q3 2026).') +
+  g('Luftfracht', [['airRate','Luftfracht all-in (USD/kg)'],['airHand','Handling FRA (€/kg)'],['airDocs','Dokumente (€)'],['truckAir','Nachlauf FRA → Graben (€/100 kg)'],['airMain','Flug und Abfertigung (Tage)',1],['airPort','Zoll (Tage)',1],['airTruck','Nachlauf (Tage)',1],['kmAir','Flugstrecke (km)',100]], 'Freightos: 4,88 USD/kg Fernost–Europa, Woche vor dem 08.09.2026 (via Suaid Global); zuletzt 4,87 USD/kg China–Europa (Freightos, 10.11.2026).') +
+  g('Vollcontainer (FCL)', [['fcl20','Seefracht 20 Fuß (USD)',10],['fcl40','Seefracht 40 Fuß (USD)',10],['fclTHC20','THC Hamburg 20 Fuß (€)',10],['fclTHC40','THC Hamburg 40 Fuß (€)',10],['fclTruck20','Container HH → Graben 20 Fuß (€)',10],['fclTruck40','Container HH → Graben 40 Fuß (€)',10],['fclPort','Hafen und Zoll FCL (Tage)',1]], 'Stand 16.11.2026: Drewry WCI Shanghai–Rotterdam 3.504 USD je 40 Fuß (12.11.2026). 20 Fuß kostet meist 60–70 % der 40-Fuß-Rate (Suaid Global). THC Hamburg laut Topway 300–450 USD je Container. Containertransport geschätzt mit 1,20–1,80 € je km (FreightAmigo) für rund 650 km. FCL spart die Entladung im CFS-Lager, daher ein Tag weniger im Hafen (Annahme).') +
+  g('Ursprungskosten (für Incoterm-Vergleich)', [['oPre','Vorlauf Werk → Hafen (€)'],['oExp','Export-Zollanmeldung (€)'],['oTHC','Verladung Shanghai (€/W/M)'],['customs','Zollabfertigung Spediteur (€)'],['ins','Versicherung (% von CIF + 10 %)'],['palKg','Gewicht Palette (kg)'],['fobLead','Vorlauf bis FOB (Tage)',1],['fbaDays','Einlagerung (Tage)',1]]) +
+  g('Finanzen', [['interest','Kapitalkosten (% p. a.)'],['safetyDays','Sicherheitsbestand (Tage)',1],['launchFix','Einmalkosten Launch (€)',100],['refundDays','Tage bis Vorsteuer-Erstattung',1],['salesPm','Absatz je Monat',10]]) +
+  `</div><div class="btns mt"><button class="btn signal" id="reset">Alle Annahmen zurücksetzen</button><button class="btn ghost" id="copyJson">Szenario als JSON kopieren</button></div>`;
+};
+
+/* Glossar & Fakten */
+P.glossar = () => {
+  const keys = Object.keys(GL).sort((a, b) => a.localeCompare(b, 'de'));
+  return ph('Glossar und Fakten', 'Fachbegriffe der App. Unterstrichene Begriffe zeigen die Erklärung auch direkt beim Darüberfahren.') +
+  `<div class="grid g21">` + panel('Begriffe', `<table><tbody>${keys.map(k => `<tr><td style="width:150px"><b>${k}</b></td><td>${GL[k]}</td></tr>`).join('')}</tbody></table>`) +
+  `<div class="grid" style="gap:18px;align-content:start">` +
+    panel('Verkehrsträger (Skript Folie 9)', `<table><tbody><tr><td><b>Luft</b></td><td>Passagiermaschine (PAX), Frachter (CAO), Charter</td></tr><tr><td><b>See</b></td><td>LCL, FCL, Bulk, RoRo</td></tr><tr><td><b>Land</b></td><td>Teilladung (LTL), Komplettladung (FTL)</td></tr><tr><td><b>Diverse</b></td><td>Zug, Kombinierter Verkehr, Schüttgut</td></tr></tbody></table>`) +
+    panel('Zahlen aus dem Skript', `<ul class="list-plain">${[['info','Größter Frachtflughafen 2024: Hongkong mit 4,94 Mio. t, so viel wie rund 823.000 Elefanten.'],['info','Größter Containerhafen 2024: Shanghai mit 51,5 Mio. TEU.'],['info','MSC Irina: 400 m lang, 61 m breit, 24.346 TEU.'],['info','Ein 20-Fuß-Container = 1 TEU.'],['info','Rund 18.253 Warennummern im Import, 9.536 im Export.']].map(x => `<li>${icon(x[0])}<span>${x[1]}</span></li>`).join('')}</ul>`) +
+  `</div></div>`;
+};
+
+/* ================= Risikomanagement & Lagebild ================= */
+let RISK_ASOF = '30.10.2026';
+const SRC = {
+  metro:{t:'Metro Global: Suez Canal return gathers pace (27.10.2026)', u:'https://www.metro.global/2026/10/27/suez-canal-return-gathers-pace/'},
+  seatrade:{t:'Seatrade Maritime: Full Suez return expected by Q1 2027 (14.10.2026)', u:'https://www.seatrade-maritime.com/containers/full-suez-return-for-container-carriers-expected-by-q1-2027'},
+  redteam:{t:'Red Team Analysis: The Houthis, Bab el-Mandeb and Maritime Transport (08.10.2026)', u:'https://redanalysis.org/2026/10/08/houthis-bab-el-mandeb-maritime-transport/'},
+  tihamah:{t:'Al Jazeera: Six killed in Houthi attack on Bab al-Mandeb ship (12.08.2026)', u:'https://www.aljazeera.com/news/2026/8/12/six-killed-in-houthi-attack-on-bab-al-mandeb-ship-yemens-government-says'},
+  redsea:{t:'Wikipedia: Red Sea crisis (Chronologie)', u:'https://en.wikipedia.org/wiki/Red_Sea_crisis'},
+  aspides:{t:'VerkehrsRundschau: EU-Mission warnt vor steigender Gefahr im Roten Meer (31.03.2026)', u:'https://www.verkehrsrundschau.de/nachrichten/vermischtes/eu-mission-warnt-vor-steigender-gefahr-fuer-schifffahrt-im-roten-meer-3786821'},
+  imb:{t:'ICC: Maritime piracy incidents remain at historic lows (15.10.2026)', u:'https://iccwbo.org/news-publications/news/maritime-piracy-incidents-remain-at-historic-lows-despite-somali-piracy-concerns/'},
+  honour:{t:'Baird Maritime: IMB records 51 piracy incidents in nine months (Okt. 2026)', u:'https://www.bairdmaritime.com/security/incidents/piracy/somali-hijackings-raise-crew-toll'},
+  imb25:{t:'ICC: Cautious optimism despite uptick in piracy attacks (Okt. 2025)', u:'https://iccwbo.org/news-publications/news/cautious-optimism-prevails-despite-uptick-in-reported-maritime-piracy-attacks/'},
+  imb24:{t:'Freight News: Piracy at lowest levels since 1994 (11.10.2024)', u:'https://www.freightnews.co.za/article/piracy-lowest-levels-1994'},
+  gog:{t:'Maritime Executive: Maritime piracy in 2026 fell to 1992 levels', u:'https://maritime-executive.com/article/maritime-piracy-in-2026-fell-to-1992-levels-despite-somalia-yemen-surge'},
+  hormuz:{t:'USNI News: October sees near daily strikes on ships in Hormuz (09.10.2026)', u:'https://news.usni.org/2026/10/09/october-sees-near-daily-strikes-on-ships-in-hormuz'},
+  hormuzW:{t:'Wikipedia: 2026 Strait of Hormuz crisis', u:'https://en.wikipedia.org/wiki/2026_Strait_of_Hormuz_crisis'},
+  dolphin:{t:'Toll Group: Typhoon Dolphin disrupts operations in China (10.08.2026)', u:'https://www.tollgroup.com/solutions/transportation/customer-advisories/typhoon-dolphin-disrupts-operations-china'},
+  flexport:{t:'Flexport: A record typhoon season is removing capacity from China’s biggest ports (01.09.2026)', u:'https://tw.flexport.com/blog/a-record-typhoon-season-is-removing-capacity-from-chinas-biggest-ports/'},
+  cny:{t:'New Buying Agent: Chinese New Year 2027 (6. Februar)', u:'https://www.newbuyingagent.com/resources/chinese-new-year-2027-february-6-the-china-production-schedule-survival-guide'},
+  ports:{t:'VerkehrsRundschau: Verdi und ZDS einigen sich auf neuen Tarifvertrag (06.10.2026)', u:'https://www.verkehrsrundschau.de/nachrichten/transport-logistik/deutsche-seehaefen-verdi-und-zds-einigen-sich-auf-neuen-tarifvertrag-3913661'},
+  congestion:{t:'Maritime Executive: Northern Europe ports brace for labor strikes (Sept. 2026)', u:'https://maritime-executive.com/article/northern-europe-ports-brace-for-labor-strikes-this-week'},
+  wci:{t:'Cyprus Shipping News: Drewry World Container Index, 22. Oktober', u:'https://cyprusshippingnews.com/2026-10-26/drewry-world-container-index-22-oct/'},
+  wciFak:{t:'ShipUniverse: Drewry WCI 15.10.2026, neue FAK-Raten ab 19.10.', u:'https://www.shipuniverse.com/?p=23515'},
+  air:{t:'The Loadstar: Gulf airspace closures slash Asia-Europe air cargo capacity', u:'https://theloadstar.com/gulf-airspace-closures-slash-asia-europe-air-cargo-capacity-by-nearly-40/'},
+  airDhl:{t:'DHL Global Forwarding: Air Freight Market Update 2026', u:'https://www.dhl.com/et-en/home/global-forwarding/latest-news-and-webinars/air-freight-market-update.html'},
+  rail:{t:'GetTransport: Busiest China–Europe rail border crossings 2026', u:'https://blog.gettransport.com/trends-in-logistic/busiest-china-europe-rail-border-crossings-2026/'},
+  railYicai:{t:'Yicai: Poland’s closed border strands over 130 China–Europe trains (23.09.2025)', u:'https://www2.yicaiglobal.com/news/over-130-china-europe-freight-trains-get-stranded-after-poland-shuts-border-with-belarus'},
+  eucn:{t:'LexisNexis: Joint statement EU–China Trade and Investment Consultations (12.10.2026)', u:'https://www.lexisnexis.co.uk/legal/news/commission-publishes-joint-statement-on-second-eu-china-trade-investment-consultations'},
+  rareearth:{t:'Brussels Signal: Brussels presses Beijing for import curbs (Okt. 2026)', u:'https://brusselssignal.eu/2026/10/brussels-presses-beijing-for-import-curbs-as-its-own-deadline-falls-due/'},
+  evergreen:{t:'The Maritime Executive: Evergreen Joins the Return to Red Sea Shipping (08.11.2026)', u:'https://maritime-executive.com/article/evergreen-joins-the-return-to-red-sea-shipping'},
+  unsc:{t:'UN News: Security Council – threats to Hormuz shipping mount (13.11.2026)', u:'https://news.un.org/en/story/2026/11/1168804'},
+  atalanta:{t:'Africanews (AP): Regional conflicts raise fears of renewed piracy in the Gulf of Aden (09.11.2026)', u:'https://www.africanews.com/2026/11/09/regional-conflicts-raise-fears-of-renewed-piracy-in-the-gulf-of-aden/'},
+  azini:{t:'Dryad Global: Somali piracy – AZINI rescue (04.11.2026)', u:'https://channel16.dryadglobal.com/somali-piracy-azini-rescue-highlights-continuing-risks-in-the-gulf-of-aden'},
+  bahrain:{t:'The National: Bahrain issues first nationwide alert in months (15.11.2026)', u:'https://www.thenationalnews.com/news/gulf/2026/11/15/bahrain-issues-first-nationwide-alert-in-months-as-iran-claims-attack-on-base-hosting-us-helicopters/'},
+  brent:{t:'FinanceFeeds: Brent Crude Oil Price $95.84 (14.11.2026)', u:'https://financefeeds.com/brent-crude-oil-price-95-84-saturday-week-ahead-second-weekly-loss-bull-98-bear-91/'},
+  maerskEU:{t:'Maersk: Europe Market Update November 2026 (06.11.2026)', u:'https://www.maersk.com/news/articles/2026/11/06/europe-market-update-november'},
+  zencargo:{t:'Zencargo: Market Update (03.11.2026)', u:'https://www.zencargo.com/resources/zencargo-market-update-3-november-2026/'},
+  wciNov:{t:'Drewry: World Container Index – 12 Nov (12.11.2026)', u:'https://www.drewry.co.uk/supply-chain-advisors/supply-chain-expertise/world-container-index-assessed-by-drewry'},
+  fos1110:{t:'Freightos: November 10, 2026 Update (10.11.2026)', u:'https://www.freightos.com/freight-resources/la-lb-strike-deadline-extended-dem-win-increasing-trade-uncertainty-november-10-2026-update/'},
+  killswitch:{t:'Euronews: China threatens EU with retaliation as EU mulls kill-switch (05.11.2026)', u:'https://www.euronews.com/2026/11/05/china-threatens-eu-with-retaliation-as-eu-mulls-kill-switch-to-defend-its-market'},
+  reExt:{t:'S&P Global: China extends rare earth export suspension to January 2027 (09.11.2026)', u:'https://www.spglobal.com/energy/en/news-research/latest-news/metals/110926-china-extends-rare-earth-export-suspension-to-january-2027'},
+};
+const srcLinks = keys => (keys || []).map(k => { const o = typeof k === 'string' ? SRC[k] : k; return o && /^https:\/\//.test(o.u || '') ? `<a href="${esc(o.u)}" target="_blank" rel="noopener">${esc(o.t || o.u)}</a>` : ''; }).join('<br>');
+
+/* Lagebild: recherchierte Meldungen, neueste zuerst */
+const LAGE = [
+  {d:'27.10.2026', cat:'Route', reg:'Rotes Meer / Suez', txt:'Fast zwei Drittel der Containerkapazität Fernost–Europa fahren wieder durch Rotes Meer und Suezkanal. Die Rückkehr verläuft aber ungleichmäßig, manche Dienste fahren ostwärts weiter ums Kap.', rel:'Unser Seetransit von rund 35 Tagen setzt die Suez-Route voraus.', src:['metro']},
+  {d:'22.10.2026', cat:'Markt', reg:'Asien–Nordeuropa', txt:'Drewry-Index Shanghai–Rotterdam steigt um 3 % auf 3.632 USD je 40-Fuß-Container. Reedereien streichen Abfahrten und versuchen seit 19. Oktober höhere FAK-Raten durchzusetzen; Drewry erwartet leicht steigende Raten.', rel:'Seefracht-Rate eher steigend; vor dem Neujahrsfest üblicherweise weiter.', src:['wci','wciFak']},
+  {d:'15.10.2026', cat:'Piraterie', reg:'Weltweit / Somalia', txt:'IMB meldet 51 Piraterie-Vorfälle von Januar bis September, den niedrigsten Wert seit 1992. Somalische Piraten sind aber für 8 Entführungen und 94 % der Geiselnahmen verantwortlich.', rel:'Unsere Route führt durch Arabisches Meer und Golf von Aden.', src:['imb','honour']},
+  {d:'14.10.2026', cat:'Route', reg:'Suezkanal', txt:'In den ersten beiden Oktoberwochen passierten wöchentlich rund 753.000 TEU den Kanal, gegenüber 1,46 Mio. TEU im Vergleichszeitraum 2023. Eine volle Rückkehr wird bis zum ersten Quartal 2027 erwartet.', rel:'Kapazität kommt zurück, Raten könnten danach sinken.', src:['seatrade']},
+  {d:'12.10.2026', cat:'Politik', reg:'EU – China', txt:'Nach Gesprächen in Peking am 8. und 9. Oktober vereinbaren EU und China weitere Gespräche über Zölle und Exportkontrollen. China will Lizenzen für Seltene Erden und Magnete schneller erteilen.', rel:'Keine Maßnahme gegen Leuchten bekannt; Exportkontrollen können Komponenten betreffen.', src:['eucn','rareearth']},
+  {d:'09.10.2026', cat:'Sicherheit', reg:'Straße von Hormus', txt:'Seit 28.02.2026 ist die Straße von Hormus wegen des Iran-Kriegs weitgehend blockiert. Im Oktober wurde dort fast täglich ein Schiff getroffen.', rel:'Nicht auf unserer Route, treibt aber Öl-, Bunker- und Kerosinpreise.', src:['hormuz','hormuzW']},
+  {d:'08.10.2026', cat:'Sicherheit', reg:'Bab el-Mandeb', txt:'Analysten sehen seit dem 5. Oktober eine neue Phase von Huthi-Angriffen. Am 11. August starben bei einem Angriff auf den Frachter Tihamah sechs Menschen.', rel:'Der Engpass liegt direkt auf unserer Seeroute.', src:['redteam','tihamah']},
+  {d:'06.10.2026', cat:'Hafen', reg:'Hamburg', txt:'Tarifeinigung in den deutschen Seehäfen mit 3,4 % mehr Lohn. Unbefristete Streiks sind damit abgewendet, nach Warnstreiks im August und September.', rel:'Streikrisiko in Hamburg für unsere Ankunft im Januar gering.', src:['ports','congestion']},
+  {d:'01.09.2026', cat:'Wetter', reg:'Shanghai / Ningbo', txt:'Nach Taifun Dolphin stieg die Warteschlange vor Shanghai binnen zwei Wochen von 24 auf 139 Schiffe. Die Terminals hatten ab 8. August alle Außenarbeiten eingestellt.', rel:'Taifunsaison Juli bis September: relevant für Nachbestellungen im Sommer.', src:['flexport','dolphin']},
+  {d:'2026', cat:'Luftfracht', reg:'Golfregion', txt:'Seit den Luftraumsperrungen am Golf fehlt ein großer Teil der Kapazität China–Europa, die sonst über Golf-Drehkreuze lief. Kerosinpreise und Zuschläge stiegen stark.', rel:'Unsere Luftfracht-Rate von 4,90 USD/kg kann schnell veralten.', src:['air','airDhl']},
+  {d:'2027', cat:'Kalender', reg:'China', txt:'Das Chinesische Neujahr fällt auf den 6. Februar 2027, die offiziellen Feiertage auf den 5. bis 12. Februar. Fabriken stehen oft zwei bis vier Wochen still.', rel:'Erstbestellung nicht betroffen; Nachbestellungen im Januar und Februar meiden.', src:['cny']},
+];
+
+/* Tägliche Aktualisierung: lage.json liegt neben der Seite und wird jeden Morgen neu recherchiert */
+let LIVE_INFO = null, LIVE_P = null;
+const cut = (v, n) => String(v == null ? '' : v).slice(0, n);
+(async () => {
+  try {
+    if (location.protocol === 'file:') return;
+    const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 8000);
+    const res = await fetch('lage.json', {cache:'no-store', signal: ctl.signal}); clearTimeout(tm);
+    if (!res.ok) return;
+    const j = await res.json();
+    if (!j || !/^\d{4}-\d{2}-\d{2}$/.test(j.asof || '') || !Array.isArray(j.items) || !j.items.length) return;
+    const items = j.items.slice(0, 30).map(n => ({d: cut(n.d, 20), cat: cut(n.cat, 30), reg: cut(n.reg, 60), txt: cut(n.txt, 600), rel: cut(n.rel, 300),
+      routes: Array.isArray(n.routes) ? n.routes.filter(x => ROUTES[x]) : null,
+      src: (Array.isArray(n.src) ? n.src : []).slice(0, 3).filter(o => o && /^https:\/\//.test(o.u || '')).map(o => ({t: cut(o.t, 160), u: cut(o.u, 400)}))})).filter(n => n.txt);
+    if (!items.length) return;
+    LAGE.splice(0, LAGE.length, ...items);
+    RISK_ASOF = dFmt(dParse(j.asof));
+    if (j.p && typeof j.p === 'object'){ LIVE_P = {}; for (const k in j.p){ const v = Math.round(+j.p[k]); if (/^R\d{1,2}$/.test(k) && v >= 1 && v <= 5) LIVE_P[k] = v; } }
+    LIVE_INFO = {asof: j.asof, updated: cut(j.updated, 40), note: cut(j.note, 400), wci: j.wci && isFinite(+j.wci.rtm) ? {rtm: +j.wci.rtm, date: cut(j.wci.date, 20)} : null};
+    if (typeof render === 'function') render();
+  } catch (e) {}
+})();
+function liveNote(){
+  if (!LIVE_INFO) return note('warn', `<b>Datenstand ${RISK_ASOF}.</b> Das Lagebild stammt aus einer Recherche mit Quellenangabe. Die tägliche Aktualisierung konnte gerade nicht geladen werden, die Seite zeigt deshalb diesen Stand. Die Live-Quellen rechts öffnen die aktuellen Meldungen.`);
+  const age = days(dParse(LIVE_INFO.asof), Date.now() - Date.now() % DAY);
+  return note(age > 2 ? 'warn' : 'ok', `<b>Lagebild vom ${RISK_ASOF}${age === 0 ? ' (heute)' : age === 1 ? ' (gestern)' : ', ' + age + ' Tage alt'}.</b> Wird jeden Morgen automatisch neu recherchiert und hier eingespielt${LIVE_INFO.note ? ': ' + esc(LIVE_INFO.note) : '.'}${LIVE_P && Object.keys(LIVE_P).length ? ' Angepasste Wahrscheinlichkeiten: ' + Object.entries(LIVE_P).map(([k, v]) => k + ' = ' + v).join(', ') + '.' : ''}`);
+}
+
+/* Live-Quellen (öffnen außerhalb der App) */
+const LIVE = [
+  ['UKMTO: Sicherheitsmeldungen Rotes Meer, Golf von Aden, Hormus', 'https://www.ukmto.org/', 'Angriffe und Warnungen, tagesaktuell'],
+  ['IMB Live Piracy Report', 'https://www.icc-ccs.org/index.php/piracy-reporting-centre/live-piracy-report', 'Piraterie-Vorfälle weltweit, Karte'],
+  ['IMF PortWatch', 'https://portwatch.imf.org/', 'Schiffspassagen an Suez, Bab el-Mandeb, Hormus'],
+  ['Joint Typhoon Warning Center', 'https://www.metoc.navy.mil/jtwc/jtwc.html', 'Taifun-Warnungen Westpazifik'],
+  ['Deutscher Wetterdienst: Seewetter', 'https://www.dwd.de/DE/leistungen/seewetterbericht/seewetterbericht.html', 'Sturmwarnungen Nord- und Ostsee'],
+  ['Drewry World Container Index', 'https://www.drewry.co.uk/supply-chain-advisors/supply-chain-expertise/world-container-index-assessed-by-drewry', 'Spotraten Seefracht, wöchentlich'],
+  ['Freightos Baltic Index', 'https://fbx.freightos.com/', 'Container- und Luftfrachtraten'],
+  ['EU Sanctions Map', 'https://www.sanctionsmap.eu/', 'Sanktionen nach Land'],
+  ['Zoll online', 'https://www.zoll.de/', 'Zollrecht, Verbote und Beschränkungen'],
+  ['MarineTraffic', 'https://www.marinetraffic.com/', 'Schiffsposition live verfolgen'],
+];
+
+/* Störereignisse für Stresstest und Schadensbewertung */
+const EVENTS = [
+  {id:'e1', label:'Rotes Meer gesperrt: Umweg Kap der Guten Hoffnung', sea:10, seaF:1.25},
+  {id:'e2', label:'Taifun schließt Shanghai vor der Verladung', origin:4},
+  {id:'e3', label:'Winterstürme Nordatlantik und Biskaya', sea:2},
+  {id:'e4', label:'Stau oder Streik im Hafen Hamburg', seaPort:5},
+  {id:'e5', label:'Zollbeschau mit Produktprüfung', clr:3, customsAdd:180},
+  {id:'e6', label:'Frachtraten-Spitze vor dem Neujahrsfest', seaF:1.4},
+  {id:'e7', label:'Luftfracht-Engpass durch die Golf-Krise', airF:1.35, air:2},
+  {id:'e8', label:'Ölpreis-Schock: Bunker- und Kerosinzuschläge', seaF:1.15, airF:1.2},
+  {id:'e9', label:'US-Dollar wertet um 8 % auf', usdF:0.92},
+  {id:'e10', label:'Produktion fällt ins Neujahrsfest', prod:21},
+  {id:'e11', label:'Zusatzzoll von 10 Prozentpunkten (hypothetisch)', dutyAdd:10},
+  {id:'e12', label:'Havarie grosse: 30 Tage festgehalten, Beitrag 15 % (unversichert)', sea:30, gaPct:15},
+  {id:'e14', label:'Somalische Piraten: Schiff weicht weit aus', sea:3, seaF:1.05},
+];
+const evById = id => EVENTS.find(e => e.id === id);
+function patchFor(evs){
+  const p = {seaMain:S.seaMain, seaPort:S.seaPort, airMain:S.airMain, airPort:S.airPort, railMain:S.railMain, railPort:S.railPort, fobLead:S.fobLead, prodDays:S.prodDays, seaRate:S.seaRate, fcl20:S.fcl20, fcl40:S.fcl40, fclPort:S.fclPort, airRate:S.airRate, usd:S.usd, customs:S.customs, duty:S.duty};
+  evs.forEach(e => { p.seaMain += e.sea || 0; p.seaPort += (e.seaPort || 0) + (e.clr || 0); p.fclPort += (e.seaPort || 0) + (e.clr || 0); p.airPort += e.clr || 0; p.railPort += e.clr || 0; p.airMain += e.air || 0; p.railMain += e.rail || 0;
+    p.fobLead += e.origin || 0; p.prodDays += e.prod || 0; p.seaRate *= e.seaF || 1; p.fcl20 *= e.seaF || 1; p.fcl40 *= e.seaF || 1; p.airRate *= e.airF || 1; p.usd *= e.usdF || 1; p.customs += e.customsAdd || 0; p.duty += e.dutyAdd || 0; });
+  return p;
+}
+/* Schaden in Euro: Mehrkosten + Kapitalbindung + verlorener Absatz während des Verzugs */
+function impactOf(evs, mode){
+  const r0 = scenario(mode), r1 = withS(patchFor(evs), () => scenario(mode));
+  const dW = r0.legs.reduce((s, l, i) => s + days(l.live, r1.legs[i].live)*l.units, 0)/r0.units;
+  const delay = Math.max(0, dW), db = unitEcon(r0.perUnit).db;
+  const ga = evs.reduce((s, e) => s + (e.gaPct || 0), 0)/100*r0.goods;
+  const extra = r1.landed - r0.landed + ga, capital = r0.goods*S.interest/100*delay/365, lost = delay*(S.salesPm/30)*Math.max(db, 0)*S.lostShare/100;
+  return {r0, r1, delay, extra, ga, capital, lost, total: extra + capital + lost};
+}
+
+/* Saisonale Wahrscheinlichkeiten nach Monat (1 = Januar) */
+const P_TYPH = [0,1,1,1,1,2,3,4,4,4,3,2,1], P_STORM = [0,3,3,2,1,1,1,1,1,2,2,3,3], P_PIR = [0,2,2,3,3,3,2,2,2,2,3,3,3];
+const CNY = ['2026-02-17','2027-02-06','2028-01-26'].map(dParse);
+const monthOf = t => new Date(t).getUTCMonth() + 1;
+const P_TYPH_VN = [0,1,1,1,1,1,1,1,1,2,3,3,2];
+function seasonCtx(r){
+  const rev = !!RT().export, at = f => r.fob + Math.round((rev ? 1 - f : f)*S.seaMain)*DAY;
+  const cnyHit = CNY.some(c => r.t0 <= dAdd(c, 19) && r.fob >= dAdd(c, -21));
+  return {at, cnyHit, typh: S.route === 'vn' ? P_TYPH_VN[monthOf(r.fob)] : rev ? P_TYPH[monthOf(dAdd(r.fob, S.seaMain))] : P_TYPH[monthOf(r.fob)], storm: P_STORM[monthOf(at(0.9))], pir: P_PIR[monthOf(at(0.48))]};
+}
+
+/* Risikoregister */
+const RISKS = [
+  {id:'R1', t:'Angriffe im Roten Meer und am Bab el-Mandeb', cat:'Sicherheit', seg:'Bab el-Mandeb, Rotes Meer', modes:['sea','split'], p:3, i:4, tr:'↑', ev:'e1', strat:'Vermindern',
+    lage:'Maersk, Hapag-Lloyd und Evergreen fahren seit Anfang November wieder durch den Suezkanal. Zugleich liegen die Passagen am Bab el-Mandeb seit der Huthi-Blockade gegen saudische Schiffe im Juli rund ein Viertel niedriger (UN, 13.11.); am 12.11. griffen die Huthis saudische Ölanlagen am Roten Meer an.',
+    mass:'Spediteur mit vereinbarter Kap-Option buchen, 10 Tage Zeitpuffer einplanen, Kriegsrisiko in der Transportversicherung einschließen, Split nutzen.', own:'Logistik', src:['evergreen','unsc','tihamah']},
+  {id:'R2', t:'Piraterie vor Somalia und im Golf von Aden', cat:'Piraterie', seg:'Arabisches Meer, Golf von Aden', modes:['sea','split'], p:'pir', i:3, tr:'↑', ev:'e14', strat:'Übertragen',
+    lage:'Weltweit so wenige Vorfälle wie seit 1992 nicht, aber Somalia steigt: 8 Entführungen und 94 % der Geiselnahmen 2026. Laut EU-Mission Atalanta über 70 Vorfälle seit November 2023, rund die Hälfte davon 2026; Anfang November befreite Indiens Marine das gekaperte Fischereischiff Azini.',
+    mass:'Reederei mit Schutzmaßnahmen nach Best Management Practices wählen, Versicherung mit Havarie grosse und Lösegeld abdecken lassen.', own:'Logistik', src:['imb','atalanta','azini']},
+  {id:'R3', t:'Überfälle in der Singapur-Straße', cat:'Piraterie', seg:'Singapur-Straße', modes:['sea','split'], p:1, i:2, tr:'↓', ev:null, strat:'Akzeptieren',
+    lage:'13 Vorfälle in den ersten neun Monaten 2026 gegenüber 73 im Vorjahr. Meist Diebstahl an Bord, selten Ladung betroffen.',
+    mass:'Keine eigene Maßnahme; im Schadensfall über die Transportversicherung.', own:'Logistik', src:['imb']},
+  {id:'R4', t:'Iran-Krieg und Hormus: Ölpreis und Zuschläge', cat:'Markt', seg:'indirekt (nicht auf Route)', modes:['sea','air','split','rail'], p:4, i:2, tr:'→', ev:'e8', strat:'Vermindern',
+    lage:'Straße von Hormus seit Februar 2026 weitgehend blockiert, Passagen laut UKMTO rund 65 % unter Vorkriegsniveau (13.11.). Am 15.11. griff Iran erstmals seit Monaten wieder Bahrain an; Brent schloss am 13.11. bei rund 96 USD. Folge: hohe Bunker- und Kerosinpreise, Notfall-Zuschläge.',
+    mass:'Frachtangebote mit festem Zuschlag (BAF/FSC) vereinbaren, Luftanteil klein halten.', own:'Einkauf', src:['unsc','bahrain','brent']},
+  {id:'R5', t:'Taifun in Shanghai', cat:'Wetter', seg:'Shanghai, Ostchinesisches Meer', modes:['sea','air','split','rail'], p:'typh', i:3, tr:'→', ev:'e2', strat:'Vermeiden',
+    lage:'Saison Juli bis September. 2026 schlossen die Häfen im Juli und August mehrfach, danach lagen über 130 Schiffe vor Shanghai.',
+    mass:'Verladungen außerhalb der Saison planen, im Sommer eine Woche Puffer, Taifun-Warnungen 5 Tage vor Verladung prüfen.', own:'Logistik', src:['flexport','dolphin']},
+  {id:'R6', t:'Winterstürme Nordatlantik und Biskaya', cat:'Wetter', seg:'Biskaya, Ärmelkanal, Nordsee', modes:['sea','split'], p:'storm', i:2, tr:'→', ev:'e3', strat:'Akzeptieren',
+    lage:'Klimatologisch November bis Februar. Führt zu Verspätungen und gelegentlich Containerverlusten bei schwerer See.',
+    mass:'Zwei Tage Puffer im Winter, Versicherung nach Klausel A (alle Gefahren).', own:'Logistik', src:[]},
+  {id:'R7', t:'Chinesisches Neujahr und Golden Week', cat:'Kalender', seg:'Lieferant, Produktion', modes:['sea','air','split','rail'], p:'cny', i:3, tr:'→', ev:'e10', strat:'Vermeiden',
+    lage:'Neujahr am 6. Februar 2027, Feiertage 5. bis 12. Februar. Fabriken stehen zwei bis vier Wochen still, vorher steigen die Frachtraten.',
+    mass:'Bestellungen für das erste Quartal bis Ende November auslösen, Produktionsende schriftlich bestätigen lassen.', own:'Einkauf', src:['cny']},
+  {id:'R8', t:'Stau oder Streik in Hamburg', cat:'Hafen', seg:'Hamburg', modes:['sea','split'], p:2, i:3, tr:'↓', ev:'e4', strat:'Vermindern',
+    lage:'Tarifeinigung am 6. Oktober 2026 beendet die Streikgefahr. Maersk nennt den Hafenbetrieb in Nordeuropa im November weitgehend stabil; Anfang November 1 bis 3 Tage Wartezeit in Hamburg.',
+    mass:'Spediteur nach Ausweichhafen fragen (Bremerhaven, Rotterdam), Nachlauf flexibel buchen.', own:'Logistik', src:['ports','maerskEU','zencargo']},
+  {id:'R9', t:'Frachtraten-Spitze', cat:'Markt', seg:'Seefracht Asien–Europa', modes:['sea','split'], p:3, i:2, tr:'↑', ev:'e6', strat:'Vermindern',
+    lage:'Drewry Shanghai–Rotterdam am 12.11. bei 3.504 USD/FEU (−3 %). Für die zweite Novemberhälfte sind höhere FAK- und PSS-Zuschläge und gestrichene Abfahrten angekündigt; vor dem Neujahrsfest steigen Raten üblicherweise.',
+    mass:'Rate beim Buchen fixieren, zwei Spediteure vergleichen.', own:'Einkauf', src:['wciNov']},
+  {id:'R10', t:'Luftfracht-Kapazität und Kerosin', cat:'Markt', seg:'Luftweg PVG → FRA', modes:['air','split'], p:4, i:2, tr:'→', ev:'e7', strat:'Vermindern',
+    lage:'Golf-Drehkreuze gestört, Russland-Luftraum für EU-Airlines gesperrt. Freightos: China–Europa 4,87 USD/kg (Woche vor dem 10.11.), 11 % mehr als in der Vorwoche, Hochsaison.',
+    mass:'Luftfracht 2 Wochen vorher buchen, Direktflüge ab Shanghai bevorzugen.', own:'Logistik', src:['air','fos1110']},
+  {id:'R11', t:'Handelspolitik EU–China', cat:'Politik', seg:'Einkauf, Zoll', modes:['sea','air','split','rail'], p:2, i:4, tr:'→', ev:'e11', strat:'Akzeptieren',
+    lage:'Die EU-Kommission bereitet ein Notfallinstrument vor, mit dem sie chinesischen Anbietern bei schweren Marktstörungen den Binnenmarkt sperren könnte; China droht mit Vergeltung. China hat die Aussetzung einiger Exportkontrollen für Seltene Erden bis 10.01.2027 verlängert. Gegen Leuchten ist keine Maßnahme bekannt.',
+    mass:'Warennummer und Antidumping-Status vor jeder Bestellung in TARIC prüfen, zweiten Lieferanten außerhalb Chinas sondieren.', own:'Einkauf', src:['killswitch','reExt']},
+  {id:'R13', t:'Zollbeschau und Produktprüfung', cat:'Compliance', seg:'Verzollung', modes:['sea','air','split','rail'], p:2, i:3, tr:'→', ev:'e5', strat:'Vermindern',
+    lage:'Neue Produkte aus China werden häufiger geprüft, vor allem bei Elektro- und Sicherheitsthemen (CE, GPSR).',
+    mass:'Konformitätserklärung, Prüfberichte und Etiketten vor dem Versand prüfen, vZTA beantragen.', own:'Einkauf', src:[]},
+  {id:'R14', t:'Wechselkurs USD', cat:'Finanzen', seg:'Zahlung', modes:['sea','air','split','rail'], p:3, i:3, tr:'→', ev:'e9', strat:'Übertragen',
+    lage:'Der Warenwert wird in USD bezahlt. 1 Cent Kursänderung beim Euro kostet rund {fx}.', mass:'Devisentermingeschäft für die Restzahlung.', own:'Geschäftsleitung', src:[]},
+  {id:'R15', t:'Feuer, Containerverlust, Havarie grosse', cat:'Ladung', seg:'gesamter Seeweg', modes:['sea','split'], p:1, i:5, tr:'→', ev:'e12', strat:'Übertragen',
+    lage:'Bei großen Schiffsunglücken erklärt die Reederei Havarie grosse: Alle Ladungseigner zahlen anteilig, und die Ware wird erst gegen Sicherheit freigegeben.',
+    mass:'Transportversicherung nach Klausel A mit Havarie grosse abschließen, damit der Versicherer die Sicherheit stellt.', own:'Geschäftsleitung', src:[]},
+];
+const P_PCT = {1:5, 2:15, 3:30, 4:50, 5:70};
+const lvl = s => s >= 15 ? 'hoch' : s >= 8 ? 'mittel' : 'gering';
+const lvlCls = s => s >= 15 ? 'bad' : s >= 8 ? 'warn' : 'ok';
+const lvlCol = s => s >= 15 ? '#B3141F' : s >= 8 ? '#C27C00' : '#2C7A41';
+function riskP(rk, ctx){
+  if (typeof rk.p === 'number') return rk.p;
+  if (rk.p === 'typh') return ctx.typh;
+  if (rk.p === 'storm') return ctx.storm;
+  if (rk.p === 'pir') return ctx.pir;
+  if (rk.p === 'cny') return ctx.cnyHit ? 4 : 1;
+  return 2;
+}
+const RISK_OV = {
+};
+function assess(mode){
+  const r = scenario(mode), ctx = seasonCtx(r);
+  const applies = rk => rk.modes.includes(mode);
+  const ov = RISK_OV[S.route] || {};
+  return RISKS.map(rk0 => { const rk = Object.assign({}, rk0, ov[rk0.id] || {}, (LIVE_P && LIVE_P[rk0.id]) ? {p: LIVE_P[rk0.id]} : {}); const p = riskP(rk, ctx), s = p*rk.i, on = applies(rk);
+    const imp = on && rk.ev ? impactOf([evById(rk.ev)], mode) : null;
+    return {...rk, P:p, S:s, on, imp, exp: imp ? P_PCT[p]/100*imp.total : 0}; });
+}
+
+/* Routenschema mit Risikoampel */
+function riskRouteSvg(list, r){
+  const ctx = seasonCtx(r), sc = id => { const x = list.find(k => k.id === id); return x ? x.S : 0; };
+  const W = 1100, H = 350, y = 118;
+  const R = RT(), rev = !!R.export;
+  const N0 = [
+    [S.route === 'vn' ? 'Ho-Chi-Minh-Stadt' : 'Shanghai', 60, 0, ['R5','R9']], [S.route === 'vn' ? 'Südchin. Meer' : 'Ostchin. Meer', 165, 0.05, ['R5']], ['Singapur-Straße', 278, 0.2, ['R3']], ['Indischer Ozean', 388, 0.36, ['R2']],
+    ['Golf von Aden', 492, 0.48, ['R2','R1']], ['Bab el-Mandeb', 588, 0.55, ['R1']], ['Suezkanal', 678, 0.62, ['R1']], ['Mittelmeer', 768, 0.72, []],
+    ['Gibraltar', 850, 0.8, []], ['Biskaya, Nordsee', 948, 0.9, ['R6']], ['Hamburg', 1045, 1, ['R8','R13']]];
+  const N = rev ? N0.map(n => [n[0], n[1], n[2], n[0] === 'Hamburg' ? ['R8'] : n[0] === 'Shanghai' ? ['R5','R13'] : n[3]]) : N0;
+  const nodeS = n => Math.max(0, ...n[3].map(sc));
+  let g = `<defs><marker id="rrA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#55616B"/></marker></defs>`;
+  // Kap-Umweg
+  g += `<path d="M388 ${y + 54} C 410 240, 560 262, 650 262 L 820 262 C 900 262, 930 230, 948 ${y + 54}" fill="none" stroke="#86919A" stroke-width="2.5" stroke-dasharray="6 5"/>` + tx(700, 284, 'Ausweichroute Kap der Guten Hoffnung: +7 bis 10 Tage', {a:'middle', fs:12, c:CC.ink2, w:600});
+  // Hormus (nicht auf Route)
+  g += `<line x1="492" x2="492" y1="${y - 40}" y2="44" stroke="#B3141F" stroke-dasharray="2 4"/>` + `<circle cx="492" cy="38" r="6" fill="#B3141F"/>` + tx(504, 34, 'Straße von Hormus: blockiert, nicht auf der Route', {fs:11.5, c:'#B3141F', w:600}) + tx(504, 49, 'wirkt über Öl-, Bunker- und Kerosinpreise (R4)', {fs:11, c:CC.ink2});
+  // Hauptroute See
+  for (let i = 0; i < N.length - 1; i++){ const s = Math.max(nodeS(N[i]), nodeS(N[i + 1])); g += `<line x1="${N[i][1]}" x2="${N[i + 1][1]}" y1="${y}" y2="${y}" stroke="${lvlCol(s)}" stroke-width="5" stroke-linecap="round"/>`; }
+  N.forEach(n => { const s = nodeS(n), dt = ctx.at(n[2]);
+    g += `<circle cx="${n[1]}" cy="${y}" r="9" fill="#fff" stroke="${lvlCol(s)}" stroke-width="3"><title>${n[0]}: ${n[3].join(', ') || 'kein besonderes Risiko'}</title></circle>`;
+    g += tx(n[1], y - 20, n[0], {a:'middle', fs:12, c:CC.ink, w:600}) + tx(n[1], y + 28, 'ca. ' + dShort(dt), {a:'middle', fs:11, c:CC.ink3});
+    if (n[3].length) g += tx(n[1], y + 44, n[3].join(' '), {a:'middle', fs:11, c:lvlCol(s), w:600}); });
+  // LKW bis Graben
+  g += `<line x1="1045" x2="1045" y1="${y + 52}" y2="${y + 96}" stroke="#86919A" stroke-width="2" marker-end="url(#rrA)"/>` + tx(1037, y + 112, rev ? 'Vorlauf LKW ab Graben' : 'LKW → ' + R.to, {a:'end', fs:12, c:CC.ink, w:600}) + (rev ? tx(60, y + 112, '← Fahrtrichtung: Hamburg nach Shanghai', {fs:12, c:CC.ink2, w:600}) : '');
+  // Luftweg
+  const air = sc('R10'), ya = 322;
+  g += `<line x1="60" x2="1045" y1="${ya}" y2="${ya}" stroke="${lvlCol(air)}" stroke-width="3" stroke-dasharray="1 7" stroke-linecap="round"/>` + `<circle cx="60" cy="${ya}" r="6" fill="${lvlCol(air)}"/><circle cx="1045" cy="${ya}" r="6" fill="${lvlCol(air)}"/>` +
+       tx(74, ya - 9, 'Luftweg ' + R.apol.split(' ')[0] + ' → ' + R.apod.split(' ')[0], {fs:12, c:CC.ink, w:600}) + tx(1031, ya - 9, 'Golf-Drehkreuze gestört, Russland-Luftraum gesperrt (R10)', {a:'end', fs:11.5, c:CC.ink2});
+  return `<div class="svgwrap"><svg viewBox="0 0 ${W} ${H}" style="min-width:820px" width="100%" role="img" aria-label="Routenschema mit Risikoampel">${g}</svg></div>`;
+}
+
+/* Saisonkalender */
+function seasonSvg(r){
+  const rows = [['Taifune Ostchina', [0,0,0,0,1,2,3,3,3,2,1,0]], ['Südwest-Monsun Arabisches Meer', [0,0,0,0,1,3,3,3,2,0,0,0]], ['Piraterie Somalia (Zwischenmonsun)', [1,1,2,2,2,1,1,1,1,2,2,2]],
+    ['Winterstürme Nordatlantik', [3,3,2,1,0,0,0,0,1,2,2,3]], ['Südwinter am Kap', [0,0,0,1,2,3,3,3,2,1,0,0]], ['Feiertage China (Neujahr, Golden Week)', [2,3,0,0,1,0,0,0,0,2,0,0]]];
+  const W = 1000, l = 250, cw = (W - l - 10)/12, rh = 26, t = 30, sy = t + rows.length*rh + 14, H = sy + 2*rh + 40;
+  const col = ['#F3F5F7', '#FFF1D2', '#F6C976', '#E08A3C'];
+  let g = '';
+  MON.forEach((m, i) => g += tx(l + i*cw + cw/2, t - 9, m, {a:'middle', fs:11.5, c:CC.ink2}));
+  rows.forEach((rw, j) => { const yy = t + j*rh; g += tx(l - 10, yy + 17, rw[0], {a:'end', fs:12, c:CC.ink});
+    rw[1].forEach((v, i) => g += `<rect x="${l + i*cw + 1}" y="${yy + 2}" width="${cw - 2}" height="${rh - 4}" rx="3" fill="${col[v]}"/>`); });
+  // diese Sendung: eigene Zeilen unter dem Kalender
+  g += `<line x1="${l}" x2="${l + 12*cw}" y1="${sy - 7}" y2="${sy - 7}" stroke="${CC.axis}" stroke-dasharray="3 3"/>`;
+  const pos = t2 => { const d = new Date(t2); return l + (d.getUTCMonth() + (d.getUTCDate() - 1)/31)*cw; };
+  const bar = (a, b, yy, c) => { const xa = pos(a), xb = pos(b), h = rh - 10;
+    if (xb < xa || b - a > 300*DAY) g += `<rect x="${xa}" y="${yy}" width="${l + 12*cw - xa}" height="${h}" rx="4" fill="${c}"/><rect x="${l}" y="${yy}" width="${Math.max(4, xb - l)}" height="${h}" rx="4" fill="${c}"/>`;
+    else g += `<rect x="${xa}" y="${yy}" width="${Math.max(4, xb - xa)}" height="${h}" rx="4" fill="${c}"/>`; };
+  const L = r.legs.find(x => x.mode === 'sea') || r.legs[0];
+  g += tx(l - 10, sy + 17, 'Diese Sendung: Produktion', {a:'end', fs:12, c:CC.ink, w:600});
+  bar(r.t0, r.fob, sy + 5, '#55616B');
+  g += tx(l - 10, sy + rh + 17, `Diese Sendung: Transport ${L.mode === 'air' ? 'Luft' : L.mode === 'rail' ? 'Bahn' : 'See'}`, {a:'end', fs:12, c:CC.ink, w:600});
+  bar(r.fob, L.pod, sy + rh + 5, MODES[L.mode].col);
+  const ly = sy + 2*rh + 28;
+  [['gering', 1], ['mittel', 2], ['hoch', 3]].forEach((x, i) => g += `<rect x="${l + i*90}" y="${ly - 10}" width="14" height="12" rx="2" fill="${col[x[1]]}"/>` + tx(l + i*90 + 20, ly, x[0], {fs:11.5, c:CC.ink2}));
+  g += tx(W - 10, ly, 'Klimatologische Erfahrungswerte, keine Wetterprognose', {a:'end', fs:11, c:CC.ink3});
+  return `<div class="svgwrap"><svg viewBox="0 0 ${W} ${H}" style="min-width:760px" width="100%" role="img" aria-label="Saisonkalender der Risiken">${g}</svg></div>`;
+}
+
+/* Vergangene Vorfälle */
+const HIST_EV = [
+  ['15.11.2026', 'Iran greift erstmals seit Monaten wieder Bahrain an, die Huthis feuern Raketen auf Riad', 'war', ['bahrain']],
+  ['12.11.2026', 'Maersk und Hapag-Lloyd schicken ihren Dienst ME1 wieder durch den Suezkanal', 'route', ['evergreen']],
+  ['Okt. 2026', 'Reedereien kehren schrittweise zum Suezkanal zurück', 'route', ['metro']],
+  ['11.08.2026', 'Huthi-Angriff auf den Frachter Tihamah im Bab el-Mandeb, sechs Tote', 'houthi', ['tihamah']],
+  ['20.07.2026', 'Huthis erklären Blockade saudischer Häfen und Schiffe im Bab el-Mandeb', 'houthi', ['redsea']],
+  ['21.04.2026', 'Somalische Piraten entführen den Tanker Honour 25; fünf Besatzungsmitglieder sterben', 'pirate', ['honour']],
+  ['28.02.2026', 'Beginn des Iran-Kriegs, Straße von Hormus weitgehend blockiert', 'war', ['hormuzW']],
+  ['Okt. 2025', 'Nach der Gaza-Waffenruhe stellen die Huthis ihre Angriffe weitgehend ein', 'route', ['redsea']],
+  ['14.12.2023', 'Somalische Piraten kapern den Frachter Ruen, die erste erfolgreiche Entführung eines Handelsschiffs seit 2017', 'pirate', []],
+  ['19.11.2023', 'Huthis kapern die Galaxy Leader; danach meiden die großen Reedereien das Rote Meer und fahren ums Kap', 'houthi', ['redsea']],
+];
+const HCOL = {houthi:'#B3141F', pirate:'#2F3539', war:'#9A5426', route:'#2C7A41'};
+
+function pirBars(){
+  const d = [['2023', 99], ['2024', 79], ['2025', 116], ['2026', 51]], W = 520, H = 150, b = 24, t = 20, bw = 64, gap = (W - d.length*bw)/(d.length + 1);
+  let g = `<line x1="0" x2="${W}" y1="${H - b}" y2="${H - b}" stroke="${CC.axis}"/>`;
+  d.forEach((x, i) => { const h = x[1]/120*(H - b - t), xx = gap + i*(bw + gap), last = i === d.length - 1;
+    g += `<rect x="${xx}" y="${H - b - h}" width="${bw}" height="${h}" rx="3" fill="${last ? '#2F3539' : '#AEB6BD'}"/>` + tx(xx + bw/2, H - b - h - 6, String(x[1]), {a:'middle', fs:12.5, c:CC.ink, w:600}) + tx(xx + bw/2, H - 7, x[0], {a:'middle', fs:11.5, c:CC.ink2}); });
+  return `<p class="tiny" style="margin:0 0 4px">Gemeldete Vorfälle weltweit, jeweils Januar bis September</p><svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Piraterie-Vorfälle 2023 bis 2026">${g}</svg>`;
+}
+
+/* Frühwarnindikatoren */
+const KRI = [
+  ['Schiffspassagen Bab el-Mandeb und Suez', 'IMF PortWatch', 'Rückgang über 30 % in zwei Wochen', 'Spediteur nach Kap-Routing fragen, 10 Tage Puffer', 'Logistik'],
+  ['Neue Angriffe auf Containerschiffe', 'UKMTO', 'Meldung im Roten Meer oder Golf von Aden', 'Kriegsrisiko-Deckung bestätigen lassen, Split prüfen', 'Logistik'],
+  ['Spotrate Shanghai–Rotterdam', 'Drewry WCI', 'über 4.500 USD/FEU (Stand 12.11.: 3.504)', 'Rate sofort fixieren, Angebote vergleichen', 'Einkauf'],
+  ['Taifun-Warnung Ostchina', 'JTWC, chinesischer Wetterdienst', 'Warnung 5 Tage vor Verladung', 'Verladung vorziehen oder verschieben, Lieferant informieren', 'Logistik'],
+  ['Treibstoffzuschläge', 'Spediteur, Freightos', 'Zuschlag +20 % gegenüber Angebot', 'Luftanteil reduzieren, Zuschlag im Angebot fixieren', 'Einkauf'],
+  ['Wechselkurs EUR/USD', 'Bank', 'unter 1,00', 'Kurssicherung ausweiten', 'Geschäftsleitung'],
+  ['Exportkontrollen China', 'EU-Kommission, Lieferant', 'Aussetzung verlängert bis 10.01.2027', 'Lieferanten nach betroffenen Bauteilen fragen', 'Einkauf'],
+  ['Chinesisches Neujahr', 'Lieferant', 'Bestellung für Q1 nicht bis Ende November erteilt', 'Bestellung vorziehen, Produktionsende schriftlich bestätigen', 'Einkauf'],
+];
+
+/* KI-Lagebericht über die sample-Fähigkeit der App (nur in claude.ai verfügbar) */
+let SAMPLE = null, BRIEF = {text:'', busy:false, err:''}, LAST_RISK = null;
+(async () => { try { if (window.claude && typeof window.claude.use === 'function'){ SAMPLE = await window.claude.use('sample'); if (SAMPLE && route() === 'risiko') render(); } } catch (e){ SAMPLE = null; } })();
+function briefPrompt(){
+  const L = LAST_RISK; if (!L) return '';
+  const top = L.list.filter(x => x.on).sort((a, b) => b.S - a.S).slice(0, 8).map(x => `${x.id} ${x.t}: Wahrscheinlichkeit ${x.P}/5, Auswirkung ${x.i}/5, Trend ${x.tr}, Lage: ${x.lage}`).join('\n');
+  return `Du bist Risikomanager eines Leuchtenherstellers. Schreibe einen kurzen Lagebericht für die Geschäftsleitung auf Deutsch.
+Nutze ausschließlich die folgenden Daten (Stand ${RISK_ASOF}). Erfinde keine Ereignisse, Zahlen oder Quellen.
+Sendung: ${L.r.cartons} Kartons LED-Leuchten, FOB Shanghai nach DAP Graben, Modus ${MODES[L.mode].name}, Bestellung ${dFmt(L.r.t0)}, verkaufsbereit ${dFmt(L.r.firstLive)}.
+Warenwert ${eur0(L.r.goods)}, Landed Cost ${eur(L.r.perUnit)} je Einheit, erwartete Risikokosten ${eur0(L.expSum)}.
+Risiken:
+${top}
+Stresstest (gewählte Ereignisse: ${L.stressLabels || 'keine'}): verkaufsbereit ${dFmt(L.st.r1.firstLive)}, Landed Cost ${eur(L.st.r1.perUnit)} je Einheit.
+Format: genau 5 Stichpunkte mit "- " (je höchstens 25 Wörter), danach eine Zeile "Empfehlung:" mit einem Satz. Keine Überschrift.`;
+}
+function briefHtml(t){ return esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').split('\n').filter(s => s.trim()).map(s => s.trim().startsWith('- ') ? `<li>${s.trim().slice(2)}</li>` : `<p>${s}</p>`).join('').replace(/(<li>.*?<\/li>)+/gs, m => `<ul style="margin:0 0 10px;padding-left:18px">${m}</ul>`); }
+async function runBrief(){
+  if (!SAMPLE || BRIEF.busy) return;
+  BRIEF = {text:'', busy:true, err:''}; render();
+  try {
+    const res = await SAMPLE(briefPrompt(), {modelTier:'default', onText: ({text}) => { BRIEF.text = text; const o = document.getElementById('briefOut'); if (o) o.innerHTML = briefHtml(text); }});
+    BRIEF.text = res.text || BRIEF.text;
+  } catch (e){
+    if (e && e.code === 'not_granted'){ SAMPLE = null; }
+    BRIEF.err = e && e.code === 'rate_limited' ? 'Gerade zu viele Anfragen. Bitte in einer Minute erneut versuchen.' : 'Der Lagebericht konnte nicht erstellt werden. Bitte später erneut versuchen.';
+  }
+  BRIEF.busy = false; render();
+}
+
+P.risiko = () => {
+  let reT = null; try { const inv = inventorySim(); reT = inv.reorders[0] ? inv.reorders[0].t : null; } catch (e){}
+  const view = UI.rview === 'reorder' && reT ? 'reorder' : 'first';
+  const firstT = dParse(S.orderDate);
+  return withS(view === 'reorder' ? {orderDate: dIso(reT)} : {}, () => riskPage(view, reT, firstT));
+};
+function riskPage(view, reT, firstT){
+  const mode = UI.mode, r = scenario(mode), list = assess(mode), on = list.filter(x => x.on);
+  const top = on.slice().sort((a, b) => b.S - a.S || b.exp - a.exp)[0], topExp = on.slice().sort((a, b) => b.exp - a.exp)[0];
+  const expSum = on.reduce((s, x) => s + x.exp, 0);
+  const modeRisk = ['sea','air','split'].map(m => { const L = assess(m).filter(x => x.on); return {m, exp: L.reduce((s, x) => s + x.exp, 0), max: Math.max(...L.map(x => x.S)), units: scenario(m).units}; });
+  const stressIds = (UI.stress || ['e1','e3','e6']).filter(id => evById(id));
+  const st = impactOf(stressIds.map(evById), mode);
+  const xmas = dParse(new Date(r.t0).getUTCFullYear() + '-12-20');
+  LAST_RISK = {r, list, mode, expSum, st, stressLabels: stressIds.map(id => evById(id).label).join('; ')};
+  const cell = (p, i) => { const s = p*i, ids = list.filter(x => x.P === p && x.i === i);
+    return `<div class="c" style="background:${s >= 15 ? '#F6D3D5' : s >= 8 ? '#FCE7BD' : '#DCEFE2'}">${ids.map(x => `<span class="rk${x.on ? '' : ' off'}" title="${esc(x.t)}">${x.id}</span>`).join('')}</div>`; };
+  const fx1 = r.goodsUsd/(S.usd - 0.01) - r.goods; list.forEach(x => { x.lage = x.lage.replace('{fx}', eur0(Math.round(fx1/10)*10)); });
+  const regRows = list.slice().sort((a, b) => (b.on - a.on) || b.S - a.S || b.exp - a.exp);
+  return ph('Risiko und Lagebild', `Wie sicher kommt die Ware an? Lagebild mit Quellen, Risikoampel entlang der Route, Bewertung in Euro und ein Stresstest. Bewertet für ${MODES[mode].name}.`, 'logistik einkauf gl') +
+  liveNote() +
+  `<div class="tabs mt" role="tablist" style="margin-bottom:14px"><button role="tab" data-rview="first" class="${view === 'first' ? 'on' : ''}" aria-selected="${view === 'first'}">Erstbestellung (${dFmt(firstT)})</button>${reT ? `<button role="tab" data-rview="reorder" class="${view === 'reorder' ? 'on' : ''}" aria-selected="${view === 'reorder'}">Nachbestellung (${dFmt(reT)})</button>` : ''}</div>` +
+  `<div class="grid g4">` +
+    panel('', stat('Gesamtrisiko der Sendung', lvl(top ? top.S : 0), top ? 'höchstes Risiko: ' + top.id + ' ' + top.t : '', lvlCol(top ? top.S : 0))) +
+    panel('', stat('Erwartete Risikokosten', eur0(expSum), eur(expSum/r.units) + ' je Einheit, gewichtet nach Wahrscheinlichkeit')) +
+    panel('', stat('Ware unterwegs', eur0(r.goods), 'Warenwert ab Bord, ' + r.door + ' Tage Tür zu Tür')) +
+    panel('', stat('Stresstest', '+' + nf(st.delay, 0) + ' Tage', 'verkaufsbereit ' + dFmt(st.r1.firstLive) + ', Schaden ' + eur0(st.total), st.total > 0 ? '#B3141F' : null)) +
+  `</div>` +
+  `<div class="mt">${panel('Risikoampel entlang der Route', riskRouteSvg(list, r) + `<div class="leg" style="margin-top:6px"><span><i style="background:#2C7A41"></i>gering</span><span><i style="background:#C27C00"></i>mittel</span><span><i style="background:#B3141F"></i>hoch</span><span>Datum = wann unsere Ware den Abschnitt etwa passiert</span></div>`, view === 'reorder' ? 'Nachbestellung' : 'Erstbestellung')}</div>` +
+  `<div class="grid g21 mt">` +
+    panel('Lagebild', `<ul class="list-plain">${LAGE.filter(n => !n.routes || !n.routes.length || n.routes.includes(S.route)).map(n => `<li>${icon(n.cat === 'Wetter' ? 'leaf' : n.cat === 'Markt' || n.cat === 'Luftfracht' ? 'euro' : n.cat === 'Kalender' ? 'clock' : n.cat === 'Politik' || n.cat === 'Bahn' ? 'inc' : 'warn')}<span><span class="tiny">${esc(n.d)} · ${esc(n.cat)} · ${esc(n.reg)}</span><br><span style="font-size:14px">${esc(n.txt)}</span><br><span class="small muted">Für uns: ${esc(n.rel)}</span><br><span class="tiny">${srcLinks(n.src)}</span></span></li>`).join('')}</ul>`, 'neueste zuerst') +
+    `<div class="grid" style="gap:18px;align-content:start">` +
+      panel('Risikomatrix', `<div class="hm"><div class="ylab">Auswirkung</div>${[5,4,3,2,1].map(i => `<div class="ax">${i}</div>` + [1,2,3,4,5].map(p => cell(p, i)).join('')).join('')}<div></div><div></div>${[1,2,3,4,5].map(p => `<div class="ax">${p}</div>`).join('')}</div><p class="tiny" style="margin-top:6px;text-align:center">Eintrittswahrscheinlichkeit (1 = unter 10 %, 5 = über 60 %). Blasse IDs betreffen ${MODES[mode].short} nicht.</p>`) +
+      panel('Erwartete Risikokosten je Verkehrsträger', (() => { const mx = Math.max(...modeRisk.map(x => x.exp/x.units));
+        return modeRisk.map(x => `<div class="mbr${x.m === mode ? ' on' : ''}"><span>${{sea:MODES.sea.name.replace('Seefracht ', 'See '), air:'Luftfracht', split:'Split'}[x.m]}</span><div class="mbt"><i style="width:${(x.exp/x.units)/mx*100}%;background:${lvlCol(x.max)}"></i></div><b>${eur(x.exp/x.units)}</b><span class="chip ${lvlCls(x.max)}">${lvl(x.max)}</span></div>`).join(''); })() +
+      `<p class="small muted" style="margin-top:8px">Je Einheit; Farbe = höchste Risikostufe. Erwartungswert = Σ Wahrscheinlichkeit × Schaden. Schaden = Mehrkosten + Kapitalbindung während des Verzugs + ${S.lostShare} % der Verkäufe im Verzugszeitraum, die an Wettbewerber verloren gehen. Größter Posten für ${MODES[mode].short}: <b>${topExp.id} ${topExp.t}</b> mit ${eur0(topExp.exp)}.</p>`) +
+      panel('KI-Lagebericht', SAMPLE ? `<p class="small muted">Claude fasst Register, Sendung und Stresstest zu einem Bericht für die Geschäftsleitung zusammen, ausschließlich aus den Daten dieser Seite.</p><div class="btns"><button class="btn" id="briefBtn"${BRIEF.busy ? ' disabled' : ''}>${BRIEF.busy ? 'Bericht wird erstellt …' : BRIEF.text ? 'Bericht neu erstellen' : 'Lagebericht erstellen'}</button>${BRIEF.text && !BRIEF.busy ? '<button class="btn ghost" id="briefCopy">Kopieren</button>' : ''}</div><div id="briefOut" class="small" style="margin-top:12px">${briefHtml(BRIEF.text)}</div>${BRIEF.err ? note('bad', BRIEF.err) : ''}<p class="tiny">KI-generiert (AI Act Art. 50). Vor Weitergabe prüfen.</p>`
+        : `<p class="small muted">Diese Funktion lässt Claude einen Lagebericht aus den Daten dieser Seite schreiben. Sie gibt es nur in der claude.ai-Version der App, auf dieser Website nicht.</p>`) +
+      panel('Live-Quellen', `<ul class="list-plain">${LIVE.map(l => `<li>${icon('track')}<span><a href="${l[1]}" target="_blank" rel="noopener"><b>${l[0]}</b></a><br><span class="tiny">${l[2]}</span></span></li>`).join('')}</ul>`, 'öffnen in neuem Tab') +
+    `</div>` +
+  `</div>` +
+  `<div class="mt">${panel('Risikoregister', `<div class="tbl-wrap"><table><thead><tr><th>ID</th><th>Risiko</th><th>Abschnitt</th><th class="c">W</th><th class="c">A</th><th>Stufe</th><th class="c">Trend</th><th class="r">Schaden, falls es eintritt</th><th class="r">Erwartungswert</th><th>Strategie</th><th>Verantwortlich</th></tr></thead><tbody>
+    ${regRows.map(x => `<tr${x.on ? '' : ' style="opacity:.45"'}><td><b>${x.id}</b></td><td>${x.t}<div class="tiny">${x.cat}</div></td><td class="small">${x.seg}</td><td class="c">${x.P}</td><td class="c">${x.i}</td><td><span class="chip ${lvlCls(x.S)}">${lvl(x.S)} (${x.S})</span></td><td class="c">${x.tr}</td>
+      <td class="r">${x.imp ? eur0(x.imp.total) + (x.imp.delay ? `<div class="tiny">+${nf(x.imp.delay, 0)} Tage</div>` : '') : (x.on ? '–' : 'anderer Modus')}</td><td class="r">${x.on ? eur0(x.exp) : '–'}</td><td>${x.strat}</td><td class="small">${x.own}</td></tr>`).join('')}</tbody></table></div>
+    <p class="tiny" style="margin-top:8px">W = Wahrscheinlichkeit, A = Auswirkung, jeweils 1 bis 5, beide <span class="est" title="Selbst geschätzt: Einschätzung des Teams auf Basis des Lagebilds">Schätzung</span> des Teams; Stufe = W × A (ab 15 hoch, ab 8 mittel). Taifun, Winterstürme, Piraterie und Neujahrsfest werden nach dem Datum bewertet, an dem unsere Ware den Abschnitt passiert.</p>`)}</div>` +
+  `<div class="mt">${panel('Steckbriefe und Maßnahmen', on.sort((a, b) => b.S - a.S).map(x => `<details class="rs" data-rs="${x.id}"${(UI.rsOpen || []).includes(x.id) ? ' open' : ''}><summary><span class="chip ${lvlCls(x.S)}">${x.id}</span>${x.t}<span class="tiny" style="margin-left:auto">${x.strat} · ${x.own}</span></summary><div class="grid g2" style="margin-top:10px"><div><h3>Lage</h3><p class="small">${x.lage}</p>${x.src.length ? `<p class="tiny">${srcLinks(x.src)}</p>` : '<p class="tiny">Erfahrungswert, keine aktuelle Meldung.</p>'}</div><div><h3>Maßnahmen</h3><p class="small">${x.mass}</p>${x.imp ? `<p class="tiny">Szenario „${evById(x.ev).label}“: Mehrkosten ${eur0(x.imp.extra)}, Kapitalbindung ${eur0(x.imp.capital)}, verlorener Absatz ${eur0(x.imp.lost)}.</p>` : ''}</div></div></details>`).join(''), 'zum Aufklappen')}</div>` +
+  `<div class="grid g12 mt">` +
+    panel('Stresstest', `<p class="small muted">Ereignisse kombinieren und sehen, was mit Termin und Kosten passiert.</p>${EVENTS.map(e => `<label class="chk" style="padding:6px 0;font-size:13.5px"><input type="checkbox" data-stress="${e.id}" ${stressIds.includes(e.id) ? 'checked' : ''}><span>${e.label}</span></label>`).join('')}
+`) +
+    panel('Ergebnis des Stresstests', `<div class="tbl-wrap"><table><thead><tr><th></th><th class="r">Plan</th><th class="r">mit Störungen</th><th class="r">Differenz</th></tr></thead><tbody>
+      <tr><td>Verkaufsbereit ab</td><td class="r">${dFmt(st.r0.firstLive)}</td><td class="r"><b>${dFmt(st.r1.firstLive)}</b></td><td class="r">+${days(st.r0.firstLive, st.r1.firstLive)} Tage</td></tr>
+      <tr><td>Letzte Teilmenge verkaufsbereit</td><td class="r">${dFmt(st.r0.lastLive)}</td><td class="r">${dFmt(st.r1.lastLive)}</td><td class="r">+${days(st.r0.lastLive, st.r1.lastLive)} Tage</td></tr>
+      <tr><td>Vor Weihnachten im Verkauf</td><td class="r">${st.r0.firstLive <= xmas ? 'ja' : 'nein'}</td><td class="r">${st.r1.firstLive <= xmas ? '<span class="chip ok">ja</span>' : '<span class="chip bad">nein</span>'}</td><td></td></tr>
+      <tr><td>Frachtkosten</td><td class="r">${eur0(st.r0.freight)}</td><td class="r">${eur0(st.r1.freight)}</td><td class="r">${eur0(st.r1.freight - st.r0.freight)}</td></tr>
+      <tr><td>Landed Cost je Einheit</td><td class="r">${eur(st.r0.perUnit)}</td><td class="r"><b>${eur(st.r1.perUnit)}</b></td><td class="r">${eur(st.r1.perUnit - st.r0.perUnit)}</td></tr>
+      ${st.ga ? `<tr><td>Beitrag Havarie grosse</td><td></td><td class="r">${eur0(st.ga)}</td><td></td></tr>` : ''}
+      <tr><td>Kapitalbindung durch Verzug</td><td></td><td class="r">${eur0(st.capital)}</td><td></td></tr>
+      <tr><td>Verlorener Absatz (Deckungsbeitrag)</td><td></td><td class="r">${eur0(st.lost)}</td><td></td></tr>
+      <tr class="sum"><td>Schaden gesamt</td><td></td><td></td><td class="r">${eur0(st.total)}</td></tr></tbody></table></div>
+      ${note(st.total > 0.1*r.goods ? 'bad' : 'info', `Der Schaden entspricht ${pct(st.total/r.goods)} des Warenwerts. ${st.r1.firstLive > xmas && st.r0.firstLive <= xmas ? 'Das Weihnachtsgeschäft geht verloren.' : ''} Ein Puffer von ${nf(Math.ceil(st.delay/7), 0)} Woche(n) im Zeitplan und eine Reserve von ${eur0(Math.ceil(st.total/100)*100)} im Budget fangen dieses Szenario auf.`)}
+      <div style="margin-top:12px;max-width:320px">${field('lostShare', 'Absatzverlust bei Verzug (%)', 1, 'Anteil der Verkäufe, die bei Verzug an Wettbewerber gehen')}</div>`) +
+  `</div>` +
+  `<div class="mt">${panel('Saisonkalender', seasonSvg(r), 'wann welche Gefahr typisch ist')}</div>` +
+  `<div class="grid g2 mt">` +
+    panel('Vergangene Angriffe und Vorfälle', `<ul class="tl">${HIST_EV.map(h => `<li style="--c:${HCOL[h[2]]}"><span class="tiny">${h[0]}</span><br><b>${h[1]}</b><br><span class="tiny">${srcLinks(h[3])}</span></li>`).join('')}</ul><div class="leg"><span><i class="sq" style="background:${HCOL.houthi}"></i>Huthi</span><span><i class="sq" style="background:${HCOL.pirate}"></i>Piraterie</span><span><i class="sq" style="background:${HCOL.war}"></i>Krieg</span><span><i class="sq" style="background:${HCOL.route}"></i>Entspannung</span></div>`) +
+    panel('Piraterie in Zahlen', pirBars() + `<div class="tbl-wrap"><table style="margin-top:8px"><thead><tr><th>Kennzahl (IMB)</th><th class="r">Jan–Sep 2025</th><th class="r">Jan–Sep 2026</th></tr></thead><tbody>
+      <tr><td>Vorfälle weltweit</td><td class="r">116</td><td class="r"><b>51</b></td></tr>
+      <tr><td>davon Singapur-Straße</td><td class="r">73</td><td class="r">13</td></tr>
+      <tr><td>Betroffene Besatzungsmitglieder</td><td class="r">72</td><td class="r">105</td></tr>
+      <tr><td>Entführungen durch somalische Piraten</td><td class="r">–</td><td class="r">8</td></tr>
+      <tr><td>Anteil Somalia an allen Geiselnahmen</td><td class="r">–</td><td class="r">94 %</td></tr>
+      <tr><td>Vorfälle Golf von Guinea</td><td class="r">–</td><td class="r">2</td></tr></tbody></table></div>
+      <p class="small muted" style="margin-top:10px">Weniger Vorfälle, aber gefährlichere: In 53 % der Fälle waren die Täter bewaffnet. Für Containerschiffe mit hoher Geschwindigkeit ist das Risiko geringer als für langsame Tanker und Massengutfrachter.</p><p class="tiny">${srcLinks(['imb','imb25','imb24','gog'])}</p>`) +
+  `</div>` +
+  `<div class="mt">${panel('Frühwarnindikatoren', `<div class="tbl-wrap"><table><thead><tr><th>Indikator</th><th>Quelle</th><th>Schwelle</th><th>Dann tun wir</th><th>Verantwortlich</th></tr></thead><tbody>${KRI.map(k => `<tr><td><b>${k[0]}</b></td><td class="small">${k[1]}</td><td class="small">${LIVE_INFO && LIVE_INFO.wci ? k[2].replace('(Stand 12.11.: 3.504)', `(Stand ${esc(LIVE_INFO.wci.date)}: ${nf(LIVE_INFO.wci.rtm, 0)})`) : k[2]}</td><td class="small">${k[3]}</td><td class="small">${k[4]}</td></tr>`).join('')}</tbody></table></div>`, 'wöchentlich prüfen')}</div>` +
+  `<div class="grid g4 mt">${[['Vermeiden','Verladung außerhalb der Taifunsaison, keine Produktion im Neujahrsfest.'],['Vermindern','Split-Shipment, Zeitpuffer, zwei Spediteure, Raten fixieren, Unterlagen vor Versand prüfen.'],['Übertragen','Transportversicherung nach Klausel A mit Kriegsrisiko und Havarie grosse, Kurssicherung.'],['Akzeptieren','Kleine Verzögerungen durch Wetter, Restrisiko Handelspolitik; dafür Budgetreserve.']].map(x => panel(x[0], `<p class="small">${x[1]}</p>`, '', 'flat')).join('')}</div>`;
+}
+
+/* ================= Rendern & Ereignisse ================= */
+const $ = s => document.querySelector(s);
+function route(){ const h = (location.hash || '#cockpit').slice(1); return P[h] ? h : 'cockpit'; }
+function renderNav(pg){
+  $('#nav').innerHTML = NAV.map(([grp, items]) => `<h4>${grp}</h4>` + items.map(([id, lab, ic, roles]) =>
+    `<a href="#${id}" class="${id === pg ? 'on' : ''}${UI.role !== 'alle' && !roles.includes(UI.role) && roles !== 'alle' ? ' dim' : ''}"${id === pg ? ' aria-current="page"' : ''}>${icon(ic)}<span>${lab}</span></a>`).join('')).join('');
+}
+function renderRoute(){
+  const sub = $('#routeSub'); if (sub) sub.textContent = 'FOB ' + RT().from + ' → DAP ' + RT().to;
+}
+function routeBanner(pg){
+  const R = RT(); if (S.route === 'cn') return '';
+  return note('warn', `<b>Route ${R.name}</b> (${R.sub.replace('Exkurs: ', '')}). Gleiche Sendung wie im Skript (48 Kartons, gleiche Einkaufspreise), Fracht, Laufzeit und Abgaben dieser Route: ${R.dutyNote}. ${R.export ? 'Kosten aus Sicht der Lieferung frei Kunde (verzollt). ' : ''}Texte zu Incoterms, Verkauf und Amazon beziehen sich weiter auf den Pilot Shanghai → Graben. Selbst geschätzte Werte dieser Route sind unter „Annahmen“ als <span class="est">Schätzung</span> markiert.`);
+}
+function renderTop(){
+  const sh = ship(S.cartons), r = scenario(), cfm = UI.topMin ? cashflow(r) : null;
+  document.querySelector('header.top').classList.toggle('min', !!UI.topMin);
+  $('#topmini').innerHTML = UI.topMin ? `<span><b>${RT().name}</b> · ${MODES[UI.mode].name}</span><span>Landed Cost <b>${eur(r.perUnit)}</b></span><span>Kapitalbedarf <b>${eur0(cfm.peakNeed)}</b></span><span>verkaufsbereit <b>${dFmt(r.firstLive)}</b></span><button class="tbtn strong" id="topToggle" aria-expanded="false" title="Kopfleiste ausklappen">▾ Leiste ausklappen</button>` : '';
+  $('#topbar').innerHTML = `<button class="tbtn strong" id="topToggle" aria-expanded="true" title="Kopfleiste einklappen">▴ Leiste einklappen</button><div class="ship" aria-label="Sendung"><div><small>Einheiten</small><b>${nf(r.units, 0)}</b></div><div><small>Paletten</small><b>${S.palletize ? sh.nPal : 'lose'}</b></div><div><small>Volumen</small><b>${nf(sh.cbm, 2)} cbm</b></div><div><small>Gewicht</small><b>${nf(sh.kg, 0)} kg</b></div></div>
+    <div class="segc" role="group" aria-label="Transportmodus">${['sea','air','split'].map(m => `<button data-m="${m}" class="${UI.mode === m ? 'on' : ''}" aria-pressed="${UI.mode === m}"><span class="dot" style="background:${MODES[m].col}"></span>${MODES[m].short}</button>`).join('')}</div>
+    <div class="grow"></div>
+    <label class="topctl"><span class="sr">Seefracht als</span><select data-k="seaCont" aria-label="Seefracht als">${[['lcl','See: Sammelgut'],['20','See: 20-Fuß-Container'],['40','See: 40-Fuß-Container']].map(([v, l]) => `<option value="${v}" ${S.seaCont === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>
+    <label class="topctl">Kartons <input type="number" min="1" step="1" data-k="cartons" value="${S.cartons}"></label>
+    <label class="topctl">Bestellung <input type="date" data-k="orderDate" value="${S.orderDate}"></label>
+    <label class="topctl"><span class="sr">Ansicht</span><select id="roleSel">${ROLES.map(([k, l]) => `<option value="${k}" ${UI.role === k ? 'selected' : ''}>${l}</option>`).join('')}</select></label>`;
+}
+function renderKpis(){
+  const r = scenario(), cf = cashflow(r);
+  const k = [['Landed Cost je Einheit', eur(r.perUnit), MODES[UI.mode].name], ['Frachtkosten', eur0(r.freight), eur(r.freight/r.units) + ' je Einheit'], ['Kapitalbedarf (Spitze)', eur0(cf.peakNeed), pct(cf.peakNeed/S.budget, 0) + ' des Budgets'], ['Verkaufsbereit ab', dFmt(r.firstLive), r.firstDoor + ' Tage Tür zu Tür'], ['Deckungsbeitrag je Einheit', eur(cf.ue.db), pct(cf.ue.dbPct) + ' vom Netto']];
+  $('#kpis').innerHTML = k.map(x => `<div class="kpi"><div class="l">${x[0]}</div><div class="v">${x[1]}</div><div class="s">${x[2]}</div></div>`).join('');
+}
+function render(){
+  const pg = route(), y = window.scrollY, act = document.activeElement;
+  const actKey = act && (act.dataset.k ? 'k:' + act.dataset.k + (act.closest('#topbar') ? ':top' : '') : act.dataset.tier ? 't:' + act.dataset.tier : null);
+  renderNav(pg); renderRoute(); renderTop(); renderKpis();
+  try { $('#page').innerHTML = routeBanner(pg) + P[pg](); }
+  catch (e){ $('#page').innerHTML = note('bad', 'Diese Seite konnte nicht berechnet werden: ' + esc(e.message) + '. Unter „Annahmen“ die Werte prüfen oder zurücksetzen.'); console.error(e); }
+  if (actKey){ const [t, k, top] = actKey.split(':'); const sel = t === 'k' ? `[data-k="${k}"]` : `[data-tier="${k}"]`;
+    const el = top ? document.querySelector('#topbar ' + sel) : document.querySelector('#page ' + sel) || document.querySelector(sel); if (el && el.type !== 'range') el.focus(); }
+  window.scrollTo(0, y);
+  store('state', S); store('ui', UI);
+}
+function toast(t){ const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => el.classList.remove('on'), 1800); }
+async function copy(t, msg){ try { await navigator.clipboard.writeText(t); toast(msg || 'Kopiert'); } catch (e){ toast('Kopieren ist hier nicht möglich'); } }
+
+document.addEventListener('input', e => {
+  const el = e.target;
+  if (el.dataset.range){ const o = document.getElementById('o_' + el.dataset.k); if (o) o.textContent = el.value + ' %'; }
+});
+document.addEventListener('change', e => {
+  const el = e.target;
+  if (el.id === 'roleSel'){ UI.role = el.value; render(); return; }
+  if (el.dataset.k){ const k = el.dataset.k;
+    if (el.dataset.type === 'bool') S[k] = el.value === 'true';
+    else if (el.type === 'number' || el.type === 'range'){ const v = parseFloat(el.value); if (!isFinite(v)) return; S[k] = v; }
+    else S[k] = el.value;
+    if (k === 'cartons') S.cartons = Math.max(1, Math.min(300, Math.round(S.cartons)));
+    if (k === 'orderDate' && !/^\d{4}-\d{2}-\d{2}$/.test(S.orderDate)) S.orderDate = DEF.orderDate;
+    render(); return; }
+  if (el.dataset.tier){ S.tiers[+el.dataset.tier][1] = parseFloat(el.value) || 0; render(); return; }
+  if (el.dataset.stress){ const cur = new Set(UI.stress || ['e1','e3','e6']); el.checked ? cur.add(el.dataset.stress) : cur.delete(el.dataset.stress); UI.stress = [...cur]; render(); return; }
+  if (el.dataset.ck !== undefined){ CK[el.dataset.ck] = el.checked; store('ck', CK); render(); }
+});
+document.addEventListener('click', e => {
+  const b = e.target.closest('button, tr[data-inc]'); if (!b) return;
+  if (b.dataset.m){ UI.mode = b.dataset.m; render(); }
+  else if (b.dataset.inc){ UI.inc = b.dataset.inc; render(); }
+  else if (b.id === 'topToggle'){ UI.topMin = !UI.topMin; render(); }
+  else if (b.dataset.cont){ S.seaCont = b.dataset.cont; render(); }
+  else if (b.dataset.rview){ UI.rview = b.dataset.rview; render(); }
+  else if (b.id === 'briefBtn'){ runBrief(); }
+  else if (b.id === 'briefCopy'){ copy(BRIEF.text, 'Lagebericht kopiert'); }
+  else if (b.id === 'reset'){ S = JSON.parse(JSON.stringify(DEF)); render(); toast('Annahmen zurückgesetzt'); }
+  else if (b.id === 'copyJson'){ copy(JSON.stringify(S, null, 1), 'Szenario kopiert'); }
+  else if (b.id === 'copyRep'){ copy(reportText(), 'Bericht kopiert'); }
+  else if (b.id === 'copyTsv'){ copy(reportTsv(), 'Tabelle kopiert'); }
+});
+document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('tr[data-inc]')){ e.preventDefault(); UI.inc = e.target.dataset.inc; render(); } });
+document.addEventListener('toggle', e => { const d = e.target; if (!d.dataset || !d.dataset.rs) return; const s = new Set(UI.rsOpen || []); d.open ? s.add(d.dataset.rs) : s.delete(d.dataset.rs); UI.rsOpen = [...s]; store('ui', UI); }, true);
+window.addEventListener('hashchange', () => { render(); window.scrollTo(0, 0); });
+render();
+</script>
+</body>
+</html>
