@@ -1,6 +1,6 @@
 // KI-Anbindung für das Import-Cockpit auf Netlify.
-// Benötigt die Umgebungsvariable ANTHROPIC_API_KEY (Netlify → Project configuration →
-// Environment variables). Optional: ANTHROPIC_MODEL (Standard: claude-sonnet-5-5).
+// Nutzt das Netlify AI Gateway (ANTHROPIC_API_KEY + ANTHROPIC_BASE_URL werden von Netlify gesetzt)
+// oder einen eigenen Schlüssel in ANTHROPIC_API_KEY. Optional: ANTHROPIC_MODEL (Standard: claude-sonnet-5-5).
 // Antwortet als Text-Stream, damit lange Antworten nicht an Zeitlimits scheitern.
 
 export const config = { path: "/api/sample" };
@@ -45,7 +45,10 @@ export default async (req) => {
   if (!messages.length) return new Response("Bad request", { status: 400 });
   if (JSON.stringify(messages).length > MAX_CHARS) return new Response("Too large", { status: 413 });
 
-  const upstream = await fetch("https://api.anthropic.com/v1/messages", {
+  // Netlify AI Gateway setzt ANTHROPIC_API_KEY und ANTHROPIC_BASE_URL automatisch;
+  // ein eigener Schlüssel ohne Base-URL geht direkt an Anthropic.
+  const base = (Netlify.env.get("ANTHROPIC_BASE_URL") || "https://api.anthropic.com").replace(/\/+$/, "");
+  const upstream = await fetch(base + "/v1/messages", {
     method: "POST",
     headers: {
       "content-type": "application/json",
