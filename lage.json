@@ -1,253 +1,335 @@
 {
- "asof": "2026-11-16",
- "updated": "2026-11-16T05:35:00+01:00",
- "note": "Neu: Iran greift erstmals seit Monaten wieder Bahrain an und die Huthis feuern erneut auf Riad, der UN-Sicherheitsrat beziffert den Einbruch der Passagen durch Hormus und Bab el-Mandeb; die Drewry-Meldung wurde um Blank Sailings, Zuschläge und Wartezeiten in Shanghai ergänzt, Wahrscheinlichkeiten unverändert.",
- "wci": {
-  "date": "12.11.2026",
-  "rtm": 3504
- },
- "p": {},
- "items": [
-  {
-   "d": "15.11.2026",
-   "cat": "Sicherheit",
-   "reg": "Bahrain / Saudi-Arabien",
-   "txt": "Bahrain löste am 15. November erstmals seit Monaten landesweiten Alarm aus, nachdem die Revolutionsgarden Drohnenangriffe auf den Stützpunkt Riffa mit US-Hubschraubern gemeldet hatten; Bahrain meldete abgefangene Angriffe, die USA keine Schäden. Saudi-Arabien fing zugleich zwei Huthi-Raketen auf Riad sowie Drohnen in der Ostprovinz ab, nachdem die Huthis am 12. November bereits Ölanlagen in Yanbu am Roten Meer angegriffen hatten.",
-   "rel": "Der Konflikt am Golf und am Roten Meer flammt wieder auf statt abzuklingen; mit sinkenden Bunker-, Kerosin- und Versicherungszuschlägen ist kurzfristig nicht zu rechnen.",
-   "src": [
+  "asof": "2026-11-25",
+  "updated": "2026-11-25T05:38:30+01:00",
+  "note": "Neu: Die Huthis drohen nach erneuten Luftangriffen auf Hodeidah allen saudischen Rotmeerhäfen, am Hormus häufen sich Angriffe auf Tanker, Drewry meldet Shanghai–Rotterdam stabil bei 3.496 USD mit angekündigten Dezember-Zuschlägen, Gemini holt AE1–AE3 in den Suezkanal zurück, der Ölpreis fällt; Wahrscheinlichkeiten unverändert.",
+  "items": [
     {
-     "t": "The National: Bahrain issues first nationwide alert in months as Iran claims attack on base hosting US helicopters (15.11.2026)",
-     "u": "https://www.thenationalnews.com/news/gulf/2026/11/15/bahrain-issues-first-nationwide-alert-in-months-as-iran-claims-attack-on-base-hosting-us-helicopters/"
+      "d": "24.11.2026",
+      "cat": "Sicherheit",
+      "reg": "Rotes Meer / Saudi-Arabien",
+      "txt": "Nach den schwersten Luftangriffen der saudisch geführten Koalition auf den Hafen Hodeidah seit Kriegsbeginn (20. November) traf am 24. November eine Huthi-Drohne den höchsten Turm Riads, mindestens 11 Menschen wurden verletzt. Die Huthis drohen, Dschidda und alle anderen saudischen Häfen am Roten Meer anzugreifen, und forderten Reedereien auf, ihre Schiffe dort abzuziehen; die Koalition griff Hodeidah daraufhin erneut an.",
+      "rel": "Angriffe auf Handelsschiffe im Transit wurden im November nicht gemeldet, aber die Eskalation am Roten Meer kann die Rückkehr der Linien durch Bab el-Mandeb jederzeit stoppen; Kap-Option beim Spediteur offenhalten.",
+      "routes": [
+        "cn",
+        "vn"
+      ],
+      "src": [
+        {
+          "t": "Reuters via WTVB: Yemen's Houthis threaten to target Jeddah and other Saudi Red Sea ports (24.11.2026)",
+          "u": "https://wtvbam.com/2026/11/24/yemens-houthis-threaten-to-target-jeddah-and-other-saudi-red-sea-ports/"
+        },
+        {
+          "t": "gCaptain (Reuters): Houthis Order Ships to Leave Saudi Red Sea Ports After Hodeidah Airstrikes (20.11.2026)",
+          "u": "https://gcaptain.com/houthis-order-ships-to-leave-saudi-red-sea-ports-after-hodeidah-airstrikes/"
+        },
+        {
+          "t": "Al Jazeera: Saudi coalition and Houthis exchange threats to bomb key ports (20.11.2026)",
+          "u": "https://www.aljazeera.com/news/2026/11/20/saudi-coalition-and-houthis-exchange-threats-to-bomb-key-ports"
+        }
+      ]
     },
     {
-     "t": "Spokesman-Review (Washington Post): Iran targets Bahrain twice after months of quiet (15.11.2026)",
-     "u": "https://www.spokesman.com/stories/2026/nov/15/iran-targets-bahrain-twice-after-months-of-quiet-c/"
-    }
-   ]
-  },
-  {
-   "d": "13.11.2026",
-   "cat": "Route",
-   "reg": "Hormus / Bab el-Mandeb",
-   "txt": "Im UN-Sicherheitsrat wurde auf Antrag Bahrains über die Schifffahrt am Golf beraten: Laut UKMTO liegen die Passagen durch Hormus rund 65 % unter Vorkriegsniveau, im Oktober gab es so viele Vorfälle wie nie seit Kriegsbeginn. Durch Bab el-Mandeb fahren seit der Huthi-Blockade gegen saudisch verbundene Schiffe im Juli etwa ein Viertel weniger Schiffe.",
-   "rel": "Bab el-Mandeb liegt direkt auf unserer Seeroute; Containerschiffe kehren zwar zurück, der Kap-Umweg sollte beim Spediteur als Option abgesichert bleiben.",
-   "routes": [
-    "cn",
-    "vn"
-   ],
-   "src": [
-    {
-     "t": "UN News: Security Council LIVE: Fragile Gulf calm tested as threats to Hormuz shipping mount (13.11.2026)",
-     "u": "https://news.un.org/en/story/2026/11/1168804"
-    }
-   ]
-  },
-  {
-   "d": "14.11.2026",
-   "cat": "Sicherheit",
-   "reg": "Straße von Hormus / Golf von Oman",
-   "txt": "Irans Marine meldete am 14. November zwei weitere Tanker, die östlich der Meerenge auf Minen gelaufen und in Brand geraten seien, nach eigener Zählung der fünfte Vorfall binnen 24 Stunden; unabhängig bestätigt ist das nicht. Die UN drängen Iran und die USA, wenigstens Düngemittelschiffe passieren zu lassen, deren Preise seit Beginn der Blockaden um rund 30 % gestiegen sind.",
-   "rel": "Nicht auf unserer Route, aber die Lage am Golf bleibt festgefahren, sodass Bunker-, Kerosin- und Versicherungszuschläge vorerst hoch bleiben.",
-   "src": [
-    {
-     "t": "The Tribune (ANI): Iran claims 17th US MQ-1 drone destroyed; 2 tankers catch fire in Strait of Hormuz (14.11.2026)",
-     "u": "https://www.tribuneindia.com/news/iran/iran-claims-17th-us-mq-1-drone-destroyed-2-tankers-catch-fire-in-strait-of-hormuz"
+      "d": "24.11.2026",
+      "cat": "Sicherheit",
+      "reg": "Straße von Hormus / Golf von Oman",
+      "txt": "Laut UKMTO wurden am 21. und 22. November mehrere Tanker sowie ein vor Khor Fakkan ankernder Massengutfrachter von Geschossen getroffen; das JMIC zählt rund zehn getroffene Tanker binnen einer Woche und stuft die Bedrohung als „severe“ ein. Irans Meerengen-Behörde setzte zusätzlich 26 Schlepper auf ihre schwarze Liste, rund 218 Schiffe warten östlich der Meerenge; unter US-Begleitung passieren etwa 38 Schiffe pro Tag statt rund 138 vor dem Krieg.",
+      "rel": "Nicht auf unserer Route, aber die Lage am Golf hält Versicherungs-, Bunker- und Kerosinzuschläge hoch und bindet weiter Schiffs- und Luftfrachtkapazität.",
+      "src": [
+        {
+          "t": "gCaptain: Four More Ships Attacked as Iran Widens Hormuz Crackdown to Tugboats (24.11.2026)",
+          "u": "https://gcaptain.com/four-more-ships-attacked-as-iran-widens-hormuz-crackdown-to-tugboats/"
+        },
+        {
+          "t": "Al Jazeera: Hormuz oil traffic is down 40 percent: Are Iran's tanker attacks working? (24.11.2026)",
+          "u": "https://www.aljazeera.com/news/2026/11/24/hormuz-oil-traffic-is-down-40-percent-are-irans-tanker-attacks-working"
+        }
+      ]
     },
     {
-     "t": "The New Arab: UN official urges Iran, US to let fertilisers through Strait of Hormuz (14.11.2026)",
-     "u": "https://www.newarab.com/news/un-official-urges-iran-us-let-fertilisers-through-hormuz"
-    }
-   ]
-  },
-  {
-   "d": "13.11.2026",
-   "cat": "Markt",
-   "reg": "Ölmarkt",
-   "txt": "Brent schloss am Freitag bei rund 95,84 USD je Barrel und verbuchte damit das zweite Wochenminus in Folge, nach einem Einbruch von 16 % in der Vorwoche. Der Markt rechnet mit einer anhaltenden US-Blockade gegen Iran, ein Abkommen ist nicht in Sicht.",
-   "rel": "Der Ölpreis liegt deutlich unter dem Oktober-Niveau, bleibt aber hoch; Bunker- und Kerosinzuschläge im Angebot des Spediteurs genau prüfen.",
-   "src": [
-    {
-     "t": "FinanceFeeds: Brent Crude Oil Price $95.84 – Week Ahead After a Second Weekly Loss (14.11.2026)",
-     "u": "https://financefeeds.com/brent-crude-oil-price-95-84-saturday-week-ahead-second-weekly-loss-bull-98-bear-91/"
+      "d": "24.11.2026",
+      "cat": "Markt",
+      "reg": "Ölmarkt",
+      "txt": "Brent fiel am 24. November unter 89 USD je Barrel und damit auf den tiefsten Stand seit Ende August, getragen von Hoffnungen auf US-iranische Gespräche; am 16. November hatte Brent noch knapp 94 USD gekostet. Laut Kpler sanken die Ölflüsse durch Hormus zuletzt auf rund 9,5 Mio. Barrel pro Tag nach 12,2 Mio. im Oktober.",
+      "rel": "Der sinkende Ölpreis kann Bunker- und Kerosinzuschläge entlasten; im Angebot des Spediteurs prüfen, ob die Zuschläge mitgehen.",
+      "src": [
+        {
+          "t": "Trading Economics: Brent Below $94 – mit Folgemeldung vom 24.11. (16.11.2026)",
+          "u": "https://tradingeconomics.com/commodity/brent-crude-oil/news/601607"
+        },
+        {
+          "t": "Al Jazeera: Hormuz oil traffic is down 40 percent: Are Iran's tanker attacks working? (24.11.2026)",
+          "u": "https://www.aljazeera.com/news/2026/11/24/hormuz-oil-traffic-is-down-40-percent-are-irans-tanker-attacks-working"
+        }
+      ]
     },
     {
-     "t": "Reuters via Investing.com: Oil prices set for second weekly decline as Trump to stay with Iran blockade (13.11.2026)",
-     "u": "https://www.investing.com/news/commodities-news/oil-prices-set-for-second-weekly-decline-as-trump-to-stay-with-iran-blockade-5024008"
-    }
-   ]
-  },
-  {
-   "d": "12.11.2026",
-   "cat": "Markt",
-   "reg": "Asien–Nordeuropa",
-   "txt": "Drewry meldet am 12. November für Shanghai–Rotterdam 3.504 USD je 40-Fuß-Container (minus 3 %), der Gesamtindex sank um 2 % auf 4.305 USD. Für Asien–Europa sind acht Blank Sailings und höhere FAK- und PSS-Zuschläge ab der zweiten Novemberhälfte angekündigt, die Wartezeit in Shanghai stieg auf 49 Stunden.",
-   "rel": "Die Seefracht liegt aktuell unter unserer Kalkulation; ein LCL-Angebot jetzt fixieren, bevor die angekündigten Aufschläge greifen, und in Shanghai etwas Puffer zum Closing einplanen.",
-   "routes": [
-    "cn",
-    "vn"
-   ],
-   "src": [
-    {
-     "t": "Drewry: World Container Index – 12 Nov (12.11.2026)",
-     "u": "https://www.drewry.co.uk/supply-chain-advisors/supply-chain-expertise/world-container-index-assessed-by-drewry"
+      "d": "24.11.2026",
+      "cat": "Hafen",
+      "reg": "Hamburg / Nordrange / Shanghai",
+      "txt": "Kuehne+Nagel meldet für die Woche bis 24. November im Schnitt 1,4 Tage Wartezeit in Hamburg, 1 Tag in Bremerhaven und 1,3 Tage in Rotterdam; das Hamburger Terminal CTA ruhte am 22./23. November wegen eines Systemtests, CTH ist zu 99 % ausgelastet. In Shanghai liegt die Wartezeit bei 2,3 Tagen mit weiterhin deutlicher Überlastung; DHL schätzt, dass über 10 % der Weltflotte in Hafenstaus gebunden sind und die Suez-Umstellung noch 6 bis 12 Monate dauern kann.",
+      "rel": "In Shanghai Puffer zum Closing und in Hamburg einige Tage für Entladung und LKW-Abholung einplanen.",
+      "routes": [
+        "cn",
+        "de"
+      ],
+      "src": [
+        {
+          "t": "Kuehne+Nagel: Port operational updates from around the world (18 Nov – 24 Nov 2026) (24.11.2026)",
+          "u": "https://mykn.kuehne-nagel.com/news/article/port-operational-updates-from-24-11-2026"
+        },
+        {
+          "t": "gCaptain: Suez Canal Return Won't Resolve Global Shipping Congestion, DHL Warns (16.11.2026)",
+          "u": "https://gcaptain.com/suez-canal-return-wont-resolve-global-shipping-congestion-dhl-warns/"
+        }
+      ]
     },
     {
-     "t": "Freightos: November 10, 2026 Update (10.11.2026)",
-     "u": "https://www.freightos.com/freight-resources/la-lb-strike-deadline-extended-dem-win-increasing-trade-uncertainty-november-10-2026-update/"
-    }
-   ]
-  },
-  {
-   "d": "10.11.2026",
-   "cat": "Luftfracht",
-   "reg": "China–Europa",
-   "txt": "Laut Freightos stiegen die Luftfrachtraten China–Europa in der Vorwoche um 11 % auf 4,87 USD/kg, 23 % mehr als vor einem Jahr. Die Hochsaison treibt die Preise wieder nach oben.",
-   "rel": "Der Markt liegt jetzt praktisch auf unserer kalkulierten Rate von 4,90 USD/kg; für die Alternative ab PVG ein verbindliches Angebot mit kurzer Gültigkeit einholen.",
-   "routes": [
-    "cn",
-    "vn"
-   ],
-   "src": [
-    {
-     "t": "Freightos: November 10, 2026 Update (10.11.2026)",
-     "u": "https://www.freightos.com/freight-resources/la-lb-strike-deadline-extended-dem-win-increasing-trade-uncertainty-november-10-2026-update/"
-    }
-   ]
-  },
-  {
-   "d": "09.11.2026",
-   "cat": "Piraterie",
-   "reg": "Somalia / Golf von Aden",
-   "txt": "Laut dem Kommandeur der EU-Mission Atalanta wurden seit November 2023 über 70 Piraterievorfälle gemeldet, etwa die Hälfte davon 2026, mit Spitzen nach den Huthi-Angriffen und nach Beginn des Hormus-Konflikts. Anfang November befreite die indische Marine das vor Nordost-Somalia gekaperte Fischereischiff Azini samt 20 Besatzungsmitgliedern.",
-   "rel": "Somalische Piraten bleiben aktiv; das Risiko im Golf von Aden und Arabischen Meer auf unserer Seeroute besteht weiter.",
-   "routes": [
-    "cn",
-    "vn"
-   ],
-   "src": [
-    {
-     "t": "Africanews (AP): Regional conflicts raise fears of renewed piracy in the Gulf of Aden (09.11.2026)",
-     "u": "https://www.africanews.com/2026/11/09/regional-conflicts-raise-fears-of-renewed-piracy-in-the-gulf-of-aden/"
+      "d": "24.11.2026",
+      "cat": "Währung",
+      "reg": "EUR/USD",
+      "txt": "Die EZB setzte den Referenzkurs am 24. November auf 1,0963 USD je Euro fest, nach 1,0939 USD am Vortag; ein Dollar kostete damit 0,9121 Euro.",
+      "rel": "Ware und Fracht werden in USD bezahlt; den Kurs bei Zahlung an den Lieferanten mit dem kalkulierten Kurs abgleichen und bei größeren Beträgen absichern.",
+      "src": [
+        {
+          "t": "onvista (dpa-AFX): Eurokurs gestiegen – EZB-Referenzkurs: 1,0963 US-Dollar (24.11.2026)",
+          "u": "https://www.onvista.de/news/2026/11-24-eurokurs-gestiegen-ezb-referenzkurs-1-0963-us-dollar-0-10-26580084"
+        }
+      ]
     },
     {
-     "t": "Dryad Global Channel 16: Somali piracy – AZINI rescue highlights continuing risks (04.11.2026)",
-     "u": "https://channel16.dryadglobal.com/somali-piracy-azini-rescue-highlights-continuing-risks-in-the-gulf-of-aden"
-    }
-   ]
-  },
-  {
-   "d": "08.11.2026",
-   "cat": "Route",
-   "reg": "Rotes Meer / Suez",
-   "txt": "Mit der Ever Eon passierte am 7. November erstmals seit Jahren wieder ein Evergreen-Schiff den Suezkanal; Maersk und Hapag-Lloyd schicken ihren Dienst ME1 ab 12. bzw. 13. November durch den Kanal. Drewry zählte zuletzt 53 Suez-Passagen pro Woche, die Gemini-Allianz will bis zum ersten Quartal 2027 fast alle Dienste zurückverlegen.",
-   "rel": "Unser Seetransit von rund 35 Tagen setzt die Suez-Route voraus; mit der Rückkehr steigt das Risiko gebündelter Ankünfte in Nordeuropa.",
-   "src": [
-    {
-     "t": "The Maritime Executive: Evergreen Joins the Return to Red Sea Shipping (08.11.2026)",
-     "u": "https://maritime-executive.com/article/evergreen-joins-the-return-to-red-sea-shipping"
+      "d": "19.11.2026",
+      "cat": "Markt",
+      "reg": "Asien–Nordeuropa",
+      "txt": "Drewry meldet am 19. November für Shanghai–Rotterdam unverändert 3.496 USD je 40-Fuß-Container, Shanghai–Genua stieg um 6 % auf 4.436 USD; der Gesamtindex sank zum vierten Mal in Folge um 3 % auf 4.176 USD. Viele Reedereien kündigen für Asien–Europa/Mittelmeer ab Dezember Peak-Season-Zuschläge von 1.000 bis 1.600 USD je 40-Fuß-Container an, Drewry erwartet steigende Raten; die Suez-Passagen stiegen auf 57 Schiffe pro Woche.",
+      "rel": "Die Seefracht liegt noch unter unserer Kalkulation; ein LCL-Angebot jetzt fixieren, bevor die Dezember-Zuschläge greifen.",
+      "routes": [
+        "cn",
+        "vn"
+      ],
+      "src": [
+        {
+          "t": "Drewry: World Container Index – 19 Nov (19.11.2026)",
+          "u": "https://www.drewry.co.uk/supply-chain-advisors/supply-chain-expertise/world-container-index-assessed-by-drewry"
+        },
+        {
+          "t": "Shipping Telegraph: Drewry: The World Container Index decreased 3% this week (20.11.2026)",
+          "u": "https://shippingtelegraph.com/freight-news/drewry-the-world-container-index-decreased-3-this-week-47-2026/"
+        }
+      ]
     },
     {
-     "t": "FreightWaves: How new capacity is raising rates in chaotic ocean market (20.10.2026)",
-     "u": "https://www.freightwaves.com/news/how-new-capacity-is-raising-rates-in-chaotic-ocean-market"
-    }
-   ]
-  },
-  {
-   "d": "06.11.2026",
-   "cat": "Hafen",
-   "reg": "Rotterdam / Hamburg / Bremerhaven",
-   "txt": "Maersk bezeichnet den Hafenbetrieb in Nordeuropa als weitgehend stabil, aber wetteranfällig; am stärksten staut es in britischen Häfen, die Bahnkapazität in Rotterdam-Maasvlakte II bleibt knapp. Anfang November meldete Zencargo noch 2 bis 8 Tage Wartezeit in Rotterdam und 1 bis 3 Tage in Hamburg.",
-   "rel": "Bei Ankunft in Hamburg einige Puffertage für Entladung und LKW-Abholung einplanen.",
-   "src": [
-    {
-     "t": "Maersk: Europe Market Update November 2026 (06.11.2026)",
-     "u": "https://www.maersk.com/news/articles/2026/11/06/europe-market-update-november"
+      "d": "19.11.2026",
+      "cat": "Politik",
+      "reg": "EU – China",
+      "txt": "Abgeordnete mehrerer Fraktionen fordern in einem Brief an von der Leyen und Šefčovič horizontale Quoten und Zölle gegen chinesische Überkapazitäten statt weiterer Branchendeals; die Kommission will ihr neues Handelsschutzinstrument, mit dem sie bei schweren Marktstörungen den Marktzugang sperren könnte, noch vor Jahresende vorlegen. China hatte für diesen Fall mit Vergeltung gedroht, Šefčovič trifft Handelsminister Wang Wentao im Januar und März 2027.",
+      "rel": "Noch keine Maßnahme gegen LED-Leuchten; Zolltarif und Antidumping-Listen vor Bestellung prüfen und das Instrument bis Jahresende beobachten.",
+      "routes": [
+        "cn",
+        "de"
+      ],
+      "src": [
+        {
+          "t": "Euronews: EU must move beyond piecemeal trade deals with China, MEPs warn (19.11.2026)",
+          "u": "https://www.euronews.com/2026/11/19/eu-must-move-beyond-piecemeal-trade-deals-with-china-meps-warn"
+        },
+        {
+          "t": "Euronews: China threatens EU with retaliation as EU mulls kill-switch to defend its market (05.11.2026)",
+          "u": "https://www.euronews.com/2026/11/05/china-threatens-eu-with-retaliation-as-eu-mulls-kill-switch-to-defend-its-market"
+        }
+      ]
     },
     {
-     "t": "Zencargo: Market Update (03.11.2026)",
-     "u": "https://www.zencargo.com/resources/zencargo-market-update-3-november-2026/"
-    }
-   ]
-  },
-  {
-   "d": "05.11.2026",
-   "cat": "Politik",
-   "reg": "EU – China",
-   "txt": "Die EU-Kommission arbeitet an einem Notfallinstrument, mit dem sie bei schweren Marktstörungen chinesischen Anbietern den Zugang zum Binnenmarkt sperren könnte; Handelskommissar Šefčovič will es bis Jahresende vorlegen. Chinas EU-Botschafter drohte für diesen Fall mit Vergeltung, das EU-Defizit mit China liegt bei rund 1 Mrd. Euro pro Tag.",
-   "rel": "Noch keine Maßnahme gegen LED-Leuchten; Zolltarif und Antidumping-Listen vor Bestellung prüfen und die Entwicklung bis Jahresende beobachten.",
-   "routes": [
-    "cn",
-    "de"
-   ],
-   "src": [
+      "d": "18.11.2026",
+      "cat": "Wetter",
+      "reg": "Nordsee / Deutsche Bucht",
+      "txt": "Der DWD warnte am 18. November für die gesamte deutsche Nordseeküste vor Sturm; in Bremerhaven gab es schwere Sturmböen von 80 bis 95 km/h, exponiert bis 110 km/h, in Hamburg Böen bis 80 km/h. Mitte November zogen damit mehrere Sturmwellen über Norddeutschland.",
+      "rel": "Die Wintersturmsaison in Nordsee und Biskaya hat begonnen; für die Ankunft in Hamburg wetterbedingte Verspätungen von ein bis zwei Tagen einplanen.",
+      "src": [
+        {
+          "t": "wetter.net: Sturm an der Nordseeküste: Orkanartige Böen, danach droht Glätte (18.11.2026)",
+          "u": "https://www.wetter.net/wetter-news/sturm-an-der-nordseekueste-orkanartige-boeen-danach-droht-glaette"
+        }
+      ]
+    },
     {
-     "t": "Euronews: China threatens EU with retaliation as EU mulls kill-switch to defend its market (05.11.2026)",
-     "u": "https://www.euronews.com/2026/11/05/china-threatens-eu-with-retaliation-as-eu-mulls-kill-switch-to-defend-its-market"
-    }
-   ]
-  },
-  {
-   "d": "03.11.2026",
-   "cat": "Wetter",
-   "reg": "Shanghai / Ningbo",
-   "txt": "Taifun Champi störte am 24. und 25. Oktober den Betrieb in Shanghai und Ningbo; Folgeverspätungen von ein bis zwei Wochen werden erwartet. Die Liegeplatz-Wartezeiten in Asien waren nach der Golden Week auf 2 bis 3 Tage gesunken.",
-   "rel": "Mögliche Verschiebung von Abfahrten ab Shanghai; Closing-Termine mit dem Spediteur prüfen.",
-   "routes": [
-    "cn"
-   ],
-   "src": [
+      "d": "17.11.2026",
+      "cat": "Luftfracht",
+      "reg": "China–Europa",
+      "txt": "Laut Freightos stiegen die Luftfrachtraten China–Nordeuropa bis 10. November um 11 % auf 4,87 USD/kg; am 17. November meldete Freightos für China–Nordamerika ein Plus von 16 % auf 9,25 USD/kg. WorldACD verzeichnet für Oktober 17 % weniger Tonnage China–Europa bei steigenden Preisen.",
+      "rel": "Der Markt liegt praktisch auf unserer kalkulierten Rate von 4,90 USD/kg und zieht in der Hochsaison weiter an; für die Alternative ab PVG ein verbindliches Angebot mit kurzer Gültigkeit einholen.",
+      "routes": [
+        "cn",
+        "vn"
+      ],
+      "src": [
+        {
+          "t": "EcomCrew: Air Freight From China Just Hit $9.25 a Kilo (18.11.2026)",
+          "u": "https://www.ecomcrew.com/air-freight-from-china-just-hit-9-25-a-kilo/"
+        },
+        {
+          "t": "EcomCrew: Less Cargo, Higher Air Freight: What Europe Sellers Are Paying (11.11.2026)",
+          "u": "https://www.ecomcrew.com/less-cargo-higher-air-freight-what-europe-sellers-are-paying/"
+        }
+      ]
+    },
     {
-     "t": "Dimerco: Asia Pac Freight Report November 2026 (03.11.2026)",
-     "u": "https://dimerco.com/news-press/asia-pac-freight-report-november-2026/"
-    }
-   ]
-  },
-  {
-   "d": "06.10.2026",
-   "cat": "Hafen",
-   "reg": "Hamburg",
-   "txt": "Tarifeinigung in den deutschen Seehäfen mit 3,4 % mehr Lohn. Unbefristete Streiks sind damit abgewendet, nach Warnstreiks im August und September.",
-   "rel": "Streikrisiko in Hamburg für unsere Ankunft gering.",
-   "src": [
+      "d": "16.11.2026",
+      "cat": "Route",
+      "reg": "Rotes Meer / Suez",
+      "txt": "Maersk und Hapag-Lloyd verlegen ihre letzten drei Asien–Europa-Dienste vom Kap zurück in den Suezkanal: AE2 ab 4. Dezember (ab Ningbo), AE3 ab 20. Dezember (ab Shanghai) und AE1 ab 14. Januar 2027 (ab Shanghai, mit Anlauf Hamburg). Weitere Änderungen machen die Reedereien von anhaltender Stabilität im Roten Meer abhängig.",
+      "rel": "Ab Mitte Januar gibt es eine direkte Suez-Verbindung Shanghai–Hamburg mit kürzerer Transitzeit, sie hängt aber an der Lage am Roten Meer.",
+      "routes": [
+        "cn"
+      ],
+      "src": [
+        {
+          "t": "gCaptain: Maersk, Hapag-Lloyd Expand Suez Canal Return With Three More Gemini Services (16.11.2026)",
+          "u": "https://gcaptain.com/maersk-hapag-lloyd-expand-suez-canal-return-with-three-more-gemini-services/"
+        },
+        {
+          "t": "Shipping Telegraph: Maersk and Hapag-Lloyd move more services via Suez route (18.11.2026)",
+          "u": "https://shippingtelegraph.com/container-news/maersk-and-hapag-lloyd-move-more-services-via-suez-route/"
+        }
+      ]
+    },
     {
-     "t": "VerkehrsRundschau: Verdi und ZDS einigen sich auf neuen Tarifvertrag (06.10.2026)",
-     "u": "https://www.verkehrsrundschau.de/nachrichten/transport-logistik/deutsche-seehaefen-verdi-und-zds-einigen-sich-auf-neuen-tarifvertrag-3913661"
-    }
-   ]
-  },
-  {
-   "d": "2026",
-   "cat": "Luftfracht",
-   "reg": "Golfregion",
-   "txt": "Seit den Luftraumsperrungen am Golf fehlt ein großer Teil der Kapazität China–Europa, die sonst über Golf-Drehkreuze lief. Kerosinpreise und Zuschläge stiegen stark.",
-   "rel": "Unsere Luftfracht-Rate von 4,90 USD/kg kann schnell veralten.",
-   "routes": [
-    "cn",
-    "vn"
-   ],
-   "src": [
+      "d": "16.11.2026",
+      "cat": "Piraterie",
+      "reg": "Arabisches Meer / Somalia",
+      "txt": "UKMTO meldete am 16. November ein mögliches Mutterschiff und ein Skiff mit vier Bewaffneten und einer Leiter, die sich rund 430 Seemeilen östlich von Sokotra einem Tanker näherten. Laut EU-Mission Atalanta gab es seit November 2023 über 70 Piraterievorfälle, etwa die Hälfte davon 2026.",
+      "rel": "Somalische Piraten operieren weit draußen im Arabischen Meer und damit auf unserer Seeroute; das Risiko besteht weiter.",
+      "routes": [
+        "cn",
+        "vn"
+      ],
+      "src": [
+        {
+          "t": "Bernama (Anadolu): 4 Armed Men Aboard Boat Approach Oil Tanker East Of Yemen's Socotra: UKMTO (16.11.2026)",
+          "u": "https://www.bernama.com/en/news.php?id=2635105"
+        },
+        {
+          "t": "Africanews (AP): Regional conflicts raise fears of renewed piracy in the Gulf of Aden (09.11.2026)",
+          "u": "https://www.africanews.com/2026/11/09/regional-conflicts-raise-fears-of-renewed-piracy-in-the-gulf-of-aden/"
+        }
+      ]
+    },
     {
-     "t": "The Loadstar: Gulf airspace closures slash Asia-Europe air cargo capacity",
-     "u": "https://theloadstar.com/gulf-airspace-closures-slash-asia-europe-air-cargo-capacity-by-nearly-40/"
-    }
-   ]
-  },
-  {
-   "d": "2027",
-   "cat": "Kalender",
-   "reg": "China / Vietnam",
-   "txt": "Chinesisches Neujahr und Tết fallen auf den 6. Februar 2027, die offiziellen Feiertage in China auf den 5. bis 12. Februar. Fabriken stehen oft zwei bis vier Wochen still.",
-   "rel": "Erstbestellung nicht betroffen; Nachbestellungen im Januar und Februar meiden.",
-   "routes": [
-    "cn",
-    "vn"
-   ],
-   "src": [
+      "d": "13.11.2026",
+      "cat": "Route",
+      "reg": "Hormus / Bab el-Mandeb",
+      "txt": "Im UN-Sicherheitsrat wurde auf Antrag Bahrains über die Schifffahrt am Golf beraten: Laut UKMTO liegen die Passagen durch Hormus rund 65 % unter Vorkriegsniveau, im Oktober gab es so viele Vorfälle wie nie seit Kriegsbeginn. Durch Bab el-Mandeb fahren seit der Huthi-Blockade gegen saudisch verbundene Schiffe im Juli etwa ein Viertel weniger Schiffe.",
+      "rel": "Bab el-Mandeb liegt direkt auf unserer Seeroute; Containerschiffe kehren zwar zurück, der Kap-Umweg sollte beim Spediteur als Option abgesichert bleiben.",
+      "routes": [
+        "cn",
+        "vn"
+      ],
+      "src": [
+        {
+          "t": "UN News: Security Council LIVE: Fragile Gulf calm tested as threats to Hormuz shipping mount (13.11.2026)",
+          "u": "https://news.un.org/en/story/2026/11/1168804"
+        }
+      ]
+    },
     {
-     "t": "New Buying Agent: Chinese New Year 2027 (6. Februar)",
-     "u": "https://www.newbuyingagent.com/resources/chinese-new-year-2027-february-6-the-china-production-schedule-survival-guide"
+      "d": "09.11.2026",
+      "cat": "Compliance",
+      "reg": "China",
+      "txt": "Chinas Handelsministerium verlängerte die Aussetzung der Exportkontrollen für bestimmte Seltene Erden und weitere Güter um zwei Monate bis zum 10. Januar 2027. Die Kontrollen waren 2025 eingeführt und im November 2025 für ein Jahr ausgesetzt worden.",
+      "rel": "Seltene Erden stecken auch in LED-Leuchtstoffen; bis 10. Januar ist mit keinen neuen Engpässen zu rechnen, danach Preise und Lieferfristen beim Lieferanten nachfragen.",
+      "routes": [
+        "cn"
+      ],
+      "src": [
+        {
+          "t": "The Star (Reuters): China extends suspension of rare earth export controls until January (09.11.2026)",
+          "u": "https://www.thestar.com.my/aseanplus/aseanplus-news/2026/11/09/china-extends-suspension-of-rare-earth-export-controls-until-january"
+        }
+      ]
+    },
+    {
+      "d": "08.11.2026",
+      "cat": "Route",
+      "reg": "Rotes Meer / Suez",
+      "txt": "Mit der Ever Eon passierte am 7. November erstmals seit Jahren wieder ein Evergreen-Schiff den Suezkanal; Maersk und Hapag-Lloyd schicken ihren Dienst ME1 ab 12. bzw. 13. November durch den Kanal. Drewry zählte zuletzt 53 Suez-Passagen pro Woche, die Gemini-Allianz will bis zum ersten Quartal 2027 fast alle Dienste zurückverlegen.",
+      "rel": "Unser Seetransit von rund 35 Tagen setzt die Suez-Route voraus; mit der Rückkehr steigt das Risiko gebündelter Ankünfte in Nordeuropa.",
+      "src": [
+        {
+          "t": "The Maritime Executive: Evergreen Joins the Return to Red Sea Shipping (08.11.2026)",
+          "u": "https://maritime-executive.com/article/evergreen-joins-the-return-to-red-sea-shipping"
+        },
+        {
+          "t": "FreightWaves: How new capacity is raising rates in chaotic ocean market (20.10.2026)",
+          "u": "https://www.freightwaves.com/news/how-new-capacity-is-raising-rates-in-chaotic-ocean-market"
+        }
+      ]
+    },
+    {
+      "d": "03.11.2026",
+      "cat": "Wetter",
+      "reg": "Shanghai / Ningbo",
+      "txt": "Taifun Champi störte am 24. und 25. Oktober den Betrieb in Shanghai und Ningbo; Folgeverspätungen von ein bis zwei Wochen werden erwartet. Die Liegeplatz-Wartezeiten in Asien waren nach der Golden Week auf 2 bis 3 Tage gesunken.",
+      "rel": "Mögliche Verschiebung von Abfahrten ab Shanghai; Closing-Termine mit dem Spediteur prüfen.",
+      "routes": [
+        "cn"
+      ],
+      "src": [
+        {
+          "t": "Dimerco: Asia Pac Freight Report November 2026 (03.11.2026)",
+          "u": "https://dimerco.com/news-press/asia-pac-freight-report-november-2026/"
+        }
+      ]
+    },
+    {
+      "d": "06.10.2026",
+      "cat": "Hafen",
+      "reg": "Hamburg",
+      "txt": "Tarifeinigung in den deutschen Seehäfen mit 3,4 % mehr Lohn. Unbefristete Streiks sind damit abgewendet, nach Warnstreiks im August und September.",
+      "rel": "Streikrisiko in Hamburg für unsere Ankunft gering.",
+      "src": [
+        {
+          "t": "VerkehrsRundschau: Verdi und ZDS einigen sich auf neuen Tarifvertrag (06.10.2026)",
+          "u": "https://www.verkehrsrundschau.de/nachrichten/transport-logistik/deutsche-seehaefen-verdi-und-zds-einigen-sich-auf-neuen-tarifvertrag-3913661"
+        }
+      ]
+    },
+    {
+      "d": "2026",
+      "cat": "Luftfracht",
+      "reg": "Golfregion",
+      "txt": "Seit den Luftraumsperrungen am Golf fehlt ein großer Teil der Kapazität China–Europa, die sonst über Golf-Drehkreuze lief. Kerosinpreise und Zuschläge stiegen stark.",
+      "rel": "Unsere Luftfracht-Rate von 4,90 USD/kg kann schnell veralten.",
+      "routes": [
+        "cn",
+        "vn"
+      ],
+      "src": [
+        {
+          "t": "The Loadstar: Gulf airspace closures slash Asia-Europe air cargo capacity",
+          "u": "https://theloadstar.com/gulf-airspace-closures-slash-asia-europe-air-cargo-capacity-by-nearly-40/"
+        }
+      ]
+    },
+    {
+      "d": "2027",
+      "cat": "Kalender",
+      "reg": "China / Vietnam",
+      "txt": "Chinesisches Neujahr und Tết fallen auf den 6. Februar 2027, die offiziellen Feiertage in China auf den 5. bis 12. Februar. Fabriken stehen oft zwei bis vier Wochen still.",
+      "rel": "Erstbestellung nicht betroffen; Nachbestellungen im Januar und Februar meiden.",
+      "routes": [
+        "cn",
+        "vn"
+      ],
+      "src": [
+        {
+          "t": "New Buying Agent: Chinese New Year 2027 (6. Februar)",
+          "u": "https://www.newbuyingagent.com/resources/chinese-new-year-2027-february-6-the-china-production-schedule-survival-guide"
+        }
+      ]
     }
-   ]
+  ],
+  "p": {},
+  "wci": {
+    "date": "19.11.2026",
+    "rtm": 3496
   }
- ]
 }
