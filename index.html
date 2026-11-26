@@ -38,6 +38,10 @@ a{color:var(--sea);text-underline-offset:2px}
 .brand .lamp{width:40px;height:40px;flex:none}
 .brand b{display:block;font:600 16px/1.2 var(--cond);color:#fff;letter-spacing:.1px}
 .brand span{font-size:12px;color:#A8B1B8;display:block}
+a.brand{text-decoration:none;color:inherit;cursor:pointer;transition:background .15s}
+a.brand:hover{background:#3A4247}
+a.brand:hover b{color:var(--signal,#F9A800)}
+a.brand:focus-visible{outline:2px solid var(--signal,#F9A800);outline-offset:-2px;border-radius:0}
 .routesel{margin:6px 0 3px;width:100%;max-width:190px;background:#3A4247;color:#fff;border:1px solid #5A6369;border-radius:6px;padding:5px 6px;font:500 12.5px var(--sans)}
 .routesel:focus{outline:2px solid var(--signal);outline-offset:1px}
 .rbanner{display:flex;gap:10px;align-items:flex-start}
@@ -366,10 +370,10 @@ details.rs[open] summary::before{content:'▾'}
 <body>
 <div class="app">
   <aside class="side">
-    <div class="brand">
+    <a class="brand" href="#ueberblick" title="Zum Cockpit &amp; Bericht" aria-label="Albleuchten Import-Cockpit – zum Cockpit &amp; Bericht">
       <svg class="lamp" viewBox="0 0 200 200" aria-hidden="true"><defs><linearGradient id="lgG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F9A800"/><stop offset=".55" stop-color="#F26B4F"/><stop offset="1" stop-color="#D9466F"/></linearGradient><clipPath id="lgK"><path d="M100 18 C60 18 34 48 34 84 C34 108 48 124 60 138 L60 154 L140 154 L140 138 C152 124 166 108 166 84 C166 48 140 18 100 18 Z"/></clipPath></defs><path d="M100 18 C60 18 34 48 34 84 C34 108 48 124 60 138 L60 154 L140 154 L140 138 C152 124 166 108 166 84 C166 48 140 18 100 18 Z" fill="url(#lgG)"/><g clip-path="url(#lgK)"><path d="M20 170 L66 104 L92 138 L126 80 L184 170 Z" fill="#2F3539"/></g><rect x="62" y="160" width="76" height="12" rx="6" fill="#D7DCE0"/><rect x="72" y="178" width="56" height="12" rx="6" fill="#D7DCE0"/></svg>
       <div><b>Albleuchten Import-Cockpit</b><span id="routeSub"></span></div>
-    </div>
+    </a>
     <nav class="nav" id="nav"></nav>
     <div class="foot">Albleuchten Import-Cockpit. Alle Werte sind Planannahmen und unter „Annahmen“ änderbar.</div>
   </aside>
@@ -2480,6 +2484,7 @@ document.addEventListener('keydown', e => {
   e.preventDefault(); thrGo(k);
 });
 window.addEventListener('hashchange', () => { if (applyAlias()) return; render(); window.scrollTo(0, 0); });
+document.querySelector('a.brand')?.addEventListener('click', e => { if ((location.hash || '#ueberblick') === '#ueberblick'){ e.preventDefault(); if (location.hash !== '#ueberblick') location.hash = '#ueberblick'; else window.scrollTo({ top: 0, behavior: 'smooth' }); } });
 
 /* ================= Verkaufsplan (3 Phasen) ================= */
 function planMonths(n){
