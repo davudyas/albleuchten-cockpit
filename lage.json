@@ -1,13 +1,34 @@
 {
-  "asof": "2026-11-25",
-  "updated": "2026-11-25T05:38:30+01:00",
-  "note": "Neu: Die Huthis drohen nach erneuten Luftangriffen auf Hodeidah allen saudischen Rotmeerhäfen, am Hormus häufen sich Angriffe auf Tanker, Drewry meldet Shanghai–Rotterdam stabil bei 3.496 USD mit angekündigten Dezember-Zuschlägen, Gemini holt AE1–AE3 in den Suezkanal zurück, der Ölpreis fällt; Wahrscheinlichkeiten unverändert.",
+  "asof": "2026-11-26",
+  "updated": "2026-11-26T05:42:01+01:00",
+  "note": "Neu: Maersk erhöht den Peak-Season-Zuschlag Fernost–Nordeuropa ab 14. Dezember auf 1.500 USD je 40-Fuß-Container, die Huthis bekräftigen ihre Drohung gegen saudische Rotmeerhäfen nach erneuten Angriffen auf Hodeidah, vor Dubai explodierte ein Geschoss nahe einem Tanker, Brent steigt wieder auf rund 91 USD und der Euro fällt auf 1,0935 USD; Drewry-WCI noch vom 19. November, Wahrscheinlichkeiten unverändert.",
   "items": [
     {
-      "d": "24.11.2026",
+      "d": "25.11.2026",
+      "cat": "Markt",
+      "reg": "Asien–Nordeuropa",
+      "txt": "Maersk erhöht den Peak-Season-Zuschlag Fernost–Nordeuropa auf 750 USD je 20-Fuß- und 1.500 USD je 40-Fuß-Container, gültig ab Preisberechnungsdatum 14. Dezember; ursprünglich waren ab 1. Dezember 500 bzw. 1.000 USD angekündigt. Für das Mittelmeer steigen die Zuschläge auf 1.000 bzw. 2.000 USD.",
+      "rel": "Die Seefracht wird ab Mitte Dezember spürbar teurer; Buchung und Ratenzusage möglichst vor dem 14. Dezember sichern und LCL-Zuschläge des Spediteurs prüfen.",
+      "routes": [
+        "cn",
+        "vn"
+      ],
+      "src": [
+        {
+          "t": "Maersk: Revise Peak Season Surcharge (PSS) from Far East Asia to North Europe and Mediterranean (25.11.2026)",
+          "u": "https://www.maersk.com/news/articles/2026/11/25/revise-peak-season-surcharge-far-east-asia-north-europe"
+        },
+        {
+          "t": "Maersk: Implementation of Peak Season Surcharge (PSS) from Far East Asia to North Europe (12.11.2026)",
+          "u": "https://www.maersk.com/news/articles/2026/11/12/pss-from-far-east-asia-to-north-europe"
+        }
+      ]
+    },
+    {
+      "d": "25.11.2026",
       "cat": "Sicherheit",
       "reg": "Rotes Meer / Saudi-Arabien",
-      "txt": "Nach den schwersten Luftangriffen der saudisch geführten Koalition auf den Hafen Hodeidah seit Kriegsbeginn (20. November) traf am 24. November eine Huthi-Drohne den höchsten Turm Riads, mindestens 11 Menschen wurden verletzt. Die Huthis drohen, Dschidda und alle anderen saudischen Häfen am Roten Meer anzugreifen, und forderten Reedereien auf, ihre Schiffe dort abzuziehen; die Koalition griff Hodeidah daraufhin erneut an.",
+      "txt": "Nach einer Huthi-Drohne auf den höchsten Turm Riads am 24. November (mindestens 11 Verletzte) bekräftigten die Huthis am 25. November, Dschidda und alle anderen saudischen Rotmeerhäfen anzugreifen, falls Hodeidah erneut bombardiert wird, und forderten Reedereien zum Abzug ihrer Schiffe auf. Die saudisch geführte Koalition griff am 25. November dennoch erneut Ziele in Hodeidah sowie in Saada und Amran an.",
       "rel": "Angriffe auf Handelsschiffe im Transit wurden im November nicht gemeldet, aber die Eskalation am Roten Meer kann die Rückkehr der Linien durch Bab el-Mandeb jederzeit stoppen; Kap-Option beim Spediteur offenhalten.",
       "routes": [
         "cn",
@@ -15,50 +36,75 @@
       ],
       "src": [
         {
+          "t": "Cyprus Mail (Reuters): Houthis threaten Saudi ports as Red Sea tensions escalate (25.11.2026)",
+          "u": "https://cyprus-mail.com/2026/11/25/houthis-threaten-saudi-ports-as-tensions-escalate"
+        },
+        {
           "t": "Reuters via WTVB: Yemen's Houthis threaten to target Jeddah and other Saudi Red Sea ports (24.11.2026)",
           "u": "https://wtvbam.com/2026/11/24/yemens-houthis-threaten-to-target-jeddah-and-other-saudi-red-sea-ports/"
         },
         {
           "t": "gCaptain (Reuters): Houthis Order Ships to Leave Saudi Red Sea Ports After Hodeidah Airstrikes (20.11.2026)",
           "u": "https://gcaptain.com/houthis-order-ships-to-leave-saudi-red-sea-ports-after-hodeidah-airstrikes/"
-        },
-        {
-          "t": "Al Jazeera: Saudi coalition and Houthis exchange threats to bomb key ports (20.11.2026)",
-          "u": "https://www.aljazeera.com/news/2026/11/20/saudi-coalition-and-houthis-exchange-threats-to-bomb-key-ports"
         }
       ]
     },
     {
-      "d": "24.11.2026",
+      "d": "25.11.2026",
       "cat": "Sicherheit",
       "reg": "Straße von Hormus / Golf von Oman",
-      "txt": "Laut UKMTO wurden am 21. und 22. November mehrere Tanker sowie ein vor Khor Fakkan ankernder Massengutfrachter von Geschossen getroffen; das JMIC zählt rund zehn getroffene Tanker binnen einer Woche und stuft die Bedrohung als „severe“ ein. Irans Meerengen-Behörde setzte zusätzlich 26 Schlepper auf ihre schwarze Liste, rund 218 Schiffe warten östlich der Meerenge; unter US-Begleitung passieren etwa 38 Schiffe pro Tag statt rund 138 vor dem Krieg.",
+      "txt": "Laut UKMTO explodierte am 25. November gegen 21:30 GMT ein Geschoss nahe einem Tanker rund 50 Seemeilen westlich von Dubai, nachdem am 21. bis 23. November bereits mehrere Tanker getroffen worden waren; die IMO zählt seit Kriegsbeginn über 130 Vorfälle mit Handelsschiffen in der Golfregion. Irans Parlamentspräsident Ghalibaf schließt Gespräche mit den USA aus, solange sieben Bedingungen wie die Aufhebung der US-Seeblockade nicht erfüllt sind; die USA prüfen zudem, ob Iran hinter Cyberangriffen auf bis zu 50 Handelsschiffe steckt.",
       "rel": "Nicht auf unserer Route, aber die Lage am Golf hält Versicherungs-, Bunker- und Kerosinzuschläge hoch und bindet weiter Schiffs- und Luftfrachtkapazität.",
       "src": [
         {
-          "t": "gCaptain: Four More Ships Attacked as Iran Widens Hormuz Crackdown to Tugboats (24.11.2026)",
-          "u": "https://gcaptain.com/four-more-ships-attacked-as-iran-widens-hormuz-crackdown-to-tugboats/"
+          "t": "investingLive: Projectile explodes near tanker 50 nautical miles off Dubai as Gulf shipping attacks mount (25.11.2026)",
+          "u": "https://investinglive.com/commodities/projectile-explodes-near-tanker-50-nautical-miles-off-dubai-as-gulf-shipping-attacks-mount/"
         },
         {
-          "t": "Al Jazeera: Hormuz oil traffic is down 40 percent: Are Iran's tanker attacks working? (24.11.2026)",
-          "u": "https://www.aljazeera.com/news/2026/11/24/hormuz-oil-traffic-is-down-40-percent-are-irans-tanker-attacks-working"
+          "t": "Gulf News: Iran warns Hormuz ships, rules out US talks until 7 conditions met (25.11.2026)",
+          "u": "https://gulfnews.com/world/mena/middle-east-conflict-us-investigates-iran-over-cyberattacks-on-50-ships-as-fresh-sanctions-target-irans-shadow-banking-network-1.500758688"
+        },
+        {
+          "t": "gCaptain: Four More Ships Attacked as Iran Widens Hormuz Crackdown to Tugboats (24.11.2026)",
+          "u": "https://gcaptain.com/four-more-ships-attacked-as-iran-widens-hormuz-crackdown-to-tugboats/"
         }
       ]
     },
     {
-      "d": "24.11.2026",
+      "d": "25.11.2026",
       "cat": "Markt",
       "reg": "Ölmarkt",
-      "txt": "Brent fiel am 24. November unter 89 USD je Barrel und damit auf den tiefsten Stand seit Ende August, getragen von Hoffnungen auf US-iranische Gespräche; am 16. November hatte Brent noch knapp 94 USD gekostet. Laut Kpler sanken die Ölflüsse durch Hormus zuletzt auf rund 9,5 Mio. Barrel pro Tag nach 12,2 Mio. im Oktober.",
-      "rel": "Der sinkende Ölpreis kann Bunker- und Kerosinzuschläge entlasten; im Angebot des Spediteurs prüfen, ob die Zuschläge mitgehen.",
+      "txt": "Brent war am 24. November unter 89 USD je Barrel gefallen, den tiefsten Stand seit Ende August, stieg aber am 25. November nach neuen Angriffen am Golf um über 2 % auf rund 91 USD. Laut Kpler liegen die Ölflüsse durch Hormus bei etwa der Hälfte des Vorkriegsniveaus.",
+      "rel": "Der Ölpreis schwankt mit jeder Meldung vom Golf; Bunker- und Kerosinzuschläge bleiben unberechenbar, daher Angebote mit festem Zuschlag bevorzugen.",
       "src": [
+        {
+          "t": "investingLive: Projectile explodes near tanker 50 nautical miles off Dubai as Gulf shipping attacks mount (25.11.2026)",
+          "u": "https://investinglive.com/commodities/projectile-explodes-near-tanker-50-nautical-miles-off-dubai-as-gulf-shipping-attacks-mount/"
+        },
         {
           "t": "Trading Economics: Brent Below $94 – mit Folgemeldung vom 24.11. (16.11.2026)",
           "u": "https://tradingeconomics.com/commodity/brent-crude-oil/news/601607"
+        }
+      ]
+    },
+    {
+      "d": "25.11.2026",
+      "cat": "Währung",
+      "reg": "EUR/USD",
+      "txt": "Die EZB setzte den Referenzkurs am 25. November auf 1,0935 USD je Euro fest (Vortag 1,0963), ein Dollar kostete 0,9144 Euro; am 23. November fiel der Euro im Handel bis auf 1,0881 USD, den tiefsten Stand seit April 2025. Seit Jahresbeginn verlor der Euro fast 7 %, Händler halten eine Zinserhöhung der Fed am 9. Dezember für nahezu sicher.",
+      "rel": "Ein stärkerer Dollar verteuert Ware und Fracht in Euro; den Kurs vor der Zahlung an den Lieferanten mit der Kalkulation abgleichen und eine Absicherung prüfen.",
+      "src": [
+        {
+          "t": "onvista (dpa-AFX): Eurokurs gefallen – EZB-Referenzkurs: 1,0935 US-Dollar (25.11.2026)",
+          "u": "https://www.onvista.de/news/2026/11-25-eurokurs-gefallen-ezb-referenzkurs-1-0935-us-dollar-0-10-26580530"
         },
         {
-          "t": "Al Jazeera: Hormuz oil traffic is down 40 percent: Are Iran's tanker attacks working? (24.11.2026)",
-          "u": "https://www.aljazeera.com/news/2026/11/24/hormuz-oil-traffic-is-down-40-percent-are-irans-tanker-attacks-working"
+          "t": "onvista (dpa-AFX): Devisen: Eurokurs gibt zum US-Dollar etwas nach (25.11.2026)",
+          "u": "https://www.onvista.de/news/2026/11-25-devisen-eurokurs-gibt-zum-us-dollar-etwas-nach-0-10-26580306"
+        },
+        {
+          "t": "aktiencheck.de: Euro Dollar Kurs: 1,0935 und Tief seit April 2025 (25.11.2026)",
+          "u": "https://aktiencheck.de/artikel/euro-dollar-kurs-10935-und-tief-seit-april-2025-fed-erhoehung-zu-97-prozent"
         }
       ]
     },
@@ -80,19 +126,6 @@
         {
           "t": "gCaptain: Suez Canal Return Won't Resolve Global Shipping Congestion, DHL Warns (16.11.2026)",
           "u": "https://gcaptain.com/suez-canal-return-wont-resolve-global-shipping-congestion-dhl-warns/"
-        }
-      ]
-    },
-    {
-      "d": "24.11.2026",
-      "cat": "Währung",
-      "reg": "EUR/USD",
-      "txt": "Die EZB setzte den Referenzkurs am 24. November auf 1,0963 USD je Euro fest, nach 1,0939 USD am Vortag; ein Dollar kostete damit 0,9121 Euro.",
-      "rel": "Ware und Fracht werden in USD bezahlt; den Kurs bei Zahlung an den Lieferanten mit dem kalkulierten Kurs abgleichen und bei größeren Beträgen absichern.",
-      "src": [
-        {
-          "t": "onvista (dpa-AFX): Eurokurs gestiegen – EZB-Referenzkurs: 1,0963 US-Dollar (24.11.2026)",
-          "u": "https://www.onvista.de/news/2026/11-24-eurokurs-gestiegen-ezb-referenzkurs-1-0963-us-dollar-0-10-26580084"
         }
       ]
     },
@@ -260,22 +293,6 @@
         {
           "t": "FreightWaves: How new capacity is raising rates in chaotic ocean market (20.10.2026)",
           "u": "https://www.freightwaves.com/news/how-new-capacity-is-raising-rates-in-chaotic-ocean-market"
-        }
-      ]
-    },
-    {
-      "d": "03.11.2026",
-      "cat": "Wetter",
-      "reg": "Shanghai / Ningbo",
-      "txt": "Taifun Champi störte am 24. und 25. Oktober den Betrieb in Shanghai und Ningbo; Folgeverspätungen von ein bis zwei Wochen werden erwartet. Die Liegeplatz-Wartezeiten in Asien waren nach der Golden Week auf 2 bis 3 Tage gesunken.",
-      "rel": "Mögliche Verschiebung von Abfahrten ab Shanghai; Closing-Termine mit dem Spediteur prüfen.",
-      "routes": [
-        "cn"
-      ],
-      "src": [
-        {
-          "t": "Dimerco: Asia Pac Freight Report November 2026 (03.11.2026)",
-          "u": "https://dimerco.com/news-press/asia-pac-freight-report-november-2026/"
         }
       ]
     },
