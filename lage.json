@@ -1,8 +1,71 @@
 {
-  "asof": "2026-11-26",
-  "updated": "2026-11-26T05:42:01+01:00",
-  "note": "Neu: Maersk erhöht den Peak-Season-Zuschlag Fernost–Nordeuropa ab 14. Dezember auf 1.500 USD je 40-Fuß-Container, die Huthis bekräftigen ihre Drohung gegen saudische Rotmeerhäfen nach erneuten Angriffen auf Hodeidah, vor Dubai explodierte ein Geschoss nahe einem Tanker, Brent steigt wieder auf rund 91 USD und der Euro fällt auf 1,0935 USD; Drewry-WCI noch vom 19. November, Wahrscheinlichkeiten unverändert.",
+  "asof": "2026-11-27",
+  "updated": "2026-11-27T05:43:08+01:00",
+  "note": "Neu: Die Huthis reklamieren Angriffe auf die saudischen Rotmeerhäfen Dschidda und Dschasan und kontrollieren die jemenitische Küste am Bab el-Mandeb, CMA CGM verlegt drei Dienste zurück ans Kap, die USA schlagen neue Zölle gegen China und die EU vor, der Euro erholt sich auf 1,0975 USD und der Drewry-Gesamtindex fällt auf 4.032 USD; Wahrscheinlichkeit R1 (Angriffe Rotes Meer/Bab el-Mandeb) von 3 auf 4 angehoben, WCI Shanghai–Rotterdam noch vom 19. November.",
   "items": [
+    {
+      "d": "26.11.2026",
+      "cat": "Sicherheit",
+      "reg": "Rotes Meer / Bab el-Mandeb",
+      "txt": "Die Huthis reklamierten am 25. November Angriffe auf die saudischen Rotmeerhäfen Dschidda und Dschasan als Vergeltung für die Luftangriffe auf Hodeidah; laut Koalition traf ein Geschoss den Hafen Dschasan mit geringem Schaden, eine Drohne wurde nahe dem Hafen Dschidda abgefangen, in der Nacht zum 26. November wurden zudem zwei ballistische Raketen auf Riad abgeschossen. Seit dem Rückzug der Regierungstruppen am 15. November kontrollieren die Huthis die jemenitische Küste am Bab el-Mandeb und stehen laut AP rund 60 km vor Aden.",
+      "rel": "Die Huthis greifen nun Häfen am Roten Meer an und beherrschen die jemenitische Küste am Bab el-Mandeb; die Wahrscheinlichkeit von Angriffen auf unserer Seeroute steigt, daher den Kap-Umweg mit dem Spediteur verbindlich als Ausweichoption vereinbaren.",
+      "routes": [
+        "cn",
+        "vn"
+      ],
+      "src": [
+        {
+          "t": "Daily News Egypt: Houthis say they hit Saudi Jeddah port and Jizan after Hodeidah strike (25.11.2026)",
+          "u": "https://africa.dailynewsegypt.com/jeddah-port-houthi-attack/"
+        },
+        {
+          "t": "Daily Sabah (AP): Houthi rebels advance toward Aden, threaten Saudi Red Sea ports (25.11.2026)",
+          "u": "https://www.dailysabah.com/world/mid-east/houthi-rebels-advance-toward-aden-threaten-saudi-red-sea-ports"
+        },
+        {
+          "t": "Al Jazeera: Houthis edge closer to Aden as Yemeni forces pull out of Bab al-Mandeb (16.11.2026)",
+          "u": "https://www.aljazeera.com/news/2026/11/16/houthis-edge-closer-to-aden-as-yemeni-forces-pull-out-of-bab-al-mandeb"
+        }
+      ]
+    },
+    {
+      "d": "26.11.2026",
+      "cat": "Markt",
+      "reg": "Weltweit / Asien–Nordeuropa",
+      "txt": "Der Drewry World Container Index fiel am 26. November zum fünften Mal in Folge um 3 % auf 4.032 USD je 40-Fuß-Container (Vorwoche 4.176 USD). Der Wert für Shanghai–Rotterdam ist öffentlich nicht ausgewiesen; in der Vorwoche lag er bei 3.496 USD, Drewry erwartet für Asien–Europa wegen der Dezember-Zuschläge steigende Raten.",
+      "rel": "Der Gesamtmarkt gibt nach, Asien–Europa dürfte aber ab Dezember teurer werden; LCL-Angebot vor den Zuschlägen fixieren.",
+      "routes": [
+        "cn",
+        "vn"
+      ],
+      "src": [
+        {
+          "t": "Drewry: World Container Index – 26 Nov (26.11.2026)",
+          "u": "https://www.drewry.co.uk/trackers-and-indices/latest-trackers-and-indices/world-container-index-assessed-by-drewry"
+        },
+        {
+          "t": "CEO Economy: Container rates fall for a fourth week on weak transpacific demand (19.11.2026)",
+          "u": "https://ceoeconomy.com/article/drewry-world-container-index-falls-fourth-week-november-2026"
+        }
+      ]
+    },
+    {
+      "d": "26.11.2026",
+      "cat": "Währung",
+      "reg": "EUR/USD",
+      "txt": "Die EZB setzte den Referenzkurs am 26. November auf 1,0975 USD je Euro fest (Vortag 1,0935), ein Dollar kostete 0,9111 Euro. Am 23. November war der Euro im Handel bis auf 1,0881 USD gefallen, den tiefsten Stand seit April 2025; Händler halten eine Zinserhöhung der Fed am 9. Dezember für nahezu sicher.",
+      "rel": "Der Euro hat sich leicht erholt, bleibt aber schwach; den Kurs vor der Zahlung an den Lieferanten mit der Kalkulation abgleichen und eine Absicherung prüfen.",
+      "src": [
+        {
+          "t": "ARIVA.DE (dpa-AFX): Eurokurs gestiegen – EZB-Referenzkurs: 1,0975 US-Dollar (26.11.2026)",
+          "u": "https://www.ariva.de/news/eurokurs-gestiegen-ezb-referenzkurs-1-0975-us-dollar-12221767"
+        },
+        {
+          "t": "aktiencheck.de: Euro Dollar Kurs: 1,0935 und Tief seit April 2025 (25.11.2026)",
+          "u": "https://aktiencheck.de/artikel/euro-dollar-kurs-10935-und-tief-seit-april-2025-fed-erhoehung-zu-97-prozent"
+        }
+      ]
+    },
     {
       "d": "25.11.2026",
       "cat": "Markt",
@@ -27,84 +90,38 @@
     {
       "d": "25.11.2026",
       "cat": "Sicherheit",
-      "reg": "Rotes Meer / Saudi-Arabien",
-      "txt": "Nach einer Huthi-Drohne auf den höchsten Turm Riads am 24. November (mindestens 11 Verletzte) bekräftigten die Huthis am 25. November, Dschidda und alle anderen saudischen Rotmeerhäfen anzugreifen, falls Hodeidah erneut bombardiert wird, und forderten Reedereien zum Abzug ihrer Schiffe auf. Die saudisch geführte Koalition griff am 25. November dennoch erneut Ziele in Hodeidah sowie in Saada und Amran an.",
-      "rel": "Angriffe auf Handelsschiffe im Transit wurden im November nicht gemeldet, aber die Eskalation am Roten Meer kann die Rückkehr der Linien durch Bab el-Mandeb jederzeit stoppen; Kap-Option beim Spediteur offenhalten.",
+      "reg": "Straße von Hormus / Golf von Oman",
+      "txt": "Laut UKMTO explodierte am 25. November gegen 21:30 GMT ein Geschoss nahe einem Tanker rund 50 Seemeilen westlich von Dubai, nachdem am 21. bis 23. November bereits mehrere Tanker getroffen worden waren; die IMO zählt seit Kriegsbeginn über 130 Vorfälle mit Handelsschiffen in der Golfregion. Irans Marine erklärt, Hormus werde erst wieder geöffnet, wenn Irans Forderungen erfüllt seien; Brent fiel am 24. November unter 89 USD je Barrel und stieg am 25. November nach den neuen Angriffen wieder auf rund 91 USD.",
+      "rel": "Nicht auf unserer Route, aber die Lage am Golf hält Versicherungs-, Bunker- und Kerosinzuschläge hoch und schwankungsanfällig; Angebote mit festem Zuschlag bevorzugen.",
+      "src": [
+        {
+          "t": "investingLive: Projectile explodes near tanker 50 nautical miles off Dubai as Gulf shipping attacks mount (25.11.2026)",
+          "u": "https://investinglive.com/commodities/projectile-explodes-near-tanker-50-nautical-miles-off-dubai-as-gulf-shipping-attacks-mount/"
+        },
+        {
+          "t": "gCaptain: Four More Ships Attacked as Iran Widens Hormuz Crackdown to Tugboats (24.11.2026)",
+          "u": "https://gcaptain.com/four-more-ships-attacked-as-iran-widens-hormuz-crackdown-to-tugboats/"
+        },
+        {
+          "t": "CBS News: Iran war live updates – Strait of Hormuz ship attacks (24.11.2026)",
+          "u": "https://www.cbsnews.com/live-updates/iran-war-us-trump-blockade-strait-of-hormuz-ship-attacks/"
+        }
+      ]
+    },
+    {
+      "d": "25.11.2026",
+      "cat": "Politik",
+      "reg": "USA – China / EU",
+      "txt": "Der US-Handelsbeauftragte schlug nach einer Section-301-Untersuchung zu struktureller Überkapazität neue Zölle gegen 14 Volkswirtschaften vor, darunter China mit 20 % sowie die EU, Japan und Vietnam; für die EU gilt die Obergrenze von 15 % aus dem Abkommen von 2025. Nach Anhörung und Kommentierungsfrist sollen die Zölle frühestens im Januar greifen, die EU-Kommission weist den Vorwurf der Überkapazität zurück.",
+      "rel": "Unsere Einfuhr in die EU ist nicht direkt betroffen, aber höhere US-Zölle können chinesische Ware nach Europa umlenken und den Druck auf neue EU-Schutzmaßnahmen erhöhen.",
       "routes": [
         "cn",
         "vn"
       ],
       "src": [
         {
-          "t": "Cyprus Mail (Reuters): Houthis threaten Saudi ports as Red Sea tensions escalate (25.11.2026)",
-          "u": "https://cyprus-mail.com/2026/11/25/houthis-threaten-saudi-ports-as-tensions-escalate"
-        },
-        {
-          "t": "Reuters via WTVB: Yemen's Houthis threaten to target Jeddah and other Saudi Red Sea ports (24.11.2026)",
-          "u": "https://wtvbam.com/2026/11/24/yemens-houthis-threaten-to-target-jeddah-and-other-saudi-red-sea-ports/"
-        },
-        {
-          "t": "gCaptain (Reuters): Houthis Order Ships to Leave Saudi Red Sea Ports After Hodeidah Airstrikes (20.11.2026)",
-          "u": "https://gcaptain.com/houthis-order-ships-to-leave-saudi-red-sea-ports-after-hodeidah-airstrikes/"
-        }
-      ]
-    },
-    {
-      "d": "25.11.2026",
-      "cat": "Sicherheit",
-      "reg": "Straße von Hormus / Golf von Oman",
-      "txt": "Laut UKMTO explodierte am 25. November gegen 21:30 GMT ein Geschoss nahe einem Tanker rund 50 Seemeilen westlich von Dubai, nachdem am 21. bis 23. November bereits mehrere Tanker getroffen worden waren; die IMO zählt seit Kriegsbeginn über 130 Vorfälle mit Handelsschiffen in der Golfregion. Irans Parlamentspräsident Ghalibaf schließt Gespräche mit den USA aus, solange sieben Bedingungen wie die Aufhebung der US-Seeblockade nicht erfüllt sind; die USA prüfen zudem, ob Iran hinter Cyberangriffen auf bis zu 50 Handelsschiffe steckt.",
-      "rel": "Nicht auf unserer Route, aber die Lage am Golf hält Versicherungs-, Bunker- und Kerosinzuschläge hoch und bindet weiter Schiffs- und Luftfrachtkapazität.",
-      "src": [
-        {
-          "t": "investingLive: Projectile explodes near tanker 50 nautical miles off Dubai as Gulf shipping attacks mount (25.11.2026)",
-          "u": "https://investinglive.com/commodities/projectile-explodes-near-tanker-50-nautical-miles-off-dubai-as-gulf-shipping-attacks-mount/"
-        },
-        {
-          "t": "Gulf News: Iran warns Hormuz ships, rules out US talks until 7 conditions met (25.11.2026)",
-          "u": "https://gulfnews.com/world/mena/middle-east-conflict-us-investigates-iran-over-cyberattacks-on-50-ships-as-fresh-sanctions-target-irans-shadow-banking-network-1.500758688"
-        },
-        {
-          "t": "gCaptain: Four More Ships Attacked as Iran Widens Hormuz Crackdown to Tugboats (24.11.2026)",
-          "u": "https://gcaptain.com/four-more-ships-attacked-as-iran-widens-hormuz-crackdown-to-tugboats/"
-        }
-      ]
-    },
-    {
-      "d": "25.11.2026",
-      "cat": "Markt",
-      "reg": "Ölmarkt",
-      "txt": "Brent war am 24. November unter 89 USD je Barrel gefallen, den tiefsten Stand seit Ende August, stieg aber am 25. November nach neuen Angriffen am Golf um über 2 % auf rund 91 USD. Laut Kpler liegen die Ölflüsse durch Hormus bei etwa der Hälfte des Vorkriegsniveaus.",
-      "rel": "Der Ölpreis schwankt mit jeder Meldung vom Golf; Bunker- und Kerosinzuschläge bleiben unberechenbar, daher Angebote mit festem Zuschlag bevorzugen.",
-      "src": [
-        {
-          "t": "investingLive: Projectile explodes near tanker 50 nautical miles off Dubai as Gulf shipping attacks mount (25.11.2026)",
-          "u": "https://investinglive.com/commodities/projectile-explodes-near-tanker-50-nautical-miles-off-dubai-as-gulf-shipping-attacks-mount/"
-        },
-        {
-          "t": "Trading Economics: Brent Below $94 – mit Folgemeldung vom 24.11. (16.11.2026)",
-          "u": "https://tradingeconomics.com/commodity/brent-crude-oil/news/601607"
-        }
-      ]
-    },
-    {
-      "d": "25.11.2026",
-      "cat": "Währung",
-      "reg": "EUR/USD",
-      "txt": "Die EZB setzte den Referenzkurs am 25. November auf 1,0935 USD je Euro fest (Vortag 1,0963), ein Dollar kostete 0,9144 Euro; am 23. November fiel der Euro im Handel bis auf 1,0881 USD, den tiefsten Stand seit April 2025. Seit Jahresbeginn verlor der Euro fast 7 %, Händler halten eine Zinserhöhung der Fed am 9. Dezember für nahezu sicher.",
-      "rel": "Ein stärkerer Dollar verteuert Ware und Fracht in Euro; den Kurs vor der Zahlung an den Lieferanten mit der Kalkulation abgleichen und eine Absicherung prüfen.",
-      "src": [
-        {
-          "t": "onvista (dpa-AFX): Eurokurs gefallen – EZB-Referenzkurs: 1,0935 US-Dollar (25.11.2026)",
-          "u": "https://www.onvista.de/news/2026/11-25-eurokurs-gefallen-ezb-referenzkurs-1-0935-us-dollar-0-10-26580530"
-        },
-        {
-          "t": "onvista (dpa-AFX): Devisen: Eurokurs gibt zum US-Dollar etwas nach (25.11.2026)",
-          "u": "https://www.onvista.de/news/2026/11-25-devisen-eurokurs-gibt-zum-us-dollar-etwas-nach-0-10-26580306"
-        },
-        {
-          "t": "aktiencheck.de: Euro Dollar Kurs: 1,0935 und Tief seit April 2025 (25.11.2026)",
-          "u": "https://aktiencheck.de/artikel/euro-dollar-kurs-10935-und-tief-seit-april-2025-fed-erhoehung-zu-97-prozent"
+          "t": "RTÉ (AFP/Reuters): US proposes new tariffs on trading partners, including EU (25.11.2026)",
+          "u": "https://www.rte.ie/news/us/2026/1125/1600630-us-tariffs/"
         }
       ]
     },
@@ -126,6 +143,43 @@
         {
           "t": "gCaptain: Suez Canal Return Won't Resolve Global Shipping Congestion, DHL Warns (16.11.2026)",
           "u": "https://gcaptain.com/suez-canal-return-wont-resolve-global-shipping-congestion-dhl-warns/"
+        }
+      ]
+    },
+    {
+      "d": "23.11.2026",
+      "cat": "Luftfracht",
+      "reg": "China–Europa",
+      "txt": "Laut WorldACD stiegen die Luftfrachtpreise Asien-Pazifik–Europa in Woche 46 (9. bis 15. November) um 4 %, ab China um 6 %, und liegen 26 % über Vorjahr (China +16 %); die Tonnage auf der Strecke fiel im Jahresvergleich um 15 %. Freightos meldete für China–Nordeuropa bis 10. November 4,87 USD/kg (+11 %).",
+      "rel": "Der Markt liegt praktisch auf unserer kalkulierten Rate von 4,90 USD/kg und zieht in der Hochsaison weiter an; für die Alternative ab PVG ein verbindliches Angebot mit kurzer Gültigkeit einholen.",
+      "routes": [
+        "cn",
+        "vn"
+      ],
+      "src": [
+        {
+          "t": "Global Trade Magazine (WorldACD): Global Air Cargo Rates Rise for Seventh Straight Week to $3.49 (23.11.2026)",
+          "u": "https://www.globaltrademag.com/global-air-cargo-rates-rise-for-seventh-straight-week-to-3-49/"
+        },
+        {
+          "t": "EcomCrew: Less Cargo, Higher Air Freight: What Europe Sellers Are Paying (11.11.2026)",
+          "u": "https://www.ecomcrew.com/less-cargo-higher-air-freight-what-europe-sellers-are-paying/"
+        }
+      ]
+    },
+    {
+      "d": "21.11.2026",
+      "cat": "Route",
+      "reg": "Rotes Meer / Suez",
+      "txt": "Während Maersk und Hapag-Lloyd bis Mitte Januar 2027 alle Asien–Europa-Dienste durch Suez führen wollen, verlegte CMA CGM die Dienste FAL 1, FAL 3 und MEX wegen des unsicheren Umfelds zurück ans Kap der Guten Hoffnung. ONE fuhr am 15. November erstmals seit fast drei Jahren wieder durch den Kanal, die CMA CGM Osiris passierte am 18. November als erstes großes Containerschiff seit März 2024 aus Richtung Bab el-Mandeb.",
+      "rel": "Die Reedereien entscheiden unterschiedlich; beim Spediteur klären, ob unser Dienst über Suez oder ums Kap läuft, da sich die Transitzeit um rund zwei Wochen unterscheidet.",
+      "routes": [
+        "cn"
+      ],
+      "src": [
+        {
+          "t": "Maritime News: Suez Canal services diverge as carriers reassess Red Sea routing (21.11.2026)",
+          "u": "https://www.maritimenews.com/suez-canal/suez-canal-services-diverge"
         }
       ]
     },
@@ -181,27 +235,6 @@
         {
           "t": "wetter.net: Sturm an der Nordseeküste: Orkanartige Böen, danach droht Glätte (18.11.2026)",
           "u": "https://www.wetter.net/wetter-news/sturm-an-der-nordseekueste-orkanartige-boeen-danach-droht-glaette"
-        }
-      ]
-    },
-    {
-      "d": "17.11.2026",
-      "cat": "Luftfracht",
-      "reg": "China–Europa",
-      "txt": "Laut Freightos stiegen die Luftfrachtraten China–Nordeuropa bis 10. November um 11 % auf 4,87 USD/kg; am 17. November meldete Freightos für China–Nordamerika ein Plus von 16 % auf 9,25 USD/kg. WorldACD verzeichnet für Oktober 17 % weniger Tonnage China–Europa bei steigenden Preisen.",
-      "rel": "Der Markt liegt praktisch auf unserer kalkulierten Rate von 4,90 USD/kg und zieht in der Hochsaison weiter an; für die Alternative ab PVG ein verbindliches Angebot mit kurzer Gültigkeit einholen.",
-      "routes": [
-        "cn",
-        "vn"
-      ],
-      "src": [
-        {
-          "t": "EcomCrew: Air Freight From China Just Hit $9.25 a Kilo (18.11.2026)",
-          "u": "https://www.ecomcrew.com/air-freight-from-china-just-hit-9-25-a-kilo/"
-        },
-        {
-          "t": "EcomCrew: Less Cargo, Higher Air Freight: What Europe Sellers Are Paying (11.11.2026)",
-          "u": "https://www.ecomcrew.com/less-cargo-higher-air-freight-what-europe-sellers-are-paying/"
         }
       ]
     },
@@ -280,36 +313,6 @@
       ]
     },
     {
-      "d": "08.11.2026",
-      "cat": "Route",
-      "reg": "Rotes Meer / Suez",
-      "txt": "Mit der Ever Eon passierte am 7. November erstmals seit Jahren wieder ein Evergreen-Schiff den Suezkanal; Maersk und Hapag-Lloyd schicken ihren Dienst ME1 ab 12. bzw. 13. November durch den Kanal. Drewry zählte zuletzt 53 Suez-Passagen pro Woche, die Gemini-Allianz will bis zum ersten Quartal 2027 fast alle Dienste zurückverlegen.",
-      "rel": "Unser Seetransit von rund 35 Tagen setzt die Suez-Route voraus; mit der Rückkehr steigt das Risiko gebündelter Ankünfte in Nordeuropa.",
-      "src": [
-        {
-          "t": "The Maritime Executive: Evergreen Joins the Return to Red Sea Shipping (08.11.2026)",
-          "u": "https://maritime-executive.com/article/evergreen-joins-the-return-to-red-sea-shipping"
-        },
-        {
-          "t": "FreightWaves: How new capacity is raising rates in chaotic ocean market (20.10.2026)",
-          "u": "https://www.freightwaves.com/news/how-new-capacity-is-raising-rates-in-chaotic-ocean-market"
-        }
-      ]
-    },
-    {
-      "d": "06.10.2026",
-      "cat": "Hafen",
-      "reg": "Hamburg",
-      "txt": "Tarifeinigung in den deutschen Seehäfen mit 3,4 % mehr Lohn. Unbefristete Streiks sind damit abgewendet, nach Warnstreiks im August und September.",
-      "rel": "Streikrisiko in Hamburg für unsere Ankunft gering.",
-      "src": [
-        {
-          "t": "VerkehrsRundschau: Verdi und ZDS einigen sich auf neuen Tarifvertrag (06.10.2026)",
-          "u": "https://www.verkehrsrundschau.de/nachrichten/transport-logistik/deutsche-seehaefen-verdi-und-zds-einigen-sich-auf-neuen-tarifvertrag-3913661"
-        }
-      ]
-    },
-    {
       "d": "2026",
       "cat": "Luftfracht",
       "reg": "Golfregion",
@@ -344,7 +347,9 @@
       ]
     }
   ],
-  "p": {},
+  "p": {
+    "R1": 4
+  },
   "wci": {
     "date": "19.11.2026",
     "rtm": 3496
