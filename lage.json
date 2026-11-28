@@ -1,13 +1,51 @@
 {
-  "asof": "2026-11-27",
-  "updated": "2026-11-27T05:43:08+01:00",
-  "note": "Neu: Die Huthis reklamieren Angriffe auf die saudischen Rotmeerhäfen Dschidda und Dschasan und kontrollieren die jemenitische Küste am Bab el-Mandeb, CMA CGM verlegt drei Dienste zurück ans Kap, die USA schlagen neue Zölle gegen China und die EU vor, der Euro erholt sich auf 1,0975 USD und der Drewry-Gesamtindex fällt auf 4.032 USD; Wahrscheinlichkeit R1 (Angriffe Rotes Meer/Bab el-Mandeb) von 3 auf 4 angehoben, WCI Shanghai–Rotterdam noch vom 19. November.",
+  "asof": "2026-11-28",
+  "updated": "2026-11-28T05:37:20+01:00",
+  "note": "Neu: Iran meldet einen weiteren Minentreffer vor Musandam und die USA beschießen ein Schiff im Golf von Oman, die Huthis drohen weiteren saudischen Rotmeerhäfen und reklamieren einen Angriff auf Ras Tanura, Drewry weist Shanghai–Rotterdam mit 3.485 USD praktisch unverändert aus und der Euro fällt auf 1,0957 USD; UKMTO meldet Schüsse auf einen Frachter im Golf von Aden. Wahrscheinlichkeiten unverändert (R1 bleibt 4).",
   "items": [
+    {
+      "d": "27.11.2026",
+      "cat": "Währung",
+      "reg": "EUR/USD",
+      "txt": "Die EZB setzte den Referenzkurs am 27. November auf 1,0957 USD je Euro fest (Vortag 1,0975), ein Dollar kostete 0,9126 Euro; im Handel fiel der Euro am Nachmittag auf 1,0947 USD. Belastet wurde er durch stärker als erwartet gesunkene Inflation in Frankreich (3,2 %) und Spanien (4,1 %) sowie die schwächste Wirtschaftsstimmung im Euroraum seit Juli; am Montag hatte er mit 1,0881 USD den tiefsten Stand seit April 2025 erreicht.",
+      "rel": "Der Euro bleibt schwach und der Wareneinkauf in USD entsprechend teurer; Kurs vor der Zahlung an den Lieferanten prüfen und eine Absicherung erwägen.",
+      "src": [
+        {
+          "t": "ARIVA.DE (dpa-AFX): Devisen: Eurokurs gibt ein wenig nach (27.11.2026)",
+          "u": "https://www.ariva.de/news/devisen-eurokurs-gibt-ein-wenig-nach-12223073"
+        },
+        {
+          "t": "ARIVA.DE (dpa-AFX): Eurokurs gefallen – EZB-Referenzkurs: 1,0957 US-Dollar (27.11.2026)",
+          "u": "https://www.ariva.de/news/devisen-eurokurs-gefallen-ezb-referenzkurs-1-0957-12223019"
+        }
+      ]
+    },
+    {
+      "d": "27.11.2026",
+      "cat": "Sicherheit",
+      "reg": "Straße von Hormus / Golf von Oman",
+      "txt": "Die iranischen Revolutionsgarden erklärten am 27. November, ein Tanker auf einer „nicht genehmigten Route“ vor der omanischen Halbinsel Musandam sei auf eine Mine gelaufen und explodiert, unabhängig bestätigt ist das nicht; das US-Zentralkommando beschoss am 26. November das Heck des Frachters Pacific Archer im Golf von Oman, in Kuwait tötete ein Drohnenangriff zwei italienische Techniker. Brent stieg am 26. November auf rund 94,70 USD je Barrel (etwa +5 % in der Woche) und lag am Freitagnachmittag bei rund 94 USD.",
+      "rel": "Nicht auf unserer Route, aber die eskalierende Lage am Golf hält Bunker-, Versicherungs- und Kerosinzuschläge hoch; Angebote mit festem Zuschlag bevorzugen.",
+      "src": [
+        {
+          "t": "Daily News Egypt: World news today – Iran Hormuz tanker claim, Kuwait summons envoy (27.11.2026)",
+          "u": "https://africa.dailynewsegypt.com/world-news-today-hormuz-tanker-kuwait/"
+        },
+        {
+          "t": "The Irish Times (Reuters): Oil rises on supply concerns as Iran claims mine strikes on ships (26.11.2026)",
+          "u": "https://www.irishtimes.com/business/markets/2026/11/26/oil-rises-on-supply-concerns-as-iran-claims-mine-strikes-on-ships/"
+        },
+        {
+          "t": "gCaptain: Four More Ships Attacked as Iran Widens Hormuz Crackdown to Tugboats (24.11.2026)",
+          "u": "https://gcaptain.com/four-more-ships-attacked-as-iran-widens-hormuz-crackdown-to-tugboats/"
+        }
+      ]
+    },
     {
       "d": "26.11.2026",
       "cat": "Sicherheit",
       "reg": "Rotes Meer / Bab el-Mandeb",
-      "txt": "Die Huthis reklamierten am 25. November Angriffe auf die saudischen Rotmeerhäfen Dschidda und Dschasan als Vergeltung für die Luftangriffe auf Hodeidah; laut Koalition traf ein Geschoss den Hafen Dschasan mit geringem Schaden, eine Drohne wurde nahe dem Hafen Dschidda abgefangen, in der Nacht zum 26. November wurden zudem zwei ballistische Raketen auf Riad abgeschossen. Seit dem Rückzug der Regierungstruppen am 15. November kontrollieren die Huthis die jemenitische Küste am Bab el-Mandeb und stehen laut AP rund 60 km vor Aden.",
+      "txt": "Die Huthis reklamierten am 25. November Angriffe auf die saudischen Rotmeerhäfen Dschidda und Dschasan als Vergeltung für Luftangriffe der Koalition auf Hodeidah, drohten weitere Angriffe auf Dschidda, Dschasan und Janbu an und forderten Reedereien auf, ihre Schiffe sofort abzuziehen; laut Reuters erklärten sie zudem, die Raffinerie Ras Tanura und Riad angegriffen zu haben. Seit dem Rückzug der Regierungstruppen am 15. November kontrollieren die Huthis die jemenitische Küste am Bab el-Mandeb; die jemenitische Armee meldete am 27. November eine Gegenoffensive mit 726 Einsätzen an mehreren Fronten.",
       "rel": "Die Huthis greifen nun Häfen am Roten Meer an und beherrschen die jemenitische Küste am Bab el-Mandeb; die Wahrscheinlichkeit von Angriffen auf unserer Seeroute steigt, daher den Kap-Umweg mit dem Spediteur verbindlich als Ausweichoption vereinbaren.",
       "routes": [
         "cn",
@@ -15,16 +53,16 @@
       ],
       "src": [
         {
+          "t": "The Irish Times (Reuters): Oil rises on supply concerns as Iran claims mine strikes on ships (26.11.2026)",
+          "u": "https://www.irishtimes.com/business/markets/2026/11/26/oil-rises-on-supply-concerns-as-iran-claims-mine-strikes-on-ships/"
+        },
+        {
           "t": "Daily News Egypt: Houthis say they hit Saudi Jeddah port and Jizan after Hodeidah strike (25.11.2026)",
           "u": "https://africa.dailynewsegypt.com/jeddah-port-houthi-attack/"
         },
         {
-          "t": "Daily Sabah (AP): Houthi rebels advance toward Aden, threaten Saudi Red Sea ports (25.11.2026)",
-          "u": "https://www.dailysabah.com/world/mid-east/houthi-rebels-advance-toward-aden-threaten-saudi-red-sea-ports"
-        },
-        {
-          "t": "Al Jazeera: Houthis edge closer to Aden as Yemeni forces pull out of Bab al-Mandeb (16.11.2026)",
-          "u": "https://www.aljazeera.com/news/2026/11/16/houthis-edge-closer-to-aden-as-yemeni-forces-pull-out-of-bab-al-mandeb"
+          "t": "Arab News: Yemeni military reports 726 operations against Houthis, claims 121 fighters killed (27.11.2026)",
+          "u": "https://www.arabnews.com/middle-east/yemeni-military-reports-726-operations-against-houthis-claims-121-fighters-killed-3014305"
         }
       ]
     },
@@ -32,8 +70,8 @@
       "d": "26.11.2026",
       "cat": "Markt",
       "reg": "Weltweit / Asien–Nordeuropa",
-      "txt": "Der Drewry World Container Index fiel am 26. November zum fünften Mal in Folge um 3 % auf 4.032 USD je 40-Fuß-Container (Vorwoche 4.176 USD). Der Wert für Shanghai–Rotterdam ist öffentlich nicht ausgewiesen; in der Vorwoche lag er bei 3.496 USD, Drewry erwartet für Asien–Europa wegen der Dezember-Zuschläge steigende Raten.",
-      "rel": "Der Gesamtmarkt gibt nach, Asien–Europa dürfte aber ab Dezember teurer werden; LCL-Angebot vor den Zuschlägen fixieren.",
+      "txt": "Der Drewry World Container Index fiel am 26. November zum fünften Mal in Folge um 3 % auf 4.032 USD je 40-Fuß-Container; Shanghai–Rotterdam blieb laut Drewry bei 3.485 USD praktisch unverändert, Shanghai–Genua stieg um 8 % auf 4.802 USD. Drewry erwartet für Asien–Europa steigende Raten, da Reedereien ab 1. Dezember Peak-Season-Zuschläge von 1.000 bis 1.500 USD und FAK-Raten von 4.500 bis 4.600 USD je 40-Fuß-Container nach Nordeuropa angekündigt haben.",
+      "rel": "Die Rate Shanghai–Rotterdam liegt noch unter unserer Kalkulation, ab Dezember drohen aber deutlich höhere Raten; LCL-Angebot jetzt fixieren.",
       "routes": [
         "cn",
         "vn"
@@ -41,28 +79,7 @@
       "src": [
         {
           "t": "Drewry: World Container Index – 26 Nov (26.11.2026)",
-          "u": "https://www.drewry.co.uk/trackers-and-indices/latest-trackers-and-indices/world-container-index-assessed-by-drewry"
-        },
-        {
-          "t": "CEO Economy: Container rates fall for a fourth week on weak transpacific demand (19.11.2026)",
-          "u": "https://ceoeconomy.com/article/drewry-world-container-index-falls-fourth-week-november-2026"
-        }
-      ]
-    },
-    {
-      "d": "26.11.2026",
-      "cat": "Währung",
-      "reg": "EUR/USD",
-      "txt": "Die EZB setzte den Referenzkurs am 26. November auf 1,0975 USD je Euro fest (Vortag 1,0935), ein Dollar kostete 0,9111 Euro. Am 23. November war der Euro im Handel bis auf 1,0881 USD gefallen, den tiefsten Stand seit April 2025; Händler halten eine Zinserhöhung der Fed am 9. Dezember für nahezu sicher.",
-      "rel": "Der Euro hat sich leicht erholt, bleibt aber schwach; den Kurs vor der Zahlung an den Lieferanten mit der Kalkulation abgleichen und eine Absicherung prüfen.",
-      "src": [
-        {
-          "t": "ARIVA.DE (dpa-AFX): Eurokurs gestiegen – EZB-Referenzkurs: 1,0975 US-Dollar (26.11.2026)",
-          "u": "https://www.ariva.de/news/eurokurs-gestiegen-ezb-referenzkurs-1-0975-us-dollar-12221767"
-        },
-        {
-          "t": "aktiencheck.de: Euro Dollar Kurs: 1,0935 und Tief seit April 2025 (25.11.2026)",
-          "u": "https://aktiencheck.de/artikel/euro-dollar-kurs-10935-und-tief-seit-april-2025-fed-erhoehung-zu-97-prozent"
+          "u": "https://www.drewry.co.uk/WCI"
         }
       ]
     },
@@ -84,27 +101,6 @@
         {
           "t": "Maersk: Implementation of Peak Season Surcharge (PSS) from Far East Asia to North Europe (12.11.2026)",
           "u": "https://www.maersk.com/news/articles/2026/11/12/pss-from-far-east-asia-to-north-europe"
-        }
-      ]
-    },
-    {
-      "d": "25.11.2026",
-      "cat": "Sicherheit",
-      "reg": "Straße von Hormus / Golf von Oman",
-      "txt": "Laut UKMTO explodierte am 25. November gegen 21:30 GMT ein Geschoss nahe einem Tanker rund 50 Seemeilen westlich von Dubai, nachdem am 21. bis 23. November bereits mehrere Tanker getroffen worden waren; die IMO zählt seit Kriegsbeginn über 130 Vorfälle mit Handelsschiffen in der Golfregion. Irans Marine erklärt, Hormus werde erst wieder geöffnet, wenn Irans Forderungen erfüllt seien; Brent fiel am 24. November unter 89 USD je Barrel und stieg am 25. November nach den neuen Angriffen wieder auf rund 91 USD.",
-      "rel": "Nicht auf unserer Route, aber die Lage am Golf hält Versicherungs-, Bunker- und Kerosinzuschläge hoch und schwankungsanfällig; Angebote mit festem Zuschlag bevorzugen.",
-      "src": [
-        {
-          "t": "investingLive: Projectile explodes near tanker 50 nautical miles off Dubai as Gulf shipping attacks mount (25.11.2026)",
-          "u": "https://investinglive.com/commodities/projectile-explodes-near-tanker-50-nautical-miles-off-dubai-as-gulf-shipping-attacks-mount/"
-        },
-        {
-          "t": "gCaptain: Four More Ships Attacked as Iran Widens Hormuz Crackdown to Tugboats (24.11.2026)",
-          "u": "https://gcaptain.com/four-more-ships-attacked-as-iran-widens-hormuz-crackdown-to-tugboats/"
-        },
-        {
-          "t": "CBS News: Iran war live updates – Strait of Hormuz ship attacks (24.11.2026)",
-          "u": "https://www.cbsnews.com/live-updates/iran-war-us-trump-blockade-strait-of-hormuz-ship-attacks/"
         }
       ]
     },
@@ -180,6 +176,23 @@
         {
           "t": "Maritime News: Suez Canal services diverge as carriers reassess Red Sea routing (21.11.2026)",
           "u": "https://www.maritimenews.com/suez-canal/suez-canal-services-diverge"
+        }
+      ]
+    },
+    {
+      "d": "20.11.2026",
+      "cat": "Piraterie",
+      "reg": "Golf von Aden",
+      "txt": "Laut UKMTO näherte sich am 20. November rund 95 Seemeilen südwestlich von Al Mukalla ein Skiff mit sechs Bewaffneten einem Massengutfrachter im Transitkorridor IRTC und gab vier Schüsse ab; das Sicherheitsteam an Bord feuerte Warnschüsse, niemand wurde verletzt. UKMTO zählt seit Jahresbeginn bis 18. November 46 Meldungen im Golf von Aden, Arabischen Meer und vor Somalia, darunter 11 Enterungen und Entführungen.",
+      "rel": "Der Vorfall lag direkt im Korridor, den auch unser Containerschiff durchfährt; das Piraterierisiko im Golf von Aden bleibt real.",
+      "routes": [
+        "cn",
+        "vn"
+      ],
+      "src": [
+        {
+          "t": "Shipping Telegraph: Bulk carrier and skiff exchange gunfire off Yemen (23.11.2026)",
+          "u": "https://shippingtelegraph.com/dry-bulk-shipping-news/bulk-carrier-and-skiff-exchange-gunfire-off-yemen/"
         }
       ]
     },
@@ -280,23 +293,6 @@
       ]
     },
     {
-      "d": "13.11.2026",
-      "cat": "Route",
-      "reg": "Hormus / Bab el-Mandeb",
-      "txt": "Im UN-Sicherheitsrat wurde auf Antrag Bahrains über die Schifffahrt am Golf beraten: Laut UKMTO liegen die Passagen durch Hormus rund 65 % unter Vorkriegsniveau, im Oktober gab es so viele Vorfälle wie nie seit Kriegsbeginn. Durch Bab el-Mandeb fahren seit der Huthi-Blockade gegen saudisch verbundene Schiffe im Juli etwa ein Viertel weniger Schiffe.",
-      "rel": "Bab el-Mandeb liegt direkt auf unserer Seeroute; Containerschiffe kehren zwar zurück, der Kap-Umweg sollte beim Spediteur als Option abgesichert bleiben.",
-      "routes": [
-        "cn",
-        "vn"
-      ],
-      "src": [
-        {
-          "t": "UN News: Security Council LIVE: Fragile Gulf calm tested as threats to Hormuz shipping mount (13.11.2026)",
-          "u": "https://news.un.org/en/story/2026/11/1168804"
-        }
-      ]
-    },
-    {
       "d": "09.11.2026",
       "cat": "Compliance",
       "reg": "China",
@@ -351,7 +347,7 @@
     "R1": 4
   },
   "wci": {
-    "date": "19.11.2026",
-    "rtm": 3496
+    "date": "26.11.2026",
+    "rtm": 3485
   }
 }
